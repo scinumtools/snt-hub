@@ -53,9 +53,16 @@ def check_project(project: Path) -> list[str]:
     example_root = project / "dipl" / "examples"
     report_root = project / "docs" / "parameters"
     example_names = {path.name for path in example_root.iterdir() if path.is_dir()} if example_root.is_dir() else set()
-    report_names = {path.stem for path in report_root.glob("*.html")}
+    reports = list(report_root.glob("*.json"))
+    report_names = {path.stem for path in reports}
     check(set(setups) == example_names, "setup IDs differ from DIPL example directories")
     check(set(setups) == report_names, "setup IDs differ from published parameter reports")
+    for path in reports:
+        try:
+            report = json.loads(path.read_text())
+            check(report.get("schema") == "briefpp/1", f"{path.name} has an unsupported report schema")
+        except json.JSONDecodeError:
+            check(False, f"{path.name} is not valid JSON")
     for setup_name, recipe in setups.items():
         check((example_root / setup_name / "DIPfile").is_file(), f"{setup_name} has no DIPfile")
         check(isinstance(recipe, dict) and recipe.get("capability") in

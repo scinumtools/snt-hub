@@ -1,4 +1,4 @@
-"""Generate checked-in Arepo parameter references with SNT's Brief++ reporter."""
+"""Generate checked-in Brief++ document data for Hub parameter references."""
 
 from __future__ import annotations
 
@@ -36,20 +36,21 @@ def main() -> None:
         dipfile = project / "dipl" / "examples" / name / "DIPfile"
         if not dipfile.is_file():
             raise FileNotFoundError(dipfile)
-        output = destination / f"{name}.html"
+        output = destination / f"{name}.json"
         subprocess.run(
             [
                 args.snt, "report", "--project", str(dipfile.relative_to(ROOT)),
-                "--format", "html", "--title", f"{record['name']} · {name.replace('_', ' ').title()} parameters",
+                "--format", "json", "--title", f"{record['name']} · {name.replace('_', ' ').title()} parameters",
                 "--date", record["reviewed_on"], "--output", str(output),
             ],
             cwd=ROOT,
             check=True,
         )
-        # The reporter can include absolute source paths for schemas outside
-        # the DIPfile directory. Keep published references repository-relative.
-        html = output.read_text()
-        output.write_text(html.replace(f"{ROOT}/", ""))
+        # Keep provenance paths portable across development and Pages builds.
+        data = json.loads(output.read_text().replace(f"{ROOT}/", ""))
+        if data.get("schema") != "briefpp/1":
+            raise ValueError(f"Unexpected Brief++ document schema in {output}")
+        output.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")) + "\n")
         print(output.relative_to(ROOT))
 
 

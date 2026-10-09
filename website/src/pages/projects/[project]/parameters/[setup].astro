@@ -1,0 +1,118 @@
+---
+import '../../../../styles/global.css';
+import '../../../../styles/parameter-reference.css';
+import SiteHeader from '../../../../components/SiteHeader.astro';
+import SiteFooter from '../../../../components/SiteFooter.astro';
+import { field, parameterTreeHtml, parametersFromBriefpp, type BriefDocument, type Parameter } from '../../../../lib/briefpp';
+
+export function getStaticPaths() {
+  const reports = import.meta.glob('../../../../../../projects/*/docs/parameters/*.json', { eager: true, import: 'default' });
+  const records = import.meta.glob('../../../../../../projects/*/project.json', { eager: true, import: 'default' });
+  return Object.entries(reports).map(([path, report]) => {
+    const match = path.match(/\/projects\/([^/]+)\/docs\/parameters\/([^/]+)\.json$/);
+    if (!match) throw new Error(`Unexpected parameter report path: ${path}`);
+    const project = Object.values(records).find((record: any) => record.id === match[1]);
+    if (!project) throw new Error(`Missing project record for ${match[1]}`);
+    return { params: { project: match[1], setup: match[2] }, props: { project, report } };
+  });
+}
+
+const { project, report } = Astro.props as { project: any; report: BriefDocument };
+const { setup } = Astro.params;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const parameters = parametersFromBriefpp(report);
+const visibleCount = parameters.filter((parameter) => !parameter.internal).length;
+const groups = [...new Set(parameters.map((parameter) => parameter.group))].map((name) => ({
+  name,
+  label: name.replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()),
+  entries: parameters.filter((parameter) => parameter.group === name),
+}));
+const tree = parameterTreeHtml(parameters);
+const detailsFields = (parameter: Parameter) => parameter.metadata.filter((item) => item.label !== 'Description');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#061d38" />
+    <meta name="description" content={`Browse ${visibleCount} evaluated ${project.name} parameters for ${setup}, with values, units, constraints, and provenance.`} />
+    <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
+    <title>{project.name} · {setup?.replaceAll('_', ' ')} parameters — SNT Hub</title>
+  </head>
+  <body class="parameter-reference-page">
+    <SiteHeader />
+    <main>
+      <section class="reference-intro shell">
+        <a class="reference-back" href={`${base}/projects/${project.id}/`}>← {project.name} project</a>
+        <div class="eyebrow"><span class="eyebrow-line"></span> EVALUATED PARAMETER REFERENCE</div>
+        <h1>{setup?.replaceAll('_', ' ')}<span>.</span></h1>
+        <p>Browse the evaluated DIPL parameters for this pinned {project.name} example. Values come from the bundled setup; a run using overrides can differ.</p>
+        <div class="reference-facts"><span><strong>{visibleCount}</strong> model parameters</span><span><strong>{groups.length}</strong> top-level groups</span><span>Source <code>{project.source_revision.slice(0, 12)}</code></span></div>
+      </section>
+      <section class="reference-main"><div class="shell reference-layout">
+        <aside class="reference-sidebar" aria-label="Parameter navigation">
+          <div class="reference-sidebar-head"><strong>Explore parameters</strong><span id="visible-count">{visibleCount} shown</span></div>
+          <label class="reference-search-label" for="parameter-search">Search paths, values, descriptions</label>
+          <input id="parameter-search" class="reference-search" type="search" placeholder="Search parameters…" autocomplete="off" />
+          <label class="reference-internal-toggle"><input id="show-internals" type="checkbox" /> Show adapter controls <small>({parameters.length - visibleCount})</small></label>
+          <nav class="reference-navigation" aria-label="Parameter hierarchy" set:html={tree} />
+        </aside>
+        <div class="reference-content">
+          <div class="reference-explainer"><strong>What this reference shows</strong><p>Each entry gives the effective value, type, description, and relevant constraints. Open “Schema &amp; provenance” for source history and additional metadata. Adapter controls are hidden initially because they shape native output rather than scientific settings.</p></div>
+          {groups.map((group) => <section class="parameter-group" data-group={group.name}>
+            <div class="parameter-group-head"><div><span>PARAMETER GROUP</span><h2>{group.label}</h2></div><small>{group.entries.filter((parameter) => !parameter.internal).length} parameters</small></div>
+            <div class="parameter-entries">
+              {group.entries.map((parameter) => <article class="parameter-entry" id={parameter.id} data-internal={String(parameter.internal)} data-search={`${parameter.path} ${parameter.value} ${parameter.description} ${parameter.metadata.map((item) => item.value).join(' ')}`.toLowerCase()} hidden={parameter.internal}>
+                <div class="parameter-entry-top"><div><span class="parameter-path">{parameter.path}</span><h3>{parameter.name.replaceAll('_', ' ')}</h3></div><div class="parameter-value"><span>EFFECTIVE VALUE</span><code>{parameter.value || '—'}</code></div></div>
+                {parameter.description && <p class="parameter-description">{parameter.description}</p>}
+                <div class="parameter-meta"><span>Type <strong>{parameter.type || 'Unspecified'}</strong></span>{parameter.units && <span>Units <strong>{parameter.units}</strong></span>}{parameter.shape && <span>Shape <strong>{parameter.shape}</strong></span>}{parameter.internal && <span class="parameter-internal-tag">Adapter control</span>}</div>
+                {field(parameter.metadata, 'Scientific impact') && <p class="parameter-impact"><strong>Scientific impact</strong> {field(parameter.metadata, 'Scientific impact')}</p>}
+                {field(parameter.metadata, 'Validation condition') && <p class="parameter-condition"><strong>Validation</strong> <code>{field(parameter.metadata, 'Validation condition')}</code></p>}
+                <details class="parameter-details"><summary>Schema &amp; provenance <span aria-hidden="true">⌄</span></summary><div class="parameter-details-body">
+                  {detailsFields(parameter).length > 0 && <div><h4>Model metadata</h4><dl>{detailsFields(parameter).map((item) => <><dt>{item.label}</dt><dd>{item.value}</dd></>)}</dl></div>}
+                  {parameter.provenance.length > 0 && <div><h4>Source history</h4><dl>{parameter.provenance.map((item) => <><dt>{item.label}</dt><dd><code>{item.value}</code></dd></>)}</dl></div>}
+                  {parameter.notes.length > 0 && <div><h4>Notes</h4>{parameter.notes.map((note) => <p>{note}</p>)}</div>}
+                </div></details>
+              </article>)}
+            </div>
+          </section>)}
+          <p class="reference-footer-note">Generated from SNT's <strong>Brief++ JSON document</strong> for <code>{report.metadata.institution?.replace('Input: ', '')}</code>. {report.metadata.subtitle}. The parameter values describe this bundled example; inspect a run's <code>environment.diph5</code> to see overridden values.</p>
+        </div>
+      </div></section>
+    </main>
+    <SiteFooter />
+    <script>
+      const search = document.querySelector<HTMLInputElement>('#parameter-search');
+      const internals = document.querySelector<HTMLInputElement>('#show-internals');
+      const count = document.querySelector<HTMLElement>('#visible-count');
+      const cards = [...document.querySelectorAll<HTMLElement>('.parameter-entry')];
+      const links = [...document.querySelectorAll<HTMLElement>('.tree-link')];
+      const branches = [...document.querySelectorAll<HTMLDetailsElement>('.tree-branch')];
+      const groups = [...document.querySelectorAll<HTMLElement>('.parameter-group')];
+      function update() {
+        const query = search?.value.trim().toLowerCase() ?? '';
+        const showInternals = internals?.checked ?? false;
+        document.body.classList.toggle('show-internals', showInternals);
+        let shown = 0;
+        for (const card of cards) {
+          card.hidden = (card.dataset.internal === 'true' && !showInternals) || !card.dataset.search?.includes(query);
+          if (!card.hidden) shown++;
+        }
+        const visibleIds = new Set(cards.filter((card) => !card.hidden).map((card) => card.id));
+        for (const link of links) link.hidden = !visibleIds.has(link.getAttribute('href')?.slice(1) ?? '');
+        for (const branch of branches.reverse()) {
+          branch.hidden = !branch.querySelector('.tree-link:not([hidden])');
+          if (query && !branch.hidden) branch.open = true;
+        }
+        branches.reverse();
+        for (const group of groups) group.hidden = !group.querySelector('.parameter-entry:not([hidden])');
+        if (count) count.textContent = `${shown} shown`;
+      }
+      search?.addEventListener('input', update);
+      internals?.addEventListener('change', update);
+      update();
+    </script>
+  </body>
+</html>

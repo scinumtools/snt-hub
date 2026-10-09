@@ -32,7 +32,7 @@ def test_inventory_covers_the_pinned_pw_scf_directory() -> None:
         assert RECIPES[name]["source_example"] == f"test-suite/pw_scf/{path.name}"
         assert (PROJECT / "source" / RECIPES[name]["source_example"]).is_file()
         assert (PROJECT / "dipl/examples" / name / "DIPfile").is_file()
-        assert (PROJECT / "docs/parameters" / f"{name}.html").is_file()
+        assert (PROJECT / "docs/parameters" / f"{name}.json").is_file()
 
 
 @pytest.mark.parametrize("source_file", SOURCE_INPUTS, ids=lambda path: path.name)

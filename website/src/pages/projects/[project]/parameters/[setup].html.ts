@@ -1,18 +1,15 @@
 export function getStaticPaths() {
-  const reports = import.meta.glob('../../../../../../projects/*/docs/parameters/*.html', { query: '?raw', import: 'default' });
+  const reports = import.meta.glob('../../../../../../projects/*/docs/parameters/*.json');
   return Object.keys(reports).map((path) => {
-    const match = path.match(/\/projects\/([^/]+)\/docs\/parameters\/([^/]+)\.html$/);
+    const match = path.match(/\/projects\/([^/]+)\/docs\/parameters\/([^/]+)\.json$/);
     if (!match) throw new Error(`Unexpected parameter report path: ${path}`);
-    return { params: { project: match[1], setup: match[2] }, props: { path } };
+    return { params: { project: match[1], setup: match[2] } };
   });
 }
 
-export async function GET({ props, params }: { props: { path: string }, params: { project: string, setup: string } }) {
-  const reports = import.meta.glob('../../../../../../projects/*/docs/parameters/*.html', { query: '?raw', import: 'default' });
-  const raw = await reports[props.path]() as string;
+export function GET({ params }: { params: { project: string; setup: string } }) {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-  const page = raw
-    .replace('</head>', `<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="${base}/parameter-report.css"></head>`)
-    .replace('<body>', `<body><nav class="hub-report-nav"><a href="${base}/projects/${params.project}/">← ${params.project.toUpperCase()} parameters</a><a href="${base}/">{?SNT.HUB}</a></nav>`);
-  return new Response(page, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+  const destination = `${base}/projects/${encodeURIComponent(params.project)}/parameters/${encodeURIComponent(params.setup)}/`;
+  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${destination}"><link rel="canonical" href="${destination}"><title>Parameter reference moved</title></head><body><p>This parameter reference has moved to <a href="${destination}">${destination}</a>.</p></body></html>`;
+  return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
 }
