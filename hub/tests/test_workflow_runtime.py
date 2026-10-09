@@ -21,6 +21,10 @@ def test_workspace_executable_must_match_build_and_setup_locks(tmp_path):
         "executable": str(executable), "executable_sha256": digest(executable),
     }))
     assert verify_executable(bundle, setup, executable) == executable
+    data = json.loads((build / "build-lock.json").read_text())
+    data["executable"] = "solver"
+    (build / "build-lock.json").write_text(json.dumps(data))
+    assert verify_executable(bundle, setup, executable) == executable
     (setup / "setup-lock.json").write_text("changed")
     with pytest.raises(HubSetupError, match="different setup"):
         verify_executable(bundle, setup, executable)

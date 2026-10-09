@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "setups": {
+    "lj_melt": {
+      "capability": "complete",
+      "source_example": "examples/melt/in.melt",
+      "description": "Three-dimensional Lennard-Jones melt with atoms created by the input script."
+    },
+    "lj_minimize_2d": {
+      "capability": "complete",
+      "source_example": "examples/min/in.min",
+      "description": "Two-dimensional Lennard-Jones dynamics followed by energy minimization."
+    }
+  }
+}

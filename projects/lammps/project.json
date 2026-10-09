@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "id": "lammps",
+  "name": "LAMMPS",
+  "summary": "A classical molecular dynamics code; this Hub bundle models two self-contained Lennard-Jones examples.",
+  "scope": "DIPL input generation for the pinned examples/melt/in.melt and examples/min/in.min scripts.",
+  "integration_mode": "External adapter",
+  "hub": {
+    "status": "adapter-ready",
+    "setup_manifest": "projects/lammps/setups.json",
+    "runtime_package": "hub",
+    "adapter_package": "projects/lammps/dipl",
+    "adapter_executable": "lammps-dipl",
+    "adapter_protocol": 1,
+    "fetch_command": "snt hub fetch lammps",
+    "setup_command": "snt hub setup lj_melt",
+    "build": {
+      "protocol": 1,
+      "profiles": ["local"],
+      "default_profile": "local",
+      "requires_setup": false
+    },
+    "run": {
+      "protocol": 1,
+      "modes": ["local"]
+    }
+  },
+  "support": "independent",
+  "validation": "settings-parity",
+  "validation_qualifier": "Eight adapter tests passed against the pinned source on 2026-10-09. Active commands match both upstream LJ examples, and both generated setups completed local serial smoke runs. Scientific-result validation is not claimed.",
+  "source_url": "https://github.com/lammps/lammps",
+  "source_path": "projects/lammps/source",
+  "source_revision": "8de817dd79bfe4525d5d39246a212d833e6dee07",
+  "adapter_url": "https://github.com/scinumtools/snt-hub/tree/main/projects/lammps/dipl",
+  "adapter_path": "projects/lammps/dipl",
+  "adapter_origin_url": null,
+  "adapter_revision": null,
+  "verification": {
+    "date": "2026-10-09",
+    "scinumtools3": "0.9.2",
+    "tests_passed": 8
+  },
+  "evidence": [
+    {
+      "label": "Pinned LAMMPS LJ examples",
+      "url": "https://github.com/lammps/lammps/tree/stable_30Sep2026/examples"
+    },
+    {
+      "label": "Generated command parity tests",
+      "url": "https://github.com/scinumtools/snt-hub/blob/main/projects/lammps/dipl/tests/test_examples.py"
+    }
+  ],
+  "limitations": "This independent external adapter covers only two self-contained Lennard-Jones examples, not the LAMMPS input language or package catalogue. The local build and two smoke runs do not establish scientifically validated simulation results, other-platform support, or upstream endorsement.",
+  "reviewed_on": "2026-10-09"
+}

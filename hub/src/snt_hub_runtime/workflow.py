@@ -51,9 +51,11 @@ def verify_executable(bundle: ProjectBundle, setup: Path, executable_path: Path)
         if lock_path is None:
             raise HubSetupError("Workspace build executable has no build-lock.json")
         lock = json.loads(lock_path.read_text())
+        declared = Path(lock.get("executable", ""))
+        declared = (declared if declared.is_absolute() else lock_path.parent / declared).resolve()
         if (lock.get("project") != bundle.record["id"] or
                 lock.get("source_revision") != bundle.record["source_revision"] or
-                lock.get("executable") != str(executable) or
+                declared != executable or
                 lock.get("executable_sha256") != digest(executable)):
             raise HubSetupError("Build lock does not match this executable and pinned source")
         if (lock.get("setup_lock_sha256") is not None and

@@ -4,3 +4,6 @@
 [submodule "projects/quantum-espresso/source"]
 	path = projects/quantum-espresso/source
 	url = https://gitlab.com/QEF/q-e.git
+[submodule "projects/lammps/source"]
+	path = projects/lammps/source
+	url = https://github.com/lammps/lammps.git
