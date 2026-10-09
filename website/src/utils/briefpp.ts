@@ -1,3 +1,5 @@
+import { posix } from 'node:path';
+
 export type BriefInline = { type: string; value?: string; target?: string };
 export type BriefNode = {
   type: string;
@@ -42,6 +44,18 @@ function fields(node: BriefNode): Field[] {
 
 export const field = (rows: Field[], label: string): string =>
   rows.find((row) => row.label === label)?.value ?? '';
+
+export function sourceLocationUrl(location: string, projectId: string, setup: string): string | null {
+  const match = /^(.+\.dip):([1-9]\d*)$/.exec(location);
+  if (!match) return null;
+  const sourcePath = match[1].startsWith('projects/')
+    ? match[1]
+    : `projects/${projectId}/dipl/examples/${setup}/${match[1]}`;
+  const normalized = posix.normalize(sourcePath);
+  if (!normalized.startsWith(`projects/${projectId}/dipl/`)) return null;
+  const encodedPath = normalized.split('/').map(encodeURIComponent).join('/');
+  return `https://github.com/scinumtools/snt-hub/blob/main/${encodedPath}#L${match[2]}`;
+}
 
 export function parametersFromBriefpp(report: BriefDocument): Parameter[] {
   if (report.schema !== 'briefpp/1') throw new Error(`Unsupported Brief++ schema: ${report.schema}`);
