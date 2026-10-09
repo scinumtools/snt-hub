@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const base = import.meta.env.BASE_URL;
+const home = base.endsWith('/') ? base : base + '/';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#061d38" />
+    <meta name="description" content="How the SNT initiative connects DIPL parameter models to established scientific codes." />
+    <link rel="icon" type="image/svg+xml" href={home + 'favicon.svg'} />
+    <title>The initiative — SNT Hub</title>
+  </head>
+  <body>
+    <SiteHeader />
+    <main>
+      <section class="initiative-hero shell">
+        <div class="eyebrow"><span class="eyebrow-line"></span> THE SNT INITIATIVE</div>
+        <h1>Shared inputs.<br /><span>Independent science.</span></h1>
+        <p>Established scientific codes have their own input formats, unit conventions, and validation rules. This initiative explores a common, optional DIPL layer that makes those interfaces easier to inspect, check, and reuse.</p>
+        <div class="hero-actions">
+          <a class="button button-bright" href={home + '#registry'}>See participating codes <span aria-hidden="true">↗</span></a>
+          <a class="quiet-link" href="https://scinumtools.github.io/snt3/initiative.html">Read the original initiative <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+
+      <section class="initiative-flow">
+        <div class="shell">
+          <div class="eyebrow dark"><span class="eyebrow-line"></span> FIRST INTEGRATION</div>
+          <h2>Fit around the code you already use.</h2>
+          <div class="flow-grid" aria-label="DIPL integration flow">
+            <div><span>01</span><strong>DIPL model</strong><p>Typed values, units, constraints, and relationships.</p></div>
+            <div><span>02</span><strong>SNT3</strong><p>Parse, evaluate, inspect, and validate the model.</p></div>
+            <div><span>03</span><strong>Code adapter</strong><p>Apply code-specific checks and write native files.</p></div>
+            <div><span>04</span><strong>Existing solver</strong><p>Run with its familiar parser, numerics, and workflow.</p></div>
+          </div>
+          <p class="flow-note">Direct DIPL integration may come later when a project judges the model and tooling ready. Native input files remain usable throughout.</p>
+        </div>
+      </section>
+
+      <section class="initiative-principles shell">
+        <div><div class="eyebrow"><span class="eyebrow-line"></span> WORKING TOGETHER</div><h2>Clear roles.<br /><span>Clear evidence.</span></h2></div>
+        <div class="principle-list">
+          <article><span>01 / BUILD</span><h3>Start independently</h3><p>SNT contributors or code users can prepare a first parameter model and adapter without implying support from the original code maintainers.</p></article>
+          <article><span>02 / REVIEW</span><h3>Bring in code experts</h3><p>Maintainers and domain experts check parameter meanings, generated files, supported versions, and the scope of each comparison.</p></article>
+          <article><span>03 / RECORD</span><h3>Show the evidence</h3><p>The registry separates maintainer support from settings checks, successful builds, and validation of scientific results.</p></article>
+        </div>
+      </section>
+
+      <section class="initiative-cta"><div class="shell"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> EXPLORE & CONTRIBUTE</div><h2>There is more than one way in.</h2><p>Read the language, explore SNT3, or suggest an established code with a documented parameter interface.</p></div><div class="initiative-link-list">
+        <a href="https://github.com/scinumtools/snt3">SNT3 source <span aria-hidden="true">↗</span></a>
+        <a href="https://scinumtools.github.io/snt3/dipl/index.html">DIPL specification <span aria-hidden="true">↗</span></a>
+        <a href="https://scinumtools.github.io/snt3/modules/dip/adapters.html">Adapter guide <span aria-hidden="true">↗</span></a>
+        <a href="https://github.com/scinumtools/snt-hub/issues">Suggest a code <span aria-hidden="true">↗</span></a>
+      </div></div></section>
+    </main>
+    <SiteFooter />
+  </body>
+</html>

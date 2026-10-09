@@ -1,5 +1,20 @@
-# snt-hub
-A central registry of scientific codes, developers, and reusable DIPL layers for generating native simulation input files and initial conditions.
+![{?SNT.HUB} logo](docs/snt-hub-logo.svg)
+
+# SNT Hub
+
+A central registry of scientific codes and reusable DIPL layers for generating native simulation inputs.
+
+## The initiative
+
+SNT Hub is the landing place for the [SNT initiative](https://scinumtools.github.io/snt3/initiative.html): one optional parameter layer for many established scientific codes. A DIPL model describes values, units, constraints, and dependencies. SNT3 evaluates it, and a code-specific adapter generates the input files the original solver already understands. Each project record separates maintainer support from evidence about generated settings, builds, and scientific results.
+
+| Explore | What it covers |
+| --- | --- |
+| [SNT3 source](https://github.com/scinumtools/snt3) | Toolkit implementation and examples |
+| [SNT3 documentation](https://scinumtools.github.io/snt3/) | Guides and APIs |
+| [Initiative overview](https://scinumtools.github.io/snt3/initiative.html) | Goals and collaboration path |
+| [DIPL specification](https://scinumtools.github.io/snt3/dipl/index.html) | Language syntax and semantics |
+| [Adapter guide](https://scinumtools.github.io/snt3/modules/dip/adapters.html) | Generating native files from evaluated models |
 
 ## Website
 

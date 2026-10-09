@@ -1,0 +1,16 @@
+---
+const base = import.meta.env.BASE_URL;
+const home = base.endsWith('/') ? base : base + '/';
+---
+<footer class="site-footer shell">
+  <a class="logo" href={home} aria-label="SNT Hub home">
+    <img src={home + 'snt-hub-logo.svg'} alt="{?SNT.HUB}" width="174" height="34" />
+  </a>
+  <span>One parameter layer. Many scientific codes.</span>
+  <div>
+    <a href="https://github.com/scinumtools/snt3">SNT3 source ↗</a>
+    <a href="https://scinumtools.github.io/snt3/initiative.html">Initiative ↗</a>
+    <a href="https://scinumtools.github.io/snt3/dipl/index.html">DIPL ↗</a>
+    <a href="https://github.com/scinumtools/snt-hub">Hub source ↗</a>
+  </div>
+</footer>

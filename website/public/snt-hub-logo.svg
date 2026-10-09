@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 268 52" role="img" aria-labelledby="title">
+  <title id="title">{?SNT.HUB}</title>
+  <text x="0" y="39" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="900" letter-spacing="-2.1">
+    <tspan fill="#3ce0e6">{?</tspan><tspan fill="#f3f8ff">SNT</tspan><tspan fill="#3ce0e6">.HUB}</tspan>
+  </text>
+</svg>

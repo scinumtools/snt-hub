@@ -1,5 +1,7 @@
 # Arepo DIPL integration
 
+This integration is part of [SNT Hub](../../README.md). The [SNT3 toolkit](https://github.com/scinumtools/snt3) evaluates the [DIPL model](https://scinumtools.github.io/snt3/dipl/index.html), and the adapter writes Arepo's native inputs. See the [initiative overview](https://scinumtools.github.io/snt3/initiative.html) for the broader collaboration path.
+
 This directory keeps the original Arepo code and its optional DIPL parameter layer side by side:
 
 - [`source/`](source/) is a Git submodule of the [canonical public Arepo repository](https://gitlab.mpcdf.mpg.de/vrs/arepo), pinned at `351aa8111a32e2e7433866bf8367ab7eba155d39`.

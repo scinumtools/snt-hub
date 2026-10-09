@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 
 const projectModules = import.meta.glob('../../../projects/*/project.json', { eager: true, import: 'default' });
 const projects = Object.values(projectModules).sort((a, b) => a.name.localeCompare(b.name));
@@ -22,21 +24,13 @@ const validationLabels = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#081b23" />
+    <meta name="theme-color" content="#061d38" />
     <meta name="description" content="One parameter layer for many scientific codes. Discover DIPL integrations, their support status, and the evidence behind them." />
     <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
     <title>SNT Hub — One parameter layer. Many scientific codes.</title>
   </head>
   <body>
-    <header class="site-header shell">
-      <a class="logo" href={base} aria-label="SNT Hub home"><span class="logo-glyph" aria-hidden="true">✳</span><span>SNT<span class="logo-light">/hub</span></span></a>
-      <nav aria-label="Main navigation">
-        <a href="#how-it-works">How it works</a>
-        <a href="#registry">Registry</a>
-        <a href="https://scinumtools.github.io/snt3/initiative.html">Initiative <span aria-hidden="true">↗</span></a>
-      </nav>
-      <a class="header-link" href="https://github.com/scinumtools/snt-hub">View on GitHub <span aria-hidden="true">↗</span></a>
-    </header>
+    <SiteHeader />
 
     <main>
       <section class="hero shell" aria-labelledby="hero-title">
@@ -76,6 +70,19 @@ MaxSteps  <span>128</span>
         </div>
       </section>
 
+      <section class="resources shell" id="resources" aria-labelledby="resources-title">
+        <div class="resources-heading">
+          <div><div class="eyebrow"><span class="eyebrow-line"></span> GO DEEPER</div><h2 id="resources-title">Explore the ecosystem<span>.</span></h2></div>
+          <p>Start with the code, read the initiative, or get into the DIPL language and SNT3 tools.</p>
+        </div>
+        <div class="resource-grid">
+          <a class="resource-card" href="https://github.com/scinumtools/snt3"><span class="resource-index">01 / SOURCE</span><strong>SNT3 on GitHub</strong><p>Explore the implementation, examples, and releases.</p><span class="resource-arrow" aria-hidden="true">↗</span></a>
+          <a class="resource-card" href={base + '/initiative/'}><span class="resource-index">02 / INITIATIVE</span><strong>How to participate</strong><p>See the integration path and the meaning of registry statuses.</p><span class="resource-arrow" aria-hidden="true">↗</span></a>
+          <a class="resource-card" href="https://scinumtools.github.io/snt3/dipl/index.html"><span class="resource-index">03 / LANGUAGE</span><strong>DIPL specification</strong><p>Learn the syntax for typed, unit-aware scientific inputs.</p><span class="resource-arrow" aria-hidden="true">↗</span></a>
+          <a class="resource-card" href="https://scinumtools.github.io/snt3/"><span class="resource-index">04 / GUIDES</span><strong>SNT3 documentation</strong><p>Follow tutorials and API guides for using the toolkit.</p><span class="resource-arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+
       <section class="registry-section" id="registry" aria-labelledby="registry-title"><div class="shell">
         <div class="registry-heading"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> THE REGISTRY</div><h2 id="registry-title">Explore integrations<span class="heading-dot">.</span></h2><p>Every listing says what exists, who supports it, and what has actually been checked.</p></div><div class="registry-total"><strong>{String(projects.length).padStart(2, '0')}</strong><span>{projects.length === 1 ? 'PROJECT' : 'PROJECTS'} LISTED</span></div></div>
         <div class="project-grid">
@@ -95,6 +102,6 @@ MaxSteps  <span>128</span>
 
       <section class="closing shell"><div class="closing-star" aria-hidden="true">✳</div><div><div class="eyebrow"><span class="eyebrow-line"></span> JOIN THE INITIATIVE</div><h2>Better inputs.<br /><span>Stronger science.</span></h2><p>Share a code, review a model, or contribute evidence. The registry grows with every well-described integration.</p><a class="button button-bright" href="https://github.com/scinumtools/snt-hub/issues">Get involved <span aria-hidden="true">↗</span></a></div></section>
     </main>
-    <footer class="site-footer shell"><a class="logo" href={base}><span class="logo-glyph" aria-hidden="true">✳</span><span>SNT<span class="logo-light">/hub</span></span></a><span>One parameter layer. Many scientific codes.</span><div><a href="https://scinumtools.github.io/snt3/">SciNumTools ↗</a><a href="https://github.com/scinumtools/snt-hub">GitHub ↗</a></div></footer>
+    <SiteFooter />
   </body>
 </html>
