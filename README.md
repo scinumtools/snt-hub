@@ -17,7 +17,8 @@ The optional, read-only [Parameter Viewer](https://scinumtools.github.io/snt3/in
 | [Initiative overview](https://scinumtools.github.io/snt3/initiative.html) | Goals and collaboration path |
 | [DIPL specification](https://scinumtools.github.io/snt3/dipl/index.html) | Language syntax and semantics |
 | [Adapter guide](https://scinumtools.github.io/snt3/modules/dip/adapters.html) | Generating native files from evaluated models |
-| [C++ and Python interfaces](https://scinumtools.github.io/snt3/integrations/index.html) | Direct use of evaluated parameters |
+| [C++ DIPL guide](https://scinumtools.github.io/snt3/modules/dip/basic-usage.html) | Direct use of evaluated parameters in C++ |
+| [Python binding](https://scinumtools.github.io/snt3/integrations/python.html) | Direct use of evaluated parameters in Python |
 | [C binding](https://scinumtools.github.io/snt3/integrations/c.html) | Experimental C interface |
 | [Static parameter generation](https://scinumtools.github.io/snt3/modules/dip/generation.html) | Export to C++, C, Fortran, Rust, Julia, JSON, or YAML |
 | [Parameter Viewer](https://scinumtools.github.io/snt3/integrations/viewer.html) | Read-only inspection of DIPL projects and DIPH5 snapshots |
@@ -38,4 +39,4 @@ npm run dev
 
 Each integration has a pinned original-code submodule, a sibling DIPL implementation, and a registry record in its own directory. Start with [projects/arepo/](projects/arepo/). After cloning, run `git submodule update --init --recursive` before testing an adapter.
 
-The [proposal](PROPOSAL/PROPOSAL.md) describes the registry statuses and intended source/adapter layout.
+The [Arepo integration guide](projects/arepo/README.md) describes the first bundle, its status, and the evidence behind it.
