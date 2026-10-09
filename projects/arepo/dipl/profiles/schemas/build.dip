@@ -1,0 +1,487 @@
+$schema arepo_build
+  ?descr "Compile-time capabilities mapped to Config.sh."
+  ?url "https://arepo-code.org/wp-content/userguide/config-options.html"
+  ?see "https://arepo-code.org/wp-content/userguide/index.html#disclaimer"
+  ?rationale "Profiles override the shared defaults; native names and discovery tags are carried by individual fields. Defaults are example configuration choices, not general scientific recommendations."
+
+  boundaries
+    x_mode int = 0
+      !options [
+        0, # periodic: omit REFLECTIVE_X
+        1, # reflective boundary
+        2  # inflow/outflow boundary
+      ]
+      ?descr "X-boundary mode; zero leaves no REFLECTIVE_X compile option."
+      ?native "REFLECTIVE_X"
+      !tags ["arepo:config"]
+      export : arepo_export
+        omit_nonpositive = true
+
+    y_mode int = 0
+      !options [0, 1, 2]
+      ?descr "Y-boundary mode; zero leaves no REFLECTIVE_Y compile option."
+      ?native "REFLECTIVE_Y"
+      !tags ["arepo:config"]
+      export : arepo_export
+        omit_nonpositive = true
+
+    z_mode int = 0
+      !options [0, 1, 2]
+      ?descr "Z-boundary mode; zero leaves no REFLECTIVE_Z compile option."
+      ?native "REFLECTIVE_Z"
+      !tags ["arepo:config"]
+      export : arepo_export
+        omit_nonpositive = true
+
+  geometry
+    one_dimensional bool = false
+      ?descr "Restrict the Voronoi mesh and hydrodynamics to one dimension."
+      ?native "ONEDIMS"
+      !tags ["arepo:config"]
+
+    two_dimensional bool = false
+      ?descr "Restrict the Voronoi mesh and hydrodynamics to two dimensions."
+      ?native "TWODIMS"
+      !tags ["arepo:config"]
+
+    spherical_one_dimensional bool = false
+      ?descr "Use one-dimensional spherical geometry."
+      ?native "ONEDIMS_SPHERICAL"
+      !tags ["arepo:config"]
+      ?requires "build.geometry.one_dimensional"
+      ?scientific_impact "Uses the first coordinate as radius under spherical symmetry."
+      ?category "geometry"
+
+    static_mesh bool = false
+      ?descr "Use a static Voronoi mesh."
+      ?native "VORONOI_STATIC_MESH"
+      !tags ["arepo:config"]
+      ?performance_impact "Disables domain decomposition by default; mesh-generating points have zero velocity."
+      ?category "mesh motion"
+      
+  physics
+    cooling bool = false
+      ?descr "Compile radiative cooling and UV-background support."
+      ?native "COOLING"
+      !tags ["arepo:config"]
+      ?scientific_impact "Enables primordial cooling physics and conversions to proper cgs quantities."
+      ?category "gas physics"
+      
+    star_formation bool = false
+      ?descr "Compile the Springel-Hernquist multiphase star-formation model."
+      ?native "USE_SFR"
+      !tags ["arepo:config"]
+      ?scientific_impact "Turns eligible dense gas into collisionless star particles using the Springel-Hernquist (2003) model."
+      ?category "subgrid physics"
+
+    jeans_cell_stability bool = false
+      ?descr "Enforce the Jeans-stability temperature floor for gas cells."
+      ?native "ENFORCE_JEANS_STABILITY_OF_CELLS"
+      !tags ["arepo:config"]
+      ?scientific_impact "Imposes an adaptive temperature floor intended to keep the Jeans length resolved."
+      ?category "gas physics"
+      
+    magnetohydrodynamics bool = false
+      ?descr "Compile ideal magnetohydrodynamics."
+      ?native "MHD"
+      !tags ["arepo:config"]
+      ?scientific_impact "Evolves ideal MHD; a zero initial magnetic field remains zero under the ideal-MHD equations."
+      ?category "gas physics"
+      
+      powell_cleaning bool = false
+        ?descr "Use Powell eight-wave divergence-control terms for MHD."
+        ?native "MHD_POWELL"
+        !tags ["arepo:config"]
+        ?requires "build.physics.magnetohydrodynamics"
+        ?scientific_impact "Adds Powell eight-wave divergence-control terms to the MHD equations."
+        ?category "MHD divergence control"
+        
+      powell_limit_timestep bool = false
+        ?descr "Limit timesteps for Powell divergence-control stability."
+        ?native "MHD_POWELL_LIMIT_TIMESTEP"
+        !tags ["arepo:config"]
+        ?requires "build.physics.magnetohydrodynamics"
+        ?performance_impact "Adds a timestep constraint required by Powell divergence control."
+        ?category "MHD divergence control"
+
+    adiabatic_index float = 0
+      ?descr "Compile-time gas adiabatic index; zero selects Arepo's default."
+      ?native "GAMMA"
+      !tags ["arepo:config"]
+      ?rationale "A value of zero delegates to Arepo's ideal-hydrodynamics default of 5/3."
+      ?scientific_impact "Sets the equation-of-state adiabatic index for ideal hydrodynamics."
+      ?category "equation of state"
+      export : arepo_export
+        omit_nonpositive = true
+        
+  gravity
+    self_gravity bool = false
+      ?descr "Compile gravitational interactions between particles and cells."
+      ?native "SELFGRAVITY"
+      !tags ["arepo:config"]
+      
+    hierarchical bool = false
+      ?descr "Use hierarchical gravity time integration."
+      ?native "HIERARCHICAL_GRAVITY"
+      !tags ["arepo:config"]
+      ?scientific_impact "Uses hierarchical splitting of gravitational time integration."
+      ?category "gravity algorithm"
+      
+    cell_center_evaluation bool = false
+      ?descr "Evaluate cell gravity at geometric centres; requires hierarchical gravity."
+      ?native "CELL_CENTER_GRAVITY"
+      !tags ["arepo:config"]
+      ?requires "build.gravity.hierarchical"
+      
+    direct_summation bool = false
+      ?descr "Allow direct summation for small active particle sets."
+      ?native "ALLOW_DIRECT_SUMMATION"
+      !tags ["arepo:config"]
+      ?performance_impact "Avoids tree-walk overhead for sufficiently small active particle sets."
+      ?category "gravity algorithm"
+      
+      threshold int = 3000
+        !condition ({.} > 0)
+        ?descr "Active-particle threshold below which direct gravity summation is used."
+        ?native "DIRECT_SUMMATION_THRESHOLD"
+        !tags ["arepo:config"]
+        ?requires "build.gravity.direct_summation"
+        ?recommended_range "Positive; Arepo's documented default is 3000 active particles."
+        ?performance_impact "Increasing the threshold selects direct summation for more active-particle sets."
+        ?category "gravity algorithm"
+        export : arepo_export
+          requires_enabled = ["build.gravity.direct_summation"]
+        
+    multiple_node_softening bool = false
+      ?descr "Retain component-specific softenings when using softened tree nodes."
+      ?native "MULTIPLE_NODE_SOFTENING"
+      !tags ["arepo:config"]
+      ?performance_impact "Can avoid a substantial tree-walk penalty from opening softened nodes, but stores component masses per tree node."
+      ?scientific_impact "Approximates component centres of mass separately when evaluating softened node-particle interactions."
+      ?category "gravity softening"
+      ?visibility "advanced"
+      
+    individual_softening_type_mask int = 0
+      !condition ({.} >= 0)
+      ?descr "Particle-type bit mask selecting individual gravity softening."
+      ?native "INDIVIDUAL_GRAVITY_SOFTENING"
+      !tags ["arepo:config"]
+      ?scientific_impact "Assigns selected particle types a softening based on mass relative to type 1; primarily useful for zoom simulations."
+      ?category "gravity softening"
+      ?visibility "advanced"
+      export : arepo_export
+        omit_nonpositive = true
+      
+    particle_mesh bool = false
+      ?descr "Enable periodic particle-mesh gravity in the TreePM solver."
+      
+      grid_resolution int = 0
+        !condition ({.} >= 0)
+        ?descr "Particle-mesh cells per dimension; zero is disabled."
+        ?native "PMGRID"
+        !tags ["arepo:config"]
+        ?recommended_range "At least 256 for TreePM accuracy; powers of two are fastest for FFTs."
+        ?performance_impact "Larger grids increase PM-force resolution, memory use, and FFT cost."
+        ?scientific_impact "Enables TreePM, using PM for long-range and the tree for short-range forces."
+        ?category "TreePM"
+        export : arepo_export
+          requires_enabled = ["build.gravity.particle_mesh"]
+        
+      short_range_cutoff float = 4.5
+        !condition ({.} > 0)
+        ?descr "TreePM short-range cutoff in particle-mesh cell units."
+        ?native "RCUT"
+        !tags ["arepo:config"]
+        ?rationale "4.5 mesh cells is Arepo's documented default."
+        ?performance_impact "Larger cutoffs extend the tree calculation further from each particle."
+        ?category "TreePM"
+        export : arepo_export
+          requires_enabled = ["build.gravity.particle_mesh"]
+
+      high_resolution_type_mask int = 0
+        ?descr "Particle-type mask defining the TreePM high-resolution region."
+        ?native "PLACEHIGHRESREGION"
+        !tags ["arepo:config"]
+        ?requires "build.gravity.particle_mesh.grid_resolution"
+        ?scientific_impact "Adds a high-resolution Fourier mesh around the selected particle types for zoom simulations."
+        ?category "TreePM zoom"
+        export : arepo_export
+          omit_nonpositive = true
+          requires_enabled = ["build.gravity.particle_mesh"]
+
+      enlarge_high_resolution_region float = 0
+        ?descr "Expansion factor for the TreePM high-resolution region."
+        ?native "ENLARGEREGION"
+        !tags ["arepo:config"]
+        ?requires "build.gravity.particle_mesh.high_resolution_type_mask"
+        ?performance_impact "A larger buffer reduces expensive high-resolution mesh-geometry recalculations for expanding particle sets."
+        ?category "TreePM zoom"
+        export : arepo_export
+          omit_nonpositive = true
+          requires_enabled = ["build.gravity.particle_mesh"]
+
+      high_resolution_grid_boost int = 0
+        ?descr "Resolution multiplier for a zoom TreePM grid."
+        ?native "GRIDBOOST"
+        !tags ["arepo:config"]
+        ?requires "build.gravity.particle_mesh.high_resolution_type_mask"
+        ?performance_impact "Changes high-resolution FFT mesh size in proportion to PMGRID."
+        ?category "TreePM zoom"
+        export : arepo_export
+          omit_nonpositive = true
+          requires_enabled = ["build.gravity.particle_mesh"]
+
+      zoom_optimized bool = false
+        ?descr "Use the TreePM algorithm optimized for cosmological zoom simulations."
+        ?native "PM_ZOOM_OPTIMIZED"
+        !tags ["arepo:config"]
+        ?performance_impact "Uses a communication algorithm robust to clustered zoom data, but slower than the default for homogeneous periodic boxes."
+        ?category "TreePM zoom"
+
+    non_periodic bool = false
+      ?descr "Compile non-periodic gravity."
+      ?native "GRAVITY_NOT_PERIODIC"
+      !tags ["arepo:config"]
+
+    evaluate_potential bool = false
+      ?descr "Calculate gravitational potentials."
+      ?native "EVALPOTENTIAL"
+      !tags ["arepo:config"]
+      ?performance_impact "Computes potential energy whenever global statistics are measured."
+      ?scientific_impact "Enables potential-energy diagnostics for global energy-conservation tests."
+      ?category "gravity diagnostics"
+        
+    softening_types int = 6
+      !condition ({.} >= 2)
+      ?descr "Number of available gravitational-softening families."
+      ?native "NSOFTTYPES"
+      !tags ["arepo:config"]
+      ?rationale "Defaults to Arepo's NTYPES (six in this source tree) when NSOFTTYPES is omitted; must match the configured SofteningComovingTypeN entries."
+      ?scientific_impact "Defines the available gravity-softening families that particle types may share."
+      ?category "gravity softening"
+      export : arepo_export
+        enabled = false
+      
+  time
+    force_equal_timesteps bool = false
+      ?descr "Force all particles/cells onto equal timesteps."
+      ?native "FORCE_EQUAL_TIMESTEPS"
+      !tags ["arepo:config"]
+      ?performance_impact "Can increase computational work by preventing individual adaptive timesteps."
+      ?category "time integration"
+      
+    tree_based_timesteps bool = false
+      ?descr "Use the non-local, tree-based timestep criterion."
+      ?native "TREE_BASED_TIMESTEPS"
+      !tags ["arepo:config"]
+      
+  precision
+    mode int = 0
+      !options [
+        0, # leave DOUBLEPRECISION unspecified: Arepo single precision
+        1, # full double precision (Arepo-recommended mode)
+        2, # mixed precision
+        3  # mixed precision with fewer single-precision fields
+      ]
+      ?descr "Arepo precision mode; zero leaves DOUBLEPRECISION unspecified."
+      ?native "DOUBLEPRECISION"
+      !tags ["arepo:config"]
+      
+    fftw_double bool = false
+      ?descr "Use double-precision FFTW transforms."
+      ?native "DOUBLEPRECISION_FFTW"
+      !tags ["arepo:config"]
+      
+    neighbor_tree_double bool = false
+      ?descr "Use double precision for neighbor-tree node extensions."
+      ?native "NGB_TREE_DOUBLEPRECISION"
+      !tags ["arepo:config"]
+      
+  io
+    hdf5 bool = false
+      ?descr "Compile HDF5 snapshot and initial-condition support."
+      ?native "HAVE_HDF5"
+      !tags ["arepo:config"]
+      ?see ["input.initial_conditions.format", "output.snapshots.format"]
+      ?category "I/O format"
+      
+    reduced_flush bool = false
+      ?descr "Reduce log-file flush frequency."
+      ?native "REDUCE_FLUSH"
+      !tags ["arepo:config"]
+      ?performance_impact "Reduces filesystem flush activity by avoiding flushes at every synchronization point."
+      ?category "I/O performance"
+      
+    input_double_precision bool = false
+      ?descr "Read initial conditions in double precision."
+      ?native "INPUT_IN_DOUBLEPRECISION"
+      !tags ["arepo:config"]
+      
+    output_coordinates_double bool = false
+      ?descr "Always write coordinates in double precision."
+      ?native "OUTPUT_COORDINATES_IN_DOUBLEPRECISION"
+      !tags ["arepo:config"]
+
+    output_double_precision bool = false
+      ?descr "Write snapshot fields in double precision."
+      ?native "OUTPUT_IN_DOUBLEPRECISION"
+      !tags ["arepo:config"]
+
+    read_mass_as_density bool = false
+      ?descr "Interpret IC Mass fields as densities."
+      ?native "READ_MASS_AS_DENSITY_IN_INPUT"
+      !tags ["arepo:config"]
+
+    cpu_csv bool = false
+      ?descr "Write the supplementary cpu.csv performance log."
+      ?native "OUTPUT_CPU_CSV"
+      !tags ["arepo:config"]
+
+  initial_conditions
+    generate_gas_from_dark_matter bool = false
+      ?descr "Generate gas particles from dark-matter-only initial conditions."
+      ?native "GENERATE_GAS_IN_ICS"
+      !tags ["arepo:config"]
+      
+  mesh
+    refinement bool = false
+      ?descr "Compile cell refinement and derefinement."
+      ?native ["REFINEMENT_SPLIT_CELLS", "REFINEMENT_MERGE_CELLS"]
+      !tags ["arepo:config"]
+      ?conflicts "build.geometry.one_dimensional"
+      ?scientific_impact "Enables dynamic cell refinement and derefinement; the default target is gas-cell mass."
+      ?category "mesh refinement"
+      
+    adaptive_hydro_softening bool = false
+      ?descr "Compile adaptive gas-cell gravitational softening."
+      ?native "ADAPTIVE_HYDRO_SOFTENING"
+      !tags ["arepo:config"]
+      ?scientific_impact "Varies hydro-cell softening with cell radius using the runtime adaptive-softening table."
+      ?category "gravity softening"
+      
+    face_angle_regularization bool = false
+      ?descr "Regularize mesh cells using their maximum face angle."
+      ?native "REGULARIZE_MESH_FACE_ANGLE"
+      !tags ["arepo:config"]
+      
+    center_of_mass_drift bool = false
+      ?descr "Regularize mesh-generating-point drift from cell centres of mass."
+      ?native "REGULARIZE_MESH_CM_DRIFT"
+      !tags ["arepo:config"]
+      
+    drift_limited_by_sound_speed bool = false
+      ?descr "Limit centre-of-mass regularization by local sound speed."
+      ?native "REGULARIZE_MESH_CM_DRIFT_USE_SOUNDSPEED"
+      !tags ["arepo:config"]
+      ?requires "build.mesh.center_of_mass_drift"
+      ?category "mesh regularization"
+
+    volume_refinement bool = false
+      ?descr "Compile volume-limited mesh refinement."
+      ?native "REFINEMENT_VOLUME_LIMIT"
+      !tags ["arepo:config"]
+      ?scientific_impact "Enforces absolute cell-volume bounds and a maximum neighbouring-cell volume contrast."
+      ?category "mesh refinement"
+
+    no_refine_background_grid bool = false
+      ?descr "Exclude the background grid from refinement."
+      ?native "NODEREFINE_BACKGROUND_GRID"
+      !tags ["arepo:config"]
+      ?requires "build.mesh.refinement"
+      ?scientific_impact "Prevents derefinement of sufficiently large background cells in cosmological zoom simulations."
+      ?category "mesh refinement"
+
+    override_peanogrid_warning bool = false
+      ?descr "Allow configurations that exceed the Peano-grid warning threshold."
+      ?native "OVERRIDE_PEANOGRID_WARNING"
+      !tags ["arepo:config"]
+      
+  numerics
+    riemann_hlld bool = false
+      ?descr "Use the HLLD Riemann solver for ideal MHD."
+      ?native "RIEMANN_HLLD"
+      !tags ["arepo:config"]
+      ?requires "build.physics.magnetohydrodynamics"
+      ?scientific_impact "Selects the HLLD approximate Riemann solver required for MHD."
+      ?category "MHD numerics"
+      
+  analysis
+    fof bool = false
+      ?descr "Compile the friends-of-friends halo finder."
+      ?native "FOF"
+      !tags ["arepo:config"]
+      
+      primary_link_type_mask int = 2
+        !condition ({.} >= 0)
+        ?descr "Particle-type bit mask used as FoF primary linking tracers."
+        ?native "FOF_PRIMARY_LINK_TYPES"
+        !tags ["arepo:config"]
+        export : arepo_export
+          requires_enabled = ["build.analysis.fof"]
+        
+      secondary_link_type_mask int = 0
+        !condition ({.} >= 0)
+        ?descr "Particle-type bit mask attached to nearest FoF primary tracers."
+        ?native "FOF_SECONDARY_LINK_TYPES"
+        !tags ["arepo:config"]
+        export : arepo_export
+          requires_enabled = ["build.analysis.fof"]
+        
+    subfind bool = false
+      ?descr "Compile the Subfind substructure finder; requires FoF."
+      ?native "SUBFIND"
+      !tags ["arepo:config"]
+      ?requires "build.analysis.fof"
+      
+      save_density_estimates bool = false
+        ?descr "Save Subfind smoothing lengths, densities, and velocity dispersions."
+        ?native "SAVE_HSML_IN_SNAPSHOT"
+        !tags ["arepo:config"]
+        
+      calculate_velocity_dispersion bool = false
+        ?descr "Calculate additional Subfind velocity-dispersion information."
+        ?native "SUBFIND_CALC_MORE"
+        !tags ["arepo:config"]
+        
+      extended_properties bool = false
+        ?descr "Calculate extended Subfind angular-momentum and energy properties."
+        ?native "SUBFIND_EXTENDED_PROPERTIES"
+        !tags ["arepo:config"]
+        
+  output
+    process_schedule_exactly bool = false
+      ?descr "Process output-list times before starting to improve timing accuracy."
+      ?native "PROCESS_TIMES_OF_OUTPUTLIST"
+      !tags ["arepo:config"]
+
+    center_of_mass bool = false
+      ?descr "Write gas-cell centres of mass."
+      ?native "OUTPUT_CENTER_OF_MASS"
+      !tags ["arepo:config"]
+
+    magnetic_field_gradient bool = false
+      ?descr "Write magnetic-field gradients."
+      ?native "OUTPUT_BFIELD_GRADIENT"
+      !tags ["arepo:config"]
+
+    acceleration bool = false
+      ?descr "Write gravitational accelerations."
+      ?native "OUTPUTACCELERATION"
+      !tags ["arepo:config"]
+
+    pressure_gradient bool = false
+      ?descr "Write pressure gradients."
+      ?native "OUTPUT_PRESSURE_GRADIENT"
+      !tags ["arepo:config"]
+
+    potential bool = false
+      ?descr "Write gravitational potentials."
+      ?native "OUTPUTPOTENTIAL"
+      !tags ["arepo:config"]
+      
+  diagnostics
+    debug bool = false
+      ?descr "Enable Arepo debugging facilities and core-dump support."
+      ?native "DEBUG"
+      !tags ["arepo:config"]
+      

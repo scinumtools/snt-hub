@@ -1,0 +1,9 @@
+# Derived custom units reference the selected setup's fundamental code bases.
+$unit arepo_length = {?code_units.length}
+$unit arepo_mass = {?code_units.mass}
+$unit arepo_velocity = {?code_units.velocity}
+$unit arepo_time = 1*arepo_length/arepo_velocity
+$unit arepo_density = 1*arepo_mass/arepo_length3
+$unit arepo_energy = 1*arepo_mass*arepo_length2/arepo_time2
+$unit arepo_specific_energy = 1*arepo_velocity2
+$unit arepo_acceleration = 1*arepo_velocity2/arepo_length

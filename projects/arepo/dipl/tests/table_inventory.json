@@ -1,0 +1,217 @@
+[
+  {
+    "setup": "cosmological_gravity_only",
+    "key": "inputspec_ics",
+    "source": "examples/cosmo_box_gravity_only_3d/L50n32/inputspec_ics.txt",
+    "table": "examples/cosmological_gravity_only/tables/inputspec_ics.dipt",
+    "filename": "L50n32/inputspec_ics.txt",
+    "columns": [
+      "column_1",
+      "column_2",
+      "column_3",
+      "column_4"
+    ],
+    "preamble": "         127      100.387"
+  },
+  {
+    "setup": "cosmological_gravity_only",
+    "key": "Masses_L50n32_z0",
+    "source": "examples/cosmo_box_gravity_only_3d/Masses_L50n32_z0.txt",
+    "table": "examples/cosmological_gravity_only/tables/Masses_L50n32_z0.dipt",
+    "filename": "Masses_L50n32_z0.txt",
+    "columns": [
+      "mass"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "cosmological_gravity_only",
+    "key": "Masses_L50n32_z1",
+    "source": "examples/cosmo_box_gravity_only_3d/Masses_L50n32_z1.txt",
+    "table": "examples/cosmological_gravity_only/tables/Masses_L50n32_z1.dipt",
+    "filename": "Masses_L50n32_z1.txt",
+    "columns": [
+      "mass"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "cosmological_star_formation",
+    "key": "inputspec_ics",
+    "source": "examples/cosmo_box_star_formation_3d/L8n32/inputspec_ics.txt",
+    "table": "examples/cosmological_star_formation/tables/inputspec_ics.dipt",
+    "filename": "L8n32/inputspec_ics.txt",
+    "columns": [
+      "column_1",
+      "column_2",
+      "column_3",
+      "column_4"
+    ],
+    "preamble": "         127      100.387"
+  },
+  {
+    "setup": "cosmological_star_formation",
+    "key": "sfr_ref_L8n32_reduced",
+    "source": "examples/cosmo_box_star_formation_3d/sfr_ref_L8n32_reduced.txt",
+    "table": "examples/cosmological_star_formation/tables/sfr_ref_L8n32_reduced.dipt",
+    "filename": "sfr_ref_L8n32_reduced.txt",
+    "columns": [
+      "time_coordinate",
+      "expected_stellar_mass",
+      "instantaneous_sfr",
+      "realized_sfr",
+      "formed_stellar_mass",
+      "cumulative_stellar_mass"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "cosmo_zoom_gravity_only_3d",
+    "key": "Masses_z0_5",
+    "source": "examples/cosmo_zoom_gravity_only_3d/Masses_z0.5.txt",
+    "table": "examples/cosmo_zoom_gravity_only_3d/tables/Masses_z0_5.dipt",
+    "filename": "Masses_z0.5.txt",
+    "columns": [
+      "mass"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "cosmo_zoom_gravity_only_3d",
+    "key": "Masses_z0",
+    "source": "examples/cosmo_zoom_gravity_only_3d/Masses_z0.txt",
+    "table": "examples/cosmo_zoom_gravity_only_3d/tables/Masses_z0.dipt",
+    "filename": "Masses_z0.txt",
+    "columns": [
+      "mass"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "cosmo_zoom_gravity_only_3d",
+    "key": "Masses_z1",
+    "source": "examples/cosmo_zoom_gravity_only_3d/Masses_z1.txt",
+    "table": "examples/cosmo_zoom_gravity_only_3d/tables/Masses_z1.dipt",
+    "filename": "Masses_z1.txt",
+    "columns": [
+      "mass"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "cosmo_zoom_gravity_only_3d",
+    "key": "Masses_z2",
+    "source": "examples/cosmo_zoom_gravity_only_3d/Masses_z2.txt",
+    "table": "examples/cosmo_zoom_gravity_only_3d/tables/Masses_z2.dipt",
+    "filename": "Masses_z2.txt",
+    "columns": [
+      "mass"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "cosmo_zoom_gravity_only_3d",
+    "key": "Masses_z3",
+    "source": "examples/cosmo_zoom_gravity_only_3d/Masses_z3.txt",
+    "table": "examples/cosmo_zoom_gravity_only_3d/tables/Masses_z3.dipt",
+    "filename": "Masses_z3.txt",
+    "columns": [
+      "mass"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "cosmo_zoom_gravity_only_3d",
+    "key": "Masses_z4",
+    "source": "examples/cosmo_zoom_gravity_only_3d/Masses_z4.txt",
+    "table": "examples/cosmo_zoom_gravity_only_3d/tables/Masses_z4.dipt",
+    "filename": "Masses_z4.txt",
+    "columns": [
+      "mass"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "galaxy_merger_star_formation_3d",
+    "key": "sfr_reduced_ref",
+    "source": "examples/galaxy_merger_star_formation_3d/sfr_reduced_ref.txt",
+    "table": "examples/galaxy_merger_star_formation_3d/tables/sfr_reduced_ref.dipt",
+    "filename": "sfr_reduced_ref.txt",
+    "columns": [
+      "time_coordinate",
+      "expected_stellar_mass",
+      "instantaneous_sfr",
+      "realized_sfr",
+      "formed_stellar_mass",
+      "cumulative_stellar_mass"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "interacting_blastwaves_1d",
+    "key": "reference_001",
+    "source": "examples/interacting_blastwaves_1d/reference_001.txt",
+    "table": "examples/interacting_blastwaves_1d/tables/reference_001.dipt",
+    "filename": "reference_001.txt",
+    "columns": [
+      "position",
+      "density",
+      "velocity",
+      "pressure"
+    ],
+    "preamble": "# position, density, velocity and momentum of 20,000 cells fixed-grid interacting blast wave problem at t=0.038, only every 20th cell stored here"
+  },
+  {
+    "setup": "mhd_shock_tube",
+    "key": "alpha_3",
+    "source": "examples/mhd_shocktube_1d/alpha_3.dat",
+    "table": "examples/mhd_shock_tube/tables/alpha_3.dipt",
+    "filename": "alpha_3.dat",
+    "columns": [
+      "position",
+      "density",
+      "velocity_x",
+      "velocity_y",
+      "velocity_z",
+      "magnetic_x",
+      "magnetic_y",
+      "magnetic_z",
+      "pressure"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "cosmological_star_formation",
+    "key": "uv_background",
+    "source": "data/TREECOOL_ep",
+    "table": "tables/TREECOOL_ep.dipt",
+    "filename": "TREECOOL_ep",
+    "columns": [
+      "redshift_coordinate",
+      "ionization_HI",
+      "ionization_HeI",
+      "ionization_HeII",
+      "heating_HI",
+      "heating_HeI",
+      "heating_HeII"
+    ],
+    "preamble": ""
+  },
+  {
+    "setup": "galaxy_merger_star_formation_3d",
+    "key": "uv_background",
+    "source": "data/TREECOOL_ep",
+    "table": "tables/TREECOOL_ep.dipt",
+    "filename": "TREECOOL_ep",
+    "columns": [
+      "redshift_coordinate",
+      "ionization_HI",
+      "ionization_HeI",
+      "ionization_HeII",
+      "heating_HI",
+      "heating_HeI",
+      "heating_HeII"
+    ],
+    "preamble": ""
+  }
+]

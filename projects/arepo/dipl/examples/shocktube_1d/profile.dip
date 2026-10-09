@@ -1,0 +1,35 @@
+# Semantic counterpart of examples/shocktube_1d.
+experiment : experiment_settings
+  setup
+    kind = "shocktube_1d"
+build : arepo_build
+  boundaries
+    x_mode = 2
+  geometry
+    one_dimensional = true
+  physics
+    adiabatic_index = 1.4
+  mesh
+    center_of_mass_drift = true
+    drift_limited_by_sound_speed = true
+    face_angle_regularization = true
+  time
+    force_equal_timesteps = true
+  precision
+    mode = 1
+  io
+    input_double_precision = true
+    output_double_precision = true
+    hdf5 = true
+  diagnostics
+    debug = true
+simulation
+  domain
+    box
+      size = 20 arepo_length
+  time
+    end = 5
+    maximum_step = 0.1
+    minimum_step = 1e-5
+    statistics_interval = 0.1
+    snapshot_interval = 1

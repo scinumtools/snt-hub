@@ -1,0 +1,126 @@
+# Semantic counterpart of examples/cosmo_zoom_gravity_only_3d.
+experiment : experiment_settings
+  setup
+    kind = "cosmo_zoom_gravity_only_3d"
+build : arepo_build
+  gravity
+    self_gravity = true
+    hierarchical = true
+    direct_summation = true
+      threshold = 1024
+    evaluate_potential = true
+    multiple_node_softening = true
+    individual_softening_type_mask = 60
+    particle_mesh = true
+      grid_resolution = 256
+      short_range_cutoff = 5.5
+      high_resolution_type_mask = 2
+      enlarge_high_resolution_region = 1.1
+      high_resolution_grid_boost = 2
+      zoom_optimized = true
+    softening_types = 6
+  time
+    tree_based_timesteps = true
+  precision
+    mode = 1
+    fftw_double = true
+  io
+    hdf5 = true
+  analysis
+    fof = true
+      primary_link_type_mask = 2
+      secondary_link_type_mask = 49
+    subfind = true
+  output
+    process_schedule_exactly = true
+    potential = true
+  diagnostics
+    debug = true
+input
+  initial_conditions
+    path = "./ics"
+    format = 1
+output
+  schedule
+    enabled = true
+    filename = "./output_list.txt"
+  snapshots
+    directory = "./output"
+resources
+  memory
+    per_rank = 3500
+  wall_clock
+    restart_interval = 7200 s
+simulation
+  domain
+    box
+      size = 100000 arepo_length
+  time
+    coordinate = "scale_factor"
+    initial_redshift = 50
+    final_redshift = 0
+    begin float = ( 1 / ( 1 + {?simulation.time.initial_redshift} ) )
+    end float = ( 1 / ( 1 + {?simulation.time.final_redshift} ) )
+    maximum_step = 0.005
+    minimum_step = 0
+    statistics_interval = 0.01
+    snapshot_interval = 0
+hydrodynamics
+  initial_gas_temperature = 244.8095 K
+  minimum_gas_temperature = 5 K
+  maximum_neighbor_deviation = 1
+cosmology
+  matter_density = 0.3089
+  hubble_parameter = 0.6774
+  initial_redshift = {?simulation.time.initial_redshift}
+  final_redshift = {?simulation.time.final_redshift}
+  dark_energy_density float = ( 1 - {?cosmology.matter_density} )
+gravity
+  force_accuracy
+    integration = 0.012
+    opening_angle = 0.4
+    relative_force = 0.0025
+  domain_decomposition
+    multiple_domains = 8
+    top_node_factor = 5
+  softenings
+    comoving[0]
+      length = 5 arepo_length
+    comoving[1]
+      length = 5 arepo_length
+    comoving[2]
+      length = 40 arepo_length
+    comoving[3]
+      length = 125 arepo_length
+    comoving[4]
+      length = 125 arepo_length
+    comoving[5]
+      length = 125 arepo_length
+    physical_maximum[0]
+      length = 2.5 arepo_length
+    physical_maximum[1]
+      length = 2.5 arepo_length
+    physical_maximum[2]
+      length = 20 arepo_length
+    physical_maximum[3]
+      length = 125 arepo_length
+    physical_maximum[4]
+      length = 125 arepo_length
+    physical_maximum[5]
+      length = 125 arepo_length
+    particle_type_map = [0,1,2,3,4,5]
+  hydro
+    gas_softening_factor = 2.8
+mesh
+  regularization
+    shaping_factor = 0
+analysis : analysis_settings
+  subfind
+    linking_neighbors = 20
+    opening_angle = 0.5
+
+# This example exports the centre-of-mass shaping threshold.
+mesh.regularization.shaping_factor.export.enabled = true
+
+# Output schedule from the upstream example create.py (%g precision).
+output_schedule table = {schedule_data}

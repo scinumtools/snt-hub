@@ -1,0 +1,45 @@
+$schema snapshot_settings
+  ?descr "Snapshot naming and storage."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#output-file-names-and-formats"
+
+  directory str
+    ?descr "Directory receiving Arepo snapshots."
+    ?native "OutputDir"
+    !tags ["arepo:param"]
+    ?category "snapshot output"
+
+  base_name str
+    ?descr "Prefix used for snapshot filenames."
+    ?native "SnapshotFileBase"
+    !tags ["arepo:param"]
+    ?category "snapshot output"
+
+  format int
+    !options [
+      1, # traditional GADGET-style unformatted binary
+      2, # GADGET-style binary with four-character block identifiers
+      3  # HDF5 (Arepo-recommended format)
+    ]
+    ?descr "Arepo snapshot serialization format."
+    ?native "SnapFormat"
+    !tags ["arepo:param"]
+    ?recommended_range "3 (HDF5), unless a legacy binary format is specifically required."
+    ?category "snapshot output"
+
+  files int
+    !condition ({.} >= 1)
+    ?descr "Number of files produced for each snapshot."
+    ?native "NumFilesPerSnapshot"
+    !tags ["arepo:param"]
+    ?recommended_range "1 through the number of MPI ranks."
+    ?performance_impact "Splitting a snapshot can improve I/O throughput and avoid very large files, depending on the filesystem."
+    ?category "snapshot output"
+
+  parallel_files int
+    !condition ({.} >= 1)
+    ?descr "Maximum number of snapshot files written concurrently."
+    ?native "NumFilesWrittenInParallel"
+    !tags ["arepo:param"]
+    ?recommended_range "No greater than the number of MPI ranks."
+    ?performance_impact "Restricting concurrency can protect heavily used filesystems on large runs, at the cost of slower I/O."
+    ?category "snapshot output"

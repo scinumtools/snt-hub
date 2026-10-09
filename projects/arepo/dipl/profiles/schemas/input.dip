@@ -1,0 +1,28 @@
+$schema initial_conditions_settings
+  ?descr "Initial-condition paths and formats."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#initial-conditions"
+
+  path str
+    ?descr "Initial-condition file path, without an automatically appended format suffix."
+    ?native "InitCondFile"
+    !tags ["arepo:param"]
+    ?rationale "For multi-file ICs specify the basename without the trailing file number; for HDF5 omit the .hdf5 suffix because Arepo appends it."
+    ?category "initial conditions"
+
+  format int
+    !options [
+      1, # traditional GADGET-style unformatted binary
+      2, # GADGET-style binary with four-character block identifiers
+      3  # HDF5 (Arepo-recommended format)
+    ]
+    ?descr "Serialization format used to read the initial conditions."
+    ?native "ICFormat"
+    !tags ["arepo:param"]
+    ?recommended_range "3 (HDF5), unless a legacy binary format is specifically required."
+    ?category "initial conditions"
+
+$schema input_settings
+  ?descr "Simulation input settings."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#initial-conditions"
+
+  initial_conditions : initial_conditions_settings

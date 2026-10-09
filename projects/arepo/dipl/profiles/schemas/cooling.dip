@@ -1,0 +1,12 @@
+$schema cooling_settings
+  ?descr "Radiative cooling input."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#cooling-and-star-formation"
+
+  uv_background_file str
+    ?descr "Cooling and UV-background table used by Arepo."
+    ?native "TreecoolFile"
+    !tags ["arepo:param"]
+    ?requires "build.physics.cooling"
+    ?category "radiative cooling"
+    export : arepo_export
+      requires_enabled = ["build.physics.cooling"]

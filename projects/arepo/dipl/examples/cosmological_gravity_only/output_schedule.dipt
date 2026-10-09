@@ -1,0 +1,5 @@
+scale_factor float
+write_flag int
+---
+0.5 1
+1.0 1

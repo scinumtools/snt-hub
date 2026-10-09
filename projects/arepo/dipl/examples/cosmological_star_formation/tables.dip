@@ -1,0 +1,22 @@
+# Typed imports of upstream scientific datasets. Numeric conventions are preserved.
+datasets.inputspec_ics
+  output_file str = "L8n32/inputspec_ics.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/cosmo_box_star_formation_3d/L8n32/inputspec_ics.txt"
+  preamble str = "         127      100.387"
+  data table = {dataset_inputspec_ics}
+
+datasets.sfr_ref_L8n32_reduced
+  output_file str = "sfr_ref_L8n32_reduced.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/cosmo_box_star_formation_3d/sfr_ref_L8n32_reduced.txt"
+  data table = {dataset_sfr_ref_L8n32_reduced}
+
+datasets.uv_background
+  output_file str = {?cooling.uv_background_file}
+    !tags ["arepo:dataset"]
+    ?see "data/TREECOOL_ep"
+  export : arepo_export
+    requires_enabled = ["build.physics.cooling"]
+  data table = {dataset_uv_background}
+

@@ -1,0 +1,70 @@
+$schema memory_resources
+  ?descr "Per-rank memory allocation."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#memory-allocation"
+
+  per_rank int
+    !condition ({.} > 0)
+    ?descr "Memory allocated to each MPI rank, in MiB."
+    ?native "MaxMemSize"
+    !tags ["arepo:param"]
+    ?recommended_range "Up to about 95% of physical memory available per MPI rank."
+    ?performance_impact "Arepo reserves one contiguous pool of this size at startup; insufficient space terminates the run, while excessive allocation leaves too little room for MPI and the operating system."
+    ?category "resource management"
+    ?visibility "advanced"
+
+$schema wall_clock_resources
+  ?descr "Runtime limits and restart intervals."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#cpu-time-limit-and-restarts"
+  ?see ["https://arepo-code.org/wp-content/userguide/parameterfile.html#output-frequency"]
+
+  limit float s
+    !condition ({.} > 0 s)
+    ?descr "Wall-clock limit before Arepo stops cleanly for restart."
+    ?native "TimeLimitCPU"
+    !tags ["arepo:param"]
+    ?rationale "Arepo begins clean termination and restart-file writing after 85% of this limit, reserving the remaining time for the final timestep and I/O."
+    ?category "resource management"
+
+  restart_interval float s
+    !condition ({.} >= 0 s)
+    ?descr "Interval between restart-file writes."
+    ?native "CpuTimeBetRestartFile"
+    !tags ["arepo:param"]
+    ?performance_impact "Shorter intervals reduce work lost after an unexpected interruption but increase restart I/O."
+    ?category "resource management"
+
+  log_flush_interval float s
+    !condition ({.} >= 0 s)
+    ?descr "Interval between explicit log-file flushes; zero leaves this disabled."
+    ?native "FlushCpuTimeDiff"
+    !tags ["arepo:param"]
+    ?performance_impact "A shorter interval improves log durability but increases filesystem activity."
+    ?category "resource management"
+    export : arepo_export
+      requires_enabled = ["build.io.reduced_flush"]
+
+$schema execution_resources
+  ?descr "Continuation-job submission settings."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#cpu-time-limit-and-restarts"
+
+  resubmit bool = false
+    ?descr "Whether Arepo should submit a continuation job after reaching its time limit."
+    ?native "ResubmitOn"
+    !tags ["arepo:param"]
+    ?requires "resources.execution.resubmit_command"
+    ?category "batch execution"
+
+  resubmit_command str
+    ?descr "Command used to submit the continuation job when resubmission is enabled."
+    ?native "ResubmitCommand"
+    !tags ["arepo:param"]
+    ?category "batch execution"
+
+$schema resources_settings
+  ?descr "Memory and execution resources."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#cpu-time-limit-and-restarts"
+  ?see ["https://arepo-code.org/wp-content/userguide/parameterfile.html#memory-allocation", "https://arepo-code.org/wp-content/userguide/parameterfile.html#output-frequency"]
+
+  memory : memory_resources
+  wall_clock : wall_clock_resources
+  execution : execution_resources

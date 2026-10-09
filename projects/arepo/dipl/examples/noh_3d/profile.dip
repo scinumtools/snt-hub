@@ -1,0 +1,38 @@
+# Semantic counterpart of examples/noh_3d.
+experiment : experiment_settings
+  setup
+    kind = "noh_3d"
+build : arepo_build
+  boundaries
+    x_mode = 2
+    y_mode = 2
+    z_mode = 2
+  mesh
+    center_of_mass_drift = true
+    drift_limited_by_sound_speed = true
+    face_angle_regularization = true
+  time
+    tree_based_timesteps = true
+  precision
+    mode = 1
+  io
+    input_double_precision = true
+    hdf5 = true
+  output
+    center_of_mass = true
+  diagnostics
+    debug = true
+simulation
+  domain
+    box
+      size = 6 arepo_length
+  time
+    end = 2
+    maximum_step = 0.5
+    minimum_step = 1e-5
+    snapshot_interval = 0.5
+gravity
+  domain_decomposition
+    active_fraction = 0.1
+  softenings
+    particle_type_map = [0,1,1,1,1,1]

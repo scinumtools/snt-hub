@@ -1,0 +1,75 @@
+$schema hydrodynamics_settings
+  ?descr "Gas evolution controls."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#hydrodynamics"
+  ?see ["https://arepo-code.org/wp-content/userguide/parameterfile.html#initial-conditions", "https://arepo-code.org/wp-content/userguide/parameterfile.html#time-integration-accuracy", "https://arepo-code.org/wp-content/userguide/parameterfile.html#moving-mesh"]
+
+  courant_factor float = 0.3
+    !condition ({.} >= 0)
+    ?descr "Courant-Friedrichs-Lewy timestep factor."
+    ?native "CourantFac"
+    !tags ["arepo:param"]
+    ?scientific_impact "Multiplies the cell-wise CFL condition and therefore directly limits hydrodynamical timesteps."
+    ?category "hydrodynamic integration"
+
+  initial_gas_temperature float = 0 K
+    ?descr "Initial gas temperature used where initial conditions lack it."
+    ?native "InitGasTemp"
+    !tags ["arepo:param"]
+    ?scientific_impact "Applied only when positive and when the IC gas temperature is zero; the assumed ionization state changes above 10^4 K."
+    ?category "initial conditions"
+
+  minimum_gas_temperature float = 0 K
+    ?descr "Temperature floor applied to gas."
+    ?native "MinGasTemp"
+    !tags ["arepo:param"]
+    ?scientific_impact "Sets a thermodynamic floor for cooling physics."
+    ?category "thermodynamics"
+
+  minimum_startup_density float = 0 arepo_density
+    ?descr "Minimum density imposed while starting the run."
+    ?native "MinimumDensityOnStartUp"
+    !tags ["arepo:param"]
+    ?scientific_impact "All gas cells below this density immediately after IC loading are raised to this value."
+    ?category "initial conditions"
+
+  internal_energy_density_limit float = 0
+    ?descr "Density threshold for an internal-energy limit."
+    ?native "LimitUBelowThisDensity"
+    !tags ["arepo:param"]
+    ?see "hydrodynamics.internal_energy_floor"
+    ?scientific_impact "Activates the associated internal-energy floor below this density threshold."
+    ?category "thermodynamics"
+    ?visibility "advanced"
+
+  internal_energy_floor float = 0
+    ?descr "Internal-energy floor applied below the configured density threshold."
+    ?native "LimitUBelowCertainDensityToThisValue"
+    !tags ["arepo:param"]
+    ?see "hydrodynamics.internal_energy_density_limit"
+    ?scientific_impact "Prevents gas below the configured density threshold from cooling below this internal energy."
+    ?category "thermodynamics"
+    ?visibility "advanced"
+
+  minimum_specific_energy float = 0 arepo_specific_energy
+    ?descr "Minimum specific internal energy."
+    ?native "MinEgySpec"
+    !tags ["arepo:param"]
+    ?scientific_impact "Provides a global lower bound on the gas specific internal energy."
+    ?category "thermodynamics"
+
+  target_neighbors int = 64
+    !condition ({.} > 0)
+    ?descr "Desired hydrodynamic neighbor count."
+    ?native "DesNumNgb"
+    !tags ["arepo:param"]
+    ?scientific_impact "Sets the target number of nearest neighbours used for the initial gas-cell density/size estimate."
+    ?category "mesh initialization"
+
+  maximum_neighbor_deviation int = 4
+    !condition ({.} >= 0)
+    ?descr "Permitted deviation from the desired neighbor count."
+    ?native "MaxNumNgbDeviation"
+    !tags ["arepo:param"]
+    ?performance_impact "A larger tolerance reduces iterations required to determine the correct initial neighbour radius."
+    ?see "hydrodynamics.target_neighbors"
+    ?category "mesh initialization"

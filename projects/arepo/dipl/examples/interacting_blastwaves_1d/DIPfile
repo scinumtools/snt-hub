@@ -1,0 +1,75 @@
+# Ordered inputs for this AREPO setup. Paths are relative to this manifest.
+# Overrides are registered before model evaluation.
+overrides[]
+  file = "overrides.dip"
+
+sources[]
+  name = "dataset_reference_001"
+  filepath = "tables/reference_001.dipt"
+
+code[]
+  file = "../../profiles/schemas/export.dip"
+
+code[]
+  file = "../../profiles/standard_units.dip"
+
+code[]
+  file = "../../profiles/schemas/arepo_units.dip"
+
+code[]
+  file = "../../profiles/schemas/experiment.dip"
+
+code[]
+  file = "../../profiles/schemas/cosmology.dip"
+
+code[]
+  file = "../../profiles/schemas/snapshots.dip"
+
+code[]
+  file = "../../profiles/schemas/input.dip"
+
+code[]
+  file = "../../profiles/schemas/output.dip"
+
+code[]
+  file = "../../profiles/schemas/resources.dip"
+
+code[]
+  file = "../../profiles/schemas/simulation.dip"
+
+code[]
+  file = "../../profiles/schemas/build.dip"
+
+code[]
+  file = "../../profiles/schemas/analysis.dip"
+
+code[]
+  file = "../../profiles/schemas/cooling.dip"
+
+code[]
+  file = "../../profiles/schemas/star_formation.dip"
+
+code[]
+  file = "../../profiles/schemas/gravity.dip"
+
+code[]
+  file = "../../profiles/schemas/hydrodynamics.dip"
+
+code[]
+  file = "../../profiles/schemas/mesh.dip"
+
+code[]
+  file = "../../profiles/ideal_hydrodynamics.dip"
+
+code[]
+  file = "../../profiles/standard_softenings.dip"
+
+code[]
+  file = "profile.dip"
+
+code[]
+  file = "../../profiles/native_controls.dip"
+
+# Dataset output paths use the effective settings.
+code[]
+  file = "tables.dip"

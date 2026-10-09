@@ -1,0 +1,25 @@
+# Fundamental physical bases shared by the cosmological-volume examples.
+# Arepo runtime parameter reference:
+# https://arepo-code.org/wp-content/userguide/parameterfile.html
+code_units
+  length float = 3.085678e21 cm
+    ?descr "One Arepo length unit (one kiloparsec)."
+    ?native "UnitLength_in_cm"
+    !tags ["arepo:param"]
+    ?rationale "Arepo interprets its native length unit in cm/h."
+    ?example "3.085678e21 cm corresponds to 1 kpc/h in Arepo's native convention."
+    ?category "code units"
+  mass float = 1.989e43 g
+    ?descr "One Arepo mass unit (10^10 solar masses)."
+    ?native "UnitMass_in_g"
+    !tags ["arepo:param"]
+    ?rationale "Arepo interprets its native mass unit in g/h."
+    ?example "1.989e43 g corresponds to 10^10 solar masses/h in Arepo's native convention."
+    ?category "code units"
+  velocity float = 1e5 cm/s
+    ?descr "One Arepo velocity unit (one kilometre per second)."
+    ?native "UnitVelocity_in_cm_per_s"
+    !tags ["arepo:param"]
+    ?rationale "Together with the length and mass bases, this determines Arepo's internal time unit."
+    ?example "1e5 cm/s corresponds to 1 km/s."
+    ?category "code units"

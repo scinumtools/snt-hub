@@ -1,0 +1,20 @@
+# Typed imports of upstream scientific datasets. Numeric conventions are preserved.
+datasets.inputspec_ics
+  output_file str = "L50n32/inputspec_ics.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/cosmo_box_gravity_only_3d/L50n32/inputspec_ics.txt"
+  preamble str = "         127      100.387"
+  data table = {dataset_inputspec_ics}
+
+datasets.Masses_L50n32_z0
+  output_file str = "Masses_L50n32_z0.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/cosmo_box_gravity_only_3d/Masses_L50n32_z0.txt"
+  data table = {dataset_Masses_L50n32_z0}
+
+datasets.Masses_L50n32_z1
+  output_file str = "Masses_L50n32_z1.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/cosmo_box_gravity_only_3d/Masses_L50n32_z1.txt"
+  data table = {dataset_Masses_L50n32_z1}
+

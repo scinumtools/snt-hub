@@ -1,0 +1,92 @@
+$schema mesh_regularization
+  ?descr "Mesh regularization controls."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#moving-mesh"
+
+  shaping_speed float = 0.5
+    !condition ({.} >= 0)
+    ?descr "Speed of mesh regularization."
+    ?native "CellShapingSpeed"
+    !tags ["arepo:param"]
+    ?performance_impact "Controls the strength of mesh-generator motion used to restore cell roundness."
+    ?category "mesh regularization"
+    export : arepo_export
+
+  maximum_face_angle_factor float = 2.25
+    !condition ({.} > 0)
+    ?descr "Maximum-face-angle roundness threshold."
+    ?native "CellMaxAngleFactor"
+    !tags ["arepo:param"]
+    ?requires "build.mesh.face_angle_regularization"
+    ?conflicts "build.geometry.static_mesh"
+    ?scientific_impact "Elongated cells above the face-angle thresholds are not refined and their mesh generators are moved away from pure Lagrangian motion."
+    ?category "mesh regularization"
+    ?visibility "advanced"
+    export : arepo_export
+      requires_enabled = ["build.mesh.face_angle_regularization"]
+
+  shaping_factor float = 1
+    !condition ({.} >= 0)
+    ?descr "Centre-of-mass mesh-roundness threshold; zero disables this criterion."
+    ?native "CellShapingFactor"
+    !tags ["arepo:param"]
+    ?conflicts ["build.geometry.static_mesh", "build.mesh.face_angle_regularization"]
+    ?scientific_impact "Large centre-of-mass offsets suppress refinement and add mesh-generator motion to restore roundness."
+    ?category "mesh regularization"
+    ?visibility "advanced"
+    export : arepo_export
+      enabled = false
+
+$schema mesh_refinement
+  ?descr "Refinement and derefinement controls."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#refinement-and-derefinement"
+
+  reference_gas_mass float = 0 arepo_mass
+    ?descr "Reference gas-cell mass for refinement."
+    ?native "ReferenceGasPartMass"
+    !tags ["arepo:param"]
+    ?requires "build.mesh.refinement"
+    ?scientific_impact "Defines the mass scale around which the default refinement and derefinement maintain gas-cell resolution."
+    ?category "mesh refinement"
+    export : arepo_export
+      requires_enabled = ["build.mesh.refinement"]
+
+  target_gas_mass_factor float = 1
+    !condition ({.} > 0)
+    ?descr "Target gas-mass multiplier for refinement."
+    ?native "TargetGasMassFactor"
+    !tags ["arepo:param"]
+    ?requires "build.mesh.refinement"
+    ?scientific_impact "Scales the reference gas-cell mass used by the refinement target."
+    ?category "mesh refinement"
+    export : arepo_export
+      requires_enabled = ["build.mesh.refinement"]
+
+  refinement_criterion int = 1
+    ?descr "Arepo refinement-criterion selector."
+    ?native "RefinementCriterion"
+    !tags ["arepo:param"]
+    ?requires "build.mesh.refinement"
+    ?scientific_impact "Selects the algorithm governing when gas cells are refined."
+    ?category "mesh refinement"
+    ?visibility "advanced"
+    export : arepo_export
+      requires_enabled = ["build.mesh.refinement"]
+
+  derefinement_criterion int = 1
+    ?descr "Arepo derefinement-criterion selector."
+    ?native "DerefinementCriterion"
+    !tags ["arepo:param"]
+    ?requires "build.mesh.refinement"
+    ?scientific_impact "Selects the algorithm governing when gas cells are derefined."
+    ?category "mesh refinement"
+    ?visibility "advanced"
+    export : arepo_export
+      requires_enabled = ["build.mesh.refinement"]
+
+$schema mesh_settings
+  ?descr "Mesh adaptation settings."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#moving-mesh"
+  ?see ["https://arepo-code.org/wp-content/userguide/parameterfile.html#refinement-and-derefinement"]
+
+  regularization : mesh_regularization
+  refinement : mesh_refinement

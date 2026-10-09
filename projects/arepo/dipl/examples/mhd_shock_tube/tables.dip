@@ -1,0 +1,7 @@
+# Typed imports of upstream scientific datasets. Numeric conventions are preserved.
+datasets.alpha_3
+  output_file str = "alpha_3.dat"
+    !tags ["arepo:dataset"]
+    ?see "examples/mhd_shocktube_1d/alpha_3.dat"
+  data table = {dataset_alpha_3}
+

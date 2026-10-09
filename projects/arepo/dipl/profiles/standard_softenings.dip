@@ -1,0 +1,30 @@
+# Default six-family gravity softenings for the idealised examples.
+gravity
+  softenings
+    comoving list : gravity_softening_length
+    comoving[]
+      length = 0.1 arepo_length
+    comoving[]
+      length = 0.1 arepo_length
+    comoving[]
+      length = 0.1 arepo_length
+    comoving[]
+      length = 0.1 arepo_length
+    comoving[]
+      length = 0.1 arepo_length
+    comoving[]
+      length = 0.1 arepo_length
+    physical_maximum list : gravity_softening_length
+    physical_maximum[]
+      length = 0.1 arepo_length
+    physical_maximum[]
+      length = 0.1 arepo_length
+    physical_maximum[]
+      length = 0.1 arepo_length
+    physical_maximum[]
+      length = 0.1 arepo_length
+    physical_maximum[]
+      length = 0.1 arepo_length
+    physical_maximum[]
+      length = 0.1 arepo_length
+    particle_type_map int[6] = [0,0,0,0,0,0]

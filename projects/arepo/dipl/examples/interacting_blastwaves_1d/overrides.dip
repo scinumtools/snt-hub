@@ -1,0 +1,17 @@
+# Fine tuning for interacting_blastwaves_1d only.
+# Registered by overrides[] in DIPfile; no $override wrapper is needed.
+# Uncomment the settings you want, including their parent paths.
+# Each existing target may occur only once; omit type declarations.
+# Tune inputs rather than replacing their derived values.
+#
+# resources
+#   memory
+#     per_rank = 2000
+#   wall_clock
+#     limit = 3600 s
+# hydrodynamics
+#   courant_factor = 0.25
+# simulation
+#   domain
+#     box
+#       size = 10000 arepo_length

@@ -1,0 +1,160 @@
+# Semantic counterpart of examples/cosmo_box_gravity_only_3d.
+experiment : experiment_settings
+  setup
+    kind = "cosmological_gravity_only"
+
+build : arepo_build
+  physics
+    cooling = false
+    star_formation = false
+  gravity
+    self_gravity = true
+    hierarchical = true
+    cell_center_evaluation = true
+    direct_summation = true
+      threshold = 500
+    multiple_node_softening = true
+    individual_softening_type_mask = 32
+    particle_mesh = true
+      grid_resolution = 256
+      short_range_cutoff = 5.0
+    softening_types = 2
+      export
+        enabled = true
+  time
+    tree_based_timesteps = true
+  precision
+    mode = 1
+    fftw_double = true
+    neighbor_tree_double = true
+  io
+    hdf5 = true
+    reduced_flush = true
+    output_coordinates_double = true
+  mesh
+    face_angle_regularization = false
+    refinement = false
+    adaptive_hydro_softening = true
+  analysis
+    fof = true
+      primary_link_type_mask = 2
+      secondary_link_type_mask = 49
+    subfind = true
+      save_density_estimates = true
+      calculate_velocity_dispersion = true
+      extended_properties = true
+  output
+    process_schedule_exactly = true
+  diagnostics
+    debug = true
+
+input : input_settings
+  initial_conditions
+    path = "./ics"
+    format = 1
+
+output : output_settings
+  schedule
+    enabled = true
+    filename = "./output_list.txt"
+  snapshots
+    directory = "./output"
+    base_name = "snap"
+    format = 3
+    files = 1
+    parallel_files = 1
+
+resources : resources_settings
+  memory
+    per_rank = 2500
+  wall_clock
+    limit = 93000 s
+    restart_interval = 12000 s
+    log_flush_interval = 120 s
+  execution
+    resubmit = false
+    resubmit_command = "my-scriptfile"
+
+simulation : simulation_settings
+  domain
+    boundary = "periodic"
+    box
+      size = 50000 arepo_length
+  time
+    coordinate = "scale_factor"
+    initial_redshift = 127
+    final_redshift = 0
+    begin float = ( 1 / ( 1 + {?simulation.time.initial_redshift} ) )
+    end float = ( 1 / ( 1 + {?simulation.time.final_redshift} ) )
+    maximum_step = 0.005
+    minimum_step = 2e-9
+    statistics_interval = 0.01
+    first_snapshot = 0
+    snapshot_interval = 0
+    timestep_criterion = 0
+
+cosmology : cosmology_settings
+  matter_density = 0.3089
+  baryon_density = 0
+  hubble_parameter = 0.6774
+  initial_redshift = {?simulation.time.initial_redshift}
+  final_redshift = {?simulation.time.final_redshift}
+  flat bool = true
+  dark_energy_density float = ( 1 - {?cosmology.matter_density} )
+    !condition ({.} >= 0)
+  dark_matter_density float = ( {?cosmology.matter_density} - {?cosmology.baryon_density} )
+    !condition ({.} >= 0)
+
+gravity : gravity_settings
+  force_accuracy
+    integration = 0.012
+    opening_angle = 0.7
+    relative_force = 0.0025
+    opening_criterion = 1
+  domain_decomposition
+    multiple_domains = 4
+    top_node_factor = 2.5
+    active_fraction = 0.01
+  softenings
+    comoving list : gravity_softening_length
+    comoving[]
+      length = 40 arepo_length
+    comoving[]
+      length = 40 arepo_length
+    physical_maximum list : gravity_softening_length
+    physical_maximum[]
+      length = 20 arepo_length
+    physical_maximum[]
+      length = 20 arepo_length
+    particle_type_map int[6] = [0,1,1,1,1,1]
+  hydro
+    gas_softening_factor = 2.5
+    minimum_comoving = 1 arepo_length
+    spacing = 1.2
+
+hydrodynamics : hydrodynamics_settings
+  courant_factor = 0.3
+  initial_gas_temperature = 244.8095 K
+  minimum_gas_temperature = 5 K
+  minimum_startup_density = 1e-20 arepo_density
+  internal_energy_density_limit = 0
+  internal_energy_floor = 0
+  minimum_specific_energy = 0 arepo_specific_energy
+  target_neighbors = 64
+  maximum_neighbor_deviation = 4
+
+mesh : mesh_settings
+  regularization
+    shaping_speed = 0.5
+    shaping_factor = 1.0
+
+analysis : analysis_settings
+  subfind
+    linking_neighbors = 20
+    opening_angle = 0.7
+
+# This example exports the centre-of-mass shaping threshold.
+mesh.regularization.shaping_factor.export.enabled = true
+
+# Output times are imported from the example-local DIPL table.
+output_schedule table = {schedule_data}

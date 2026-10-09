@@ -1,0 +1,45 @@
+$schema cosmology_settings
+  ?descr "Cosmological background parameters."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#cosmological-parameters"
+
+  matter_density float
+    ?descr "Present-day total matter density parameter, Omega0."
+    ?native "Omega0"
+    !tags ["arepo:param"]
+    ?scientific_impact "Defines the z=0 matter density relative to critical density for comoving integration and halo/subhalo finding."
+    ?category "cosmological background"
+
+  baryon_density float
+    ?descr "Present-day baryon density parameter, OmegaBaryon."
+    ?native "OmegaBaryon"
+    !tags ["arepo:param"]
+    ?scientific_impact "Defines the z=0 baryon density relative to critical density for comoving integration, halo/subhalo finding, and star formation."
+    ?category "cosmological background"
+
+  hubble_parameter float
+    ?descr "Dimensionless Hubble parameter h, written to HubbleParam."
+    ?native "HubbleParam"
+    !tags ["arepo:param"]
+    ?rationale "For gravity and adiabatic gas dynamics Arepo absorbs h into its code units; use 1.0 unless conversions to proper cgs units, such as radiative cooling, are required."
+    ?scientific_impact "Sets the z=0 Hubble constant in units of 100 km s^-1 Mpc^-1 for physics that converts to proper cgs units."
+    ?category "cosmological background"
+
+  initial_redshift float
+    ?descr "Initial redshift from which the scale-factor start time is derived."
+
+  final_redshift float
+    ?descr "Final redshift from which the scale-factor end time is derived."
+
+  dark_energy_density float
+    ?descr "Present-day dark-energy density parameter, OmegaLambda."
+    ?native "OmegaLambda"
+    !tags ["arepo:param"]
+    ?rationale "Often derived from the remaining density budget of a flat cosmology."
+    ?scientific_impact "Defines the z=0 vacuum-energy density relative to critical density for comoving integration and halo/subhalo finding."
+    ?category "cosmological background"
+
+  dark_matter_density float
+    ?descr "Present-day non-baryonic matter density derived from total and baryon density."
+    ?see ["cosmology.matter_density", "cosmology.baryon_density"]
+    ?scientific_impact "Represents the non-baryonic matter component implied by the total and baryon density parameters."
+    ?category "cosmological background"

@@ -1,0 +1,13 @@
+$schema arepo_export
+  ?descr "Optional typed policy for the local AREPO exporter."
+  ?see "dip/docs/native-outputs.md"
+  ?rationale "Defined by this integration, not by AREPO or the DIPL language. Ordinary scalar and boolean exports need no policy child."
+
+  enabled bool = true
+    ?descr "Include this value in native output when its other conditions pass."
+
+  omit_nonpositive bool = false
+    ?descr "Omit numeric values that are zero or negative."
+
+  requires_enabled str[:] = []
+    ?descr "Full paths of boolean features that must all be enabled. Resolved at export time after overrides."

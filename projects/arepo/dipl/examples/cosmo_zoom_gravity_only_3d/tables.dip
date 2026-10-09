@@ -1,0 +1,37 @@
+# Typed imports of upstream scientific datasets. Numeric conventions are preserved.
+datasets.Masses_z0_5
+  output_file str = "Masses_z0.5.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/cosmo_zoom_gravity_only_3d/Masses_z0.5.txt"
+  data table = {dataset_Masses_z0_5}
+
+datasets.Masses_z0
+  output_file str = "Masses_z0.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/cosmo_zoom_gravity_only_3d/Masses_z0.txt"
+  data table = {dataset_Masses_z0}
+
+datasets.Masses_z1
+  output_file str = "Masses_z1.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/cosmo_zoom_gravity_only_3d/Masses_z1.txt"
+  data table = {dataset_Masses_z1}
+
+datasets.Masses_z2
+  output_file str = "Masses_z2.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/cosmo_zoom_gravity_only_3d/Masses_z2.txt"
+  data table = {dataset_Masses_z2}
+
+datasets.Masses_z3
+  output_file str = "Masses_z3.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/cosmo_zoom_gravity_only_3d/Masses_z3.txt"
+  data table = {dataset_Masses_z3}
+
+datasets.Masses_z4
+  output_file str = "Masses_z4.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/cosmo_zoom_gravity_only_3d/Masses_z4.txt"
+  data table = {dataset_Masses_z4}
+

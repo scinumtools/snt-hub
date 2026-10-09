@@ -1,0 +1,127 @@
+$schema simulation_box
+  ?descr "Computational box size."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#simulated-time-span-and-spatial-extent"
+
+  size float arepo_length
+    !condition ({.} > 0 arepo_length)
+    ?descr "Simulation-box edge length in the selected Arepo code-length unit."
+    ?native "BoxSize"
+    !tags ["arepo:param"]
+    ?scientific_impact "Initial-condition coordinates normally must lie within [0, BoxSize] in every dimension."
+    ?category "simulation domain"
+
+$schema simulation_domain
+  ?descr "Domain extent and boundaries."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#simulated-time-span-and-spatial-extent"
+
+  boundary str
+    !options [
+      "periodic",     # periodic domain boundaries
+      "non_periodic"  # non-periodic domain boundaries
+    ]
+    ?descr "Whether the simulation domain has periodic boundaries."
+    ?native "PeriodicBoundariesOn"
+    ?see "build.gravity.non_periodic"
+    ?scientific_impact "Controls gravitational boundary conditions; hydrodynamic boundaries are compile-time directional settings."
+    ?category "simulation domain"
+
+  box : simulation_box
+
+$schema simulation_time
+  ?descr "Integration interval and output cadence."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#simulated-time-span-and-spatial-extent"
+  ?see ["https://arepo-code.org/wp-content/userguide/parameterfile.html#cosmological-parameters", "https://arepo-code.org/wp-content/userguide/parameterfile.html#time-integration-accuracy", "https://arepo-code.org/wp-content/userguide/parameterfile.html#output-frequency"]
+
+  coordinate str
+    !options [
+      "scale_factor", # cosmological integration using scale factor
+      "linear"        # non-cosmological integration using linear time
+    ]
+    ?descr "Independent coordinate used by the time integrator."
+    ?native "ComovingIntegrationOn"
+    ?scientific_impact "With scale_factor, Arepo evolves an expanding cosmology and uses scale factor as its time coordinate; linear uses Newtonian physical coordinates."
+    ?category "cosmological integration"
+
+  initial_redshift float
+    ?descr "Redshift represented by the initial conditions."
+
+  final_redshift float
+    ?descr "Redshift at which a cosmological integration ends."
+
+  begin float
+    ?descr "Initial integration coordinate; often derived from the initial redshift."
+    ?native "TimeBegin"
+    !tags ["arepo:param"]
+    ?scientific_impact "For a cosmological run this is the initial scale factor."
+    ?category "time integration"
+
+  end float
+    !condition ({.} >= {?simulation.time.begin})
+    ?descr "Final integration coordinate."
+    ?native "TimeMax"
+    !tags ["arepo:param"]
+    ?scientific_impact "For a cosmological run this is the final scale factor."
+    ?category "time integration"
+
+  maximum_step float
+    !condition ({.} > 0)
+    ?descr "Maximum permitted integration step."
+    ?native "MaxSizeTimestep"
+    !tags ["arepo:param"]
+    ?rationale "Protects particles with very small accelerations from unphysically large timesteps."
+    ?scientific_impact "For comoving integrations this caps dln(a)."
+    ?category "time integration"
+    ?visibility "advanced"
+
+  minimum_step float
+    !condition ({.} >= 0)
+    ?descr "Minimum permitted integration step; zero delegates the lower limit to Arepo."
+    ?native "MinSizeTimestep"
+    !tags ["arepo:param"]
+    ?scientific_impact "A requested smaller step normally stops Arepo; NOSTOP_WHEN_BELOW_MINTIMESTEP instead clamps it to this value."
+    ?category "time integration"
+    ?visibility "advanced"
+
+  statistics_interval float
+    !condition ({.} >= 0)
+    ?descr "Interval between time-statistics reports."
+    ?native "TimeBetStatistics"
+    !tags ["arepo:param"]
+    ?performance_impact "More frequent measurements increase diagnostic I/O; gravitational potential energy additionally requires build.gravity.evaluate_potential."
+    ?see "build.gravity.evaluate_potential"
+    ?category "diagnostics"
+
+  first_snapshot float
+    ?descr "First regularly spaced snapshot time when no output schedule is used."
+    ?native "TimeOfFirstSnapshot"
+    !tags ["arepo:param"]
+    ?scientific_impact "For cosmological simulations this is the first output scale factor."
+    ?category "snapshot scheduling"
+
+  snapshot_interval float
+    !condition ({.} >= 0)
+    ?descr "Spacing of regular snapshots when no output schedule is used."
+    ?native "TimeBetSnapshot"
+    !tags ["arepo:param"]
+    ?scientific_impact "Spacing is logarithmic in scale factor for cosmological runs and linear in time otherwise."
+    ?category "snapshot scheduling"
+
+  timestep_criterion int
+    !options [
+      0, # displacement-based criterion
+      1  # acceleration-based criterion
+    ]
+    ?descr "Global time-step criterion used by Arepo."
+    ?native "TypeOfTimestepCriterion"
+    !tags ["arepo:param"]
+    ?recommended_range "0; this is the only criterion currently supported by Arepo."
+    ?category "time integration"
+    ?visibility "expert"
+
+$schema simulation_settings
+  ?descr "Spatial and temporal settings."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#simulated-time-span-and-spatial-extent"
+  ?see ["https://arepo-code.org/wp-content/userguide/parameterfile.html#cosmological-parameters", "https://arepo-code.org/wp-content/userguide/parameterfile.html#time-integration-accuracy"]
+
+  domain : simulation_domain
+  time : simulation_time

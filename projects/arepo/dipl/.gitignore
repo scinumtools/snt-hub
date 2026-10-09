@@ -1,0 +1,9 @@
+generated/
+.venv/
+.snt3-build/
+__pycache__/
+.pytest_cache/
+
+# The repository's Arepo* binary rule also matches this Python package on
+# case-insensitive filesystems.
+!src/arepo_dipl/

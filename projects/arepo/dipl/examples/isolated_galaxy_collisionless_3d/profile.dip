@@ -1,0 +1,87 @@
+# Semantic counterpart of examples/isolated_galaxy_collisionless_3d.
+experiment : experiment_settings
+  setup
+    kind = "isolated_galaxy_collisionless_3d"
+build : arepo_build
+  gravity
+    self_gravity = true
+    hierarchical = true
+    cell_center_evaluation = true
+    direct_summation = true
+      threshold = 500
+    non_periodic = true
+    multiple_node_softening = true
+    individual_softening_type_mask = 32
+    softening_types = 2
+      export
+        enabled = true
+  time
+    tree_based_timesteps = true
+  precision
+    mode = 1
+    neighbor_tree_double = true
+  io
+    hdf5 = true
+  mesh
+    adaptive_hydro_softening = true
+  output
+    process_schedule_exactly = true
+  diagnostics
+    debug = true
+input
+  initial_conditions
+    path = "./snap_010"
+    format = 1
+output
+  schedule
+    enabled = true
+    filename = "./output_list.txt"
+  snapshots
+    directory = "./output"
+resources
+  wall_clock
+    limit = 93000 s
+    restart_interval = 12000 s
+simulation
+  domain
+    boundary = "non_periodic"
+    box
+      size = 100000 arepo_length
+  time
+    end = 1
+    maximum_step = 0.05
+    minimum_step = 2e-9
+    statistics_interval = 0.01
+    snapshot_interval = 0
+hydrodynamics
+  initial_gas_temperature = 244.8095 K
+  minimum_gas_temperature = 5 K
+  maximum_neighbor_deviation = 4
+gravity
+  force_accuracy
+    integration = 0.012
+    opening_angle = 0.7
+    relative_force = 0.0025
+  domain_decomposition
+    multiple_domains = 8
+    top_node_factor = 2.5
+  softenings
+    comoving[0]
+      length = 1 arepo_length
+    comoving[1]
+      length = 1 arepo_length
+    physical_maximum[0]
+      length = 1 arepo_length
+    physical_maximum[1]
+      length = 1 arepo_length
+    particle_type_map = [0,1,1,1,1,1]
+  hydro
+    gas_softening_factor = 2.5
+    minimum_comoving = 1 arepo_length
+    spacing = 1.2
+
+# This example exports the centre-of-mass shaping threshold.
+mesh.regularization.shaping_factor.export.enabled = true
+
+# Output schedule from the upstream example create.py (%g precision).
+output_schedule table = {schedule_data}

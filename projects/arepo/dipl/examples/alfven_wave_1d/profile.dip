@@ -1,0 +1,45 @@
+# Semantic counterpart of examples/alfven_wave_1d.
+experiment : experiment_settings
+  setup
+    kind = "alfven_wave_1d"
+build : arepo_build
+  geometry
+    one_dimensional = true
+  physics
+    magnetohydrodynamics = true
+      powell_cleaning = true
+      powell_limit_timestep = true
+  numerics
+    riemann_hlld = true
+  mesh
+    center_of_mass_drift = true
+    face_angle_regularization = true
+  time
+    force_equal_timesteps = true
+  precision
+    mode = 1
+  io
+    input_double_precision = true
+    hdf5 = true
+  output
+    center_of_mass = true
+  diagnostics
+    debug = true
+resources
+  memory
+    per_rank = 1500
+input
+  initial_conditions
+    path = "ics"
+output
+  snapshots
+    directory = "output/"
+simulation
+  time
+    end = 2
+    maximum_step = 0.1
+    snapshot_interval = 0.25
+    timestep_criterion = 1
+gravity
+  domain_decomposition
+    active_fraction = 0.5

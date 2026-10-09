@@ -1,0 +1,16 @@
+# Derived native switches. Load after the profiles that define their inputs.
+# $override replacements are already effective when those inputs are declared.
+# Keeping these translations in DIPL makes them visible in environment.diph5.
+native_controls
+  comoving bool = ({?simulation.time.coordinate} == "scale_factor")
+    !tags ["arepo:param"]
+    ?native "ComovingIntegrationOn"
+  periodic bool = ({?simulation.domain.boundary} == "periodic")
+    !tags ["arepo:param"]
+    ?native "PeriodicBoundariesOn"
+  cooling bool = {?build.physics.cooling}
+    !tags ["arepo:param"]
+    ?native "CoolingOn"
+  star_formation bool = {?build.physics.star_formation}
+    !tags ["arepo:param"]
+    ?native "StarformationOn"

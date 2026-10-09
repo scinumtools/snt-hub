@@ -1,0 +1,33 @@
+$schema experiment_setup_selection
+  ?descr "Local selection of bundled AREPO examples."
+  ?url "https://arepo-code.org/wp-content/userguide/simtypes.html"
+  ?rationale "Schema organization and setup identifiers belong to this DIPL integration, not to the native AREPO parameter format."
+
+  kind str
+    !options [
+      "cosmological_star_formation", # cosmological gas, cooling, and star formation
+      "cosmological_gravity_only",    # collisionless cosmological TreePM volume
+      "mhd_shock_tube",                # one-dimensional ideal-MHD shock tube
+      "alfven_wave_1d",                # one-dimensional MHD Alfvén wave
+      "cosmo_zoom_gravity_only_3d",    # collisionless cosmological zoom volume
+      "current_sheet_2d",              # two-dimensional MHD current sheet
+      "galaxy_merger_star_formation_3d", # isolated merging galaxies with cooling/SF
+      "gresho_2d",                     # two-dimensional Gresho vortex
+      "interacting_blastwaves_1d",     # one-dimensional blast-wave interaction
+      "isolated_galaxy_collisionless_3d", # isolated collisionless galaxy
+      "noh_2d",                        # two-dimensional Noh implosion
+      "noh_3d",                        # three-dimensional Noh implosion
+      "polytrope_1d_spherical",        # self-gravitating spherical polytrope
+      "shocktube_1d",                  # one-dimensional hydrodynamic shock tube
+      "wave_1d",                       # one-dimensional linear wave
+      "yee_2d"                         # two-dimensional Yee vortex
+    ]
+    ?descr "Selects the scientific setup branch represented by this DIPL environment."
+    ?url "https://arepo-code.org/wp-content/userguide/simtypes.html"
+
+$schema experiment_settings
+  ?descr "Local experiment identity settings."
+  ?url "https://arepo-code.org/wp-content/userguide/simtypes.html"
+  ?rationale "Schema organization and setup identifiers belong to this DIPL integration, not to the native AREPO parameter format."
+
+  setup : experiment_setup_selection

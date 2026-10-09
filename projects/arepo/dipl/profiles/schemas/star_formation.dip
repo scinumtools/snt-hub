@@ -1,0 +1,83 @@
+$schema star_formation_settings
+  ?descr "Star-formation model parameters."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#cooling-and-star-formation"
+
+  critical_overdensity float
+    ?descr "Critical overdensity above which star formation may occur in a comoving integration."
+    ?native "CritOverDensity"
+    !tags ["arepo:param"]
+    ?requires "build.physics.star_formation"
+    ?scientific_impact "Sets the redshift-independent overdensity threshold for star formation in comoving integrations."
+    ?category "star formation"
+    export : arepo_export
+      requires_enabled = ["build.physics.star_formation"]
+
+  temperature_threshold float K
+    ?descr "Maximum gas temperature eligible for star formation."
+    ?native "TemperatureThresh"
+    !tags ["arepo:param"]
+    ?requires "build.physics.star_formation"
+    ?scientific_impact "Prevents star formation in gas hotter than the effective equation of state and this threshold; a low value excludes hot halo gas."
+    ?category "star formation"
+    export : arepo_export
+      requires_enabled = ["build.physics.star_formation"]
+
+  critical_physical_density float kg/m3
+    ?descr "Critical physical density above which star formation may occur in a non-comoving integration."
+    ?native "CritPhysDensity"
+    !tags ["arepo:param"]
+    ?requires "build.physics.star_formation"
+    ?scientific_impact "Sets the physical-density threshold used instead of critical_overdensity in non-comoving integrations."
+    ?category "star formation"
+    export : arepo_export
+      requires_enabled = ["build.physics.star_formation"]
+
+  supernova_temperature float K
+    ?descr "Hot inter-cloud-medium temperature in the Springel-Hernquist model."
+    ?native "TempSupernova"
+    !tags ["arepo:param"]
+    ?requires "build.physics.star_formation"
+    ?scientific_impact "Sets the hot inter-cloud-medium temperature in the Springel-Hernquist model."
+    ?category "star formation"
+    export : arepo_export
+      requires_enabled = ["build.physics.star_formation"]
+
+  cloud_temperature float K
+    ?descr "Cold-cloud temperature in the Springel-Hernquist model."
+    ?native "TempClouds"
+    !tags ["arepo:param"]
+    ?requires "build.physics.star_formation"
+    ?scientific_impact "Sets the cold-cloud temperature in the Springel-Hernquist model."
+    ?category "star formation"
+    export : arepo_export
+      requires_enabled = ["build.physics.star_formation"]
+
+  maximum_timescale float arepo_time
+    ?descr "Star-formation timescale at the density threshold."
+    ?native "MaxSfrTimescale"
+    !tags ["arepo:param"]
+    ?requires "build.physics.star_formation"
+    ?scientific_impact "Sets the star-formation timescale at threshold density; the local timescale decreases as density to the power -0.5."
+    ?category "star formation"
+    export : arepo_export
+      requires_enabled = ["build.physics.star_formation"]
+
+  supernova_factor float
+    ?descr "Mass fraction of massive stars formed for an initial stellar population."
+    ?native "FactorSN"
+    !tags ["arepo:param"]
+    ?requires "build.physics.star_formation"
+    ?scientific_impact "Sets the stellar-IMF mass fraction assigned to massive stars above 8 solar masses."
+    ?category "star formation"
+    export : arepo_export
+      requires_enabled = ["build.physics.star_formation"]
+
+  evaporation_factor float
+    ?descr "Cloud-evaporation efficiency in the Springel-Hernquist model."
+    ?native "FactorEVP"
+    !tags ["arepo:param"]
+    ?requires "build.physics.star_formation"
+    ?scientific_impact "Sets the cloud-evaporation efficiency A in the Springel-Hernquist model."
+    ?category "star formation"
+    export : arepo_export
+      requires_enabled = ["build.physics.star_formation"]

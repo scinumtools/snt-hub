@@ -1,0 +1,28 @@
+# Semantic counterpart of examples/wave_1d.
+experiment : experiment_settings
+  setup
+    kind = "wave_1d"
+build : arepo_build
+  geometry
+    one_dimensional = true
+  mesh
+    center_of_mass_drift = true
+    drift_limited_by_sound_speed = true
+    face_angle_regularization = true
+  time
+    force_equal_timesteps = true
+  precision
+    mode = 1
+  io
+    input_double_precision = true
+    output_double_precision = true
+    hdf5 = true
+  output
+    center_of_mass = true
+  diagnostics
+    debug = true
+simulation
+  time
+    maximum_step = 0.5
+    minimum_step = 1e-5
+    statistics_interval = 1

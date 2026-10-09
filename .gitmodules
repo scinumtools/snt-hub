@@ -1,0 +1,3 @@
+[submodule "projects/arepo/source"]
+	path = projects/arepo/source
+	url = https://gitlab.mpcdf.mpg.de/vrs/arepo.git

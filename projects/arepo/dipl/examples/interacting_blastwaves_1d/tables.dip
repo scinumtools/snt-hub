@@ -1,0 +1,8 @@
+# Typed imports of upstream scientific datasets. Numeric conventions are preserved.
+datasets.reference_001
+  output_file str = "reference_001.txt"
+    !tags ["arepo:dataset"]
+    ?see "examples/interacting_blastwaves_1d/reference_001.txt"
+  preamble str = "# position, density, velocity and momentum of 20,000 cells fixed-grid interacting blast wave problem at t=0.038, only every 20th cell stored here"
+  data table = {dataset_reference_001}
+

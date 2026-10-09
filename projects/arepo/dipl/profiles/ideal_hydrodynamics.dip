@@ -1,0 +1,77 @@
+# Reusable baseline for idealised, non-cosmological Arepo examples. Individual
+# setup profiles below modify only the scientific choices that differ.
+input : input_settings
+  initial_conditions
+    path = "./IC"
+    format = 3
+output : output_settings
+  schedule
+    enabled = false
+    filename = "ol"
+  snapshots
+    directory = "./output/"
+    base_name = "snap"
+    format = 3
+    files = 1
+    parallel_files = 1
+resources : resources_settings
+  memory
+    per_rank = 2500
+  wall_clock
+    limit = 90000 s
+    restart_interval = 9000 s
+    log_flush_interval = 0 s
+  execution
+    resubmit = false
+    resubmit_command = "my-scriptfile"
+simulation : simulation_settings
+  domain
+    boundary = "periodic"
+    box
+      size = 1 arepo_length
+  time
+    coordinate = "linear"
+    initial_redshift = 0
+    final_redshift = 0
+    begin = 0
+    end = 1
+    maximum_step = 0.1
+    minimum_step = 1e-10
+    statistics_interval = 0.005
+    first_snapshot = 0
+    snapshot_interval = 1
+    timestep_criterion = 0
+cosmology : cosmology_settings
+  matter_density = 0
+  baryon_density = 0
+  hubble_parameter = 1
+  initial_redshift = {?simulation.time.initial_redshift}
+  final_redshift = {?simulation.time.final_redshift}
+  dark_energy_density float = 0
+  dark_matter_density float = 0
+gravity : gravity_settings
+  force_accuracy
+    integration = 0.1
+    opening_angle = 0.1
+    relative_force = 0.1
+    opening_criterion = 1
+  domain_decomposition
+    multiple_domains = 2
+    top_node_factor = 4
+    active_fraction = 0.01
+  hydro
+    gas_softening_factor = 0.01
+hydrodynamics : hydrodynamics_settings
+  courant_factor = 0.3
+  initial_gas_temperature = 0 K
+  minimum_gas_temperature = 0 K
+  minimum_startup_density = 0 arepo_density
+  internal_energy_density_limit = 0
+  internal_energy_floor = 0
+  minimum_specific_energy = 0 arepo_specific_energy
+  target_neighbors = 64
+  maximum_neighbor_deviation = 2
+mesh : mesh_settings
+  regularization
+    shaping_speed = 0.5
+    maximum_face_angle_factor = 2.25

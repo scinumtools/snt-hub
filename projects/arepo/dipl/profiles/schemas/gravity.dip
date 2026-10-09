@@ -1,0 +1,139 @@
+$schema gravity_force_accuracy
+  ?descr "Gravity accuracy controls."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#gravitational-force-accuracy"
+  ?see ["https://arepo-code.org/wp-content/userguide/parameterfile.html#time-integration-accuracy"]
+
+  integration float = 0.012
+    ?descr "Integration accuracy tolerance."
+    ?native "ErrTolIntAccuracy"
+    !tags ["arepo:param"]
+    ?scientific_impact "Sets eta in the gravitational timestep criterion; collisionless cosmological timesteps scale approximately as eta^0.5."
+    ?category "gravity accuracy"
+    ?visibility "advanced"
+
+  opening_angle float = 0.7
+    ?descr "Tree opening angle."
+    ?native "ErrTolTheta"
+    !tags ["arepo:param"]
+    ?scientific_impact "Controls the initial Barnes-Hut force estimate and all tree forces when the geometric opening criterion is selected."
+    ?category "gravity accuracy"
+    ?visibility "advanced"
+
+  relative_force float = 0.0025
+    ?descr "Relative force-error tolerance."
+    ?native "ErrTolForceAcc"
+    !tags ["arepo:param"]
+    ?requires "gravity.force_accuracy.opening_criterion=1"
+    ?scientific_impact "Controls tree-force accuracy when using Arepo's relative opening criterion."
+    ?category "gravity accuracy"
+    ?visibility "advanced"
+
+  opening_criterion int = 1
+    !options [
+      0, # geometric Barnes-Hut opening criterion
+      1  # relative opening criterion
+    ]
+    ?descr "Tree opening-criterion selector."
+    ?native "TypeOfOpeningCriterion"
+    !tags ["arepo:param"]
+    ?recommended_range "1 (relative opening criterion), which Arepo normally recommends."
+    ?scientific_impact "Selects relative force-error control (1) or the geometric Barnes-Hut criterion (0)."
+    ?category "gravity accuracy"
+    ?visibility "advanced"
+
+$schema gravity_domain_decomposition
+  ?descr "Domain decomposition controls."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#domain-decomposition"
+
+  multiple_domains int = 1
+    !condition ({.} >= 1)
+    ?descr "Number of simultaneous domain decompositions."
+    ?native "MultipleDomains"
+    !tags ["arepo:param"]
+    ?performance_impact "Too few domains can prevent simultaneous CPU and memory load balance; too many increase MPI communication across domain boundaries."
+    ?category "domain decomposition"
+    ?visibility "advanced"
+
+  top_node_factor float = 2.5
+    !condition ({.} > 0)
+    ?descr "Top-level tree-node allocation factor."
+    ?native "TopNodeFactor"
+    !tags ["arepo:param"]
+    ?performance_impact "Higher values enable finer Peano-Hilbert load cuts but increase the replicated top-level-tree memory on every MPI rank."
+    ?category "domain decomposition"
+    ?visibility "advanced"
+
+  active_fraction float = 0.01
+    !condition ({.} >= 0)
+    ?descr "Active-particle fraction that triggers a domain decomposition."
+    ?native "ActivePartFracForNewDomainDecomp"
+    !tags ["arepo:param"]
+    ?performance_impact "Larger values avoid domain-decomposition work at synchronization points with few active particles."
+    ?category "domain decomposition"
+    ?visibility "advanced"
+
+$schema gravity_hydro_softening
+  ?descr "Adaptive gas softening settings."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#gravitational-softening"
+
+  gas_softening_factor float = 1
+    !condition ({.} > 0)
+    ?descr "Gas-cell softening relative to the assigned base softening."
+    ?native "GasSoftFactor"
+    !tags ["arepo:param"]
+    ?requires "build.mesh.adaptive_hydro_softening"
+    ?scientific_impact "Adaptive gas-cell softening is selected from a logarithmically spaced table after scaling the cell radius by this factor."
+    ?category "gravity softening"
+
+  minimum_comoving float = 0 arepo_length
+    ?descr "Minimum comoving adaptive gas softening."
+    ?native "MinimumComovingHydroSoftening"
+    !tags ["arepo:param"]
+    ?requires "build.mesh.adaptive_hydro_softening"
+    ?scientific_impact "Sets the smallest entry in the adaptive gas-softening table."
+    ?category "gravity softening"
+    export : arepo_export
+      requires_enabled = ["build.mesh.adaptive_hydro_softening"]
+
+  spacing float = 1
+    !condition ({.} >= 1)
+    ?descr "Geometric spacing between adaptive gas softening levels."
+    ?native "AdaptiveHydroSofteningSpacing"
+    !tags ["arepo:param"]
+    ?requires "build.mesh.adaptive_hydro_softening"
+    ?recommended_range "At least 1; values define the geometric ratio between adjacent adaptive softening levels."
+    ?scientific_impact "Sets the spacing of the logarithmic adaptive gas-softening table."
+    ?category "gravity softening"
+    export : arepo_export
+      requires_enabled = ["build.mesh.adaptive_hydro_softening"]
+
+$schema gravity_softening_length
+  ?descr "One gravitational softening length."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#gravitational-softening"
+  ?rationale "DIPL collection items are containers, so the scalar length is represented by a named child."
+
+  length float = 0.1 arepo_length
+    !condition ({.} > 0 arepo_length)
+    ?descr "Gravity softening length in Arepo code-length units; the schema default is overridden by each setup."
+    ?native ["SofteningComovingTypeN", "SofteningMaxPhysTypeN"]
+    ?scientific_impact "A softening family may be shared by multiple particle types; its comoving and maximum physical values control short-range gravitational resolution."
+    ?category "gravity softening"
+
+$schema gravity_settings
+  ?descr "Gravity and softening settings."
+  ?url "https://arepo-code.org/wp-content/userguide/parameterfile.html#gravitational-force-accuracy"
+  ?see ["https://arepo-code.org/wp-content/userguide/parameterfile.html#domain-decomposition", "https://arepo-code.org/wp-content/userguide/parameterfile.html#gravitational-softening", "https://arepo-code.org/wp-content/userguide/parameterfile.html#system-of-units"]
+
+  constant_internal float = 0
+    ?descr "Gravitational constant in the selected internal code-unit system."
+    ?native "GravityConstantInternal"
+    !tags ["arepo:param"]
+    ?rationale "Zero asks Arepo to derive the physical value from the selected code units."
+    ?conflicts "cosmological integration"
+    ?scientific_impact "An explicit value defines a non-standard or natural unit system; it should not be set for cosmological integrations."
+    ?category "code units"
+    ?visibility "expert"
+
+  force_accuracy : gravity_force_accuracy
+  domain_decomposition : gravity_domain_decomposition
+  hydro : gravity_hydro_softening

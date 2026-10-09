@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "arepo",
+  "name": "Arepo",
+  "summary": "A massively parallel code for gravitational N-body and hydrodynamics simulations, including cosmological setups.",
+  "scope": "DIPL models and native input generation for the 16 bundled examples in the pinned public Arepo source.",
+  "support": "independent",
+  "validation": "settings-parity",
+  "validation_qualifier": "Locally verified on 2026-10-09: 38 tests and 28 subtests passed with SciNumTools3 0.9.0 against the pinned Arepo source. CI and physical simulation runs remain separate checks.",
+  "source_url": "https://gitlab.mpcdf.mpg.de/vrs/arepo",
+  "source_path": "projects/arepo/source",
+  "source_revision": "351aa8111a32e2e7433866bf8367ab7eba155d39",
+  "adapter_url": "https://github.com/scinumtools/snt-hub/tree/main/projects/arepo/dipl",
+  "adapter_path": "projects/arepo/dipl",
+  "adapter_origin_url": "https://github.com/vrtulka23/arepo-snt/tree/7924a04/dip",
+  "adapter_revision": null,
+  "verification": {
+    "date": "2026-10-09",
+    "scinumtools3": "0.9.0",
+    "tests_passed": 38,
+    "subtests_passed": 28
+  },
+  "evidence": [
+    {
+      "label": "Bundled example comparison tests",
+      "url": "https://github.com/scinumtools/snt-hub/blob/main/projects/arepo/dipl/tests/test_bundled_examples.py"
+    },
+    {
+      "label": "Verification scope",
+      "url": "https://github.com/scinumtools/snt-hub/blob/main/projects/arepo/dipl/docs/verification.md"
+    }
+  ],
+  "limitations": "Active settings are compared for bundled examples; comments, ordering, file bytes, builds, and physical simulation results are outside that comparison. Upstream endorsement is not established.",
+  "reviewed_on": "2026-10-09"
+}

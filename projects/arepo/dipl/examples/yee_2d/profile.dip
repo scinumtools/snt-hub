@@ -1,0 +1,36 @@
+# Semantic counterpart of examples/yee_2d.
+experiment : experiment_settings
+  setup
+    kind = "yee_2d"
+build : arepo_build
+  geometry
+    two_dimensional = true
+  physics
+    adiabatic_index = 1.4
+  mesh
+    center_of_mass_drift = true
+    drift_limited_by_sound_speed = true
+    face_angle_regularization = true
+  time
+    tree_based_timesteps = true
+  precision
+    mode = 1
+  io
+    read_mass_as_density = true
+    input_double_precision = true
+    output_double_precision = true
+    hdf5 = true
+  output
+    center_of_mass = true
+  diagnostics
+    debug = true
+simulation
+  domain
+    box
+      size = 10 arepo_length
+  time
+    end = 10
+    maximum_step = 1
+    minimum_step = 1e-5
+    statistics_interval = 0.5
+    snapshot_interval = 10
