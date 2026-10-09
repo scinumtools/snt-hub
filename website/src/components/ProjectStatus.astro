@@ -17,7 +17,7 @@ const support = supportStatuses.find((status) => status.key === project.support)
 const validation = validationStatuses.find((status) => status.key === project.validation);
 ---
 
-<div class={`project-status-panel ${variant}`} role="group" aria-label={`${project.name} integration, support, and validation status`}>
+<div class={`project-status-panel is-${variant}`} role="group" aria-label={`${project.name} integration, support, and validation status`}>
   <a href={`${base}/integration-levels/#integration`} aria-label={`Integration: ${project.integration_mode ?? 'Unspecified'}. See integration levels.`}>
     <span>INTEGRATION <b aria-hidden="true">↗</b></span>
     <strong>{project.integration_mode ?? 'Unspecified'}</strong>
