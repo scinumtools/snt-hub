@@ -80,6 +80,7 @@ def prepare_setup(
     render: Callable[[SetupContext], None],
     prepare_inputs: Callable[[SetupContext], None] | None = None,
     inputs_only: bool = False,
+    input_provenance: dict | None = None,
 ) -> Path:
     """Build in a sibling temporary directory and publish only on success."""
     recipe = bundle.recipe(name)
@@ -106,6 +107,7 @@ def prepare_setup(
             "setup": name,
             "capability": "native-inputs-only" if inputs_only else "complete",
             "source_revision": revision,
+            "inputs": input_provenance or {},
             "files": sorted(str(path.relative_to(stage)) for path in stage.rglob("*") if path.is_file()),
         }
         (stage / "setup-lock.json").write_text(json.dumps(lock, indent=2) + "\n")

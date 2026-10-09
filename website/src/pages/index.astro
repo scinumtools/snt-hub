@@ -87,7 +87,7 @@ MaxSteps  <span>128</span>
         {projects.filter((project) => project.hub).map((project) => <div class="hub-command-card">
           <div class="hub-command-head"><strong>{project.name}</strong><span>PINNED SOURCE · REVIEWED EXAMPLE</span></div>
           <div class="hub-command-lines"><div><span>01 / INSTALL</span><code>{project.hub.install_command}</code></div><div><span>02 / SETUP</span><code>{project.hub.setup_command}</code></div></div>
-          <p>See available examples with <code>snt hub examples {project.id}</code>. Other Arepo examples currently produce native inputs while their IC recipes are reviewed.</p>
+          <p>See available examples with <code>snt hub examples {project.id}</code>. Add <code>--override-file tuning.dip</code> to tune one setup without editing the pinned bundle; complete IC recipes accept only reviewed override targets. Other Arepo examples currently produce native inputs while their IC recipes are reviewed.</p>
         </div>)}
       </section>
 

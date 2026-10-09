@@ -36,7 +36,11 @@ def _require_dipl() -> Any:
 _value = value_at
 
 
-def load_environment(setup: str = "cosmological_star_formation", bundle_root: Path | None = None) -> Any:
+def load_environment(
+    setup: str = "cosmological_star_formation",
+    bundle_root: Path | None = None,
+    override_file: Path | None = None,
+) -> Any:
     """Load one self-contained DIPL setup and its reference-derived units."""
     DIP = _require_dipl()
     try:
@@ -46,6 +50,8 @@ def load_environment(setup: str = "cosmological_star_formation", bundle_root: Pa
         raise GenerationError(f"Unknown setup `{setup}`. Choose one of: {', '.join(manifests)}.") from exc
     dip = DIP()
     dip.add_project(manifest)
+    if override_file is not None:
+        dip.add_override_file(Path(override_file).resolve())
     return dip.parse()
 
 
@@ -108,8 +114,9 @@ def generate(
     setup: str = "cosmological_star_formation",
     bundle_root: Path | None = None,
     existing_output_policy: ExistingOutputPolicy = ExistingOutputPolicy.ReplaceRegistered,
+    override_file: Path | None = None,
 ) -> Path:
-    env = load_environment(setup, bundle_root)
+    env = load_environment(setup, bundle_root, override_file)
     run_adapter(
         env, ArepoAdapter(), output, "environment.diph5",
         existing_output_policy=existing_output_policy,

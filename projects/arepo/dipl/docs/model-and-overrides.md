@@ -49,8 +49,7 @@ shared contract is insufficient.
 
 ## Tune an existing setup
 
-Edit only that setup's `overrides.dip`. Its body is unwrapped because the
-manifest registers it under `overrides[]`:
+For local model development, edit only that setup's `overrides.dip`. Its body is unwrapped because the manifest registers it under `overrides[]`. A top-level `$override` block inside ordinary DIPL source has the same replacement role, but its body is indented under that directive. For a pinned hub installation, keep the bundle untouched and supply a separate file with `snt hub setup ... --override-file tuning.dip`:
 
 ```dipl
 resources.wall_clock.limit = 1 h
@@ -64,8 +63,8 @@ at declaration time, so [expressions](units-and-expressions.md) downstream
 use the tuned input. Prefer independent inputs such as
 `simulation.time.initial_redshift` over overriding a derived output directly.
 
-An override may target an existing scalar or explicit collection member. It
-cannot add a node or instantiate an absent physics schema. A target may be
+An override may target an existing value or an explicit collection member, and SNT3 can create items in an existing schema-backed collection. It
+cannot change a schema or instantiate an absent physics schema. A target may be
 assigned only once across the project. Unknown paths, duplicate targets,
 type declarations, property declarations, incompatible units, and violations
 of the target's constraints are errors. Empty or comment-only override files
@@ -81,3 +80,5 @@ env["resources.wall_clock.limit"].provenance.override_code
 
 The manifest, override, and persistence behavior is checked in
 [`test_rendering.py`](../tests/test_rendering.py).
+
+When a complete example also runs a pinned IC creator, the override must remain consistent with what that creator writes. The MHD shock tube's `create.py` fixes physical IC values, so the complete recipe explicitly allows only `resources.wall_clock.limit` and `hydrodynamics.courant_factor` for now. Changing `simulation.domain.box.size` or another unreviewed target causes `setup` to reject the output. `--inputs-only` permits broader native-file experiments without claiming an IC file was prepared.

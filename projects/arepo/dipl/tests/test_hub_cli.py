@@ -1,6 +1,7 @@
 """Checks for the packaged entry point that SNT Hub can invoke."""
 
 import json
+from hashlib import sha256
 import subprocess
 import sys
 
@@ -63,3 +64,24 @@ def test_unreviewed_ic_requires_explicit_inputs_only(tmp_path):
     setup("alfven_wave_1d", output, inputs_only=True)
     assert (output / "Config.sh").is_file()
     assert not (output / "IC.hdf5").exists()
+
+
+def test_per_run_override_changes_native_input_and_is_recorded(tmp_path):
+    override = tmp_path / "tuning.dip"
+    override.write_text("resources.wall_clock.limit = 1800 s\nhydrodynamics.courant_factor = 0.25\n")
+    output = tmp_path / "tuned"
+    setup("mhd_shock_tube", output, override_file=override)
+    assert "TimeLimitCPU" in (output / "param.txt").read_text()
+    assert any(line.split() == ["TimeLimitCPU", "1800"] for line in (output / "param.txt").read_text().splitlines())
+    assert (output / "input-overrides.dip").read_bytes() == override.read_bytes()
+    lock = json.loads((output / "setup-lock.json").read_text())
+    assert lock["inputs"]["override_sha256"] == sha256(override.read_bytes()).hexdigest()
+
+
+def test_ic_incompatible_override_does_not_publish(tmp_path):
+    override = tmp_path / "tuning.dip"
+    override.write_text("simulation.domain.box.size = 3 arepo_length\n")
+    output = tmp_path / "mismatch"
+    with pytest.raises(SetupError, match="not approved for this complete IC recipe"):
+        setup("mhd_shock_tube", output, override_file=override)
+    assert not output.exists()

@@ -37,12 +37,14 @@ Expose these executable arguments so the SNT3 `hub` module can call any project 
 <adapter-executable> examples --bundle <absolute dipl path>
 <adapter-executable> setup --bundle <absolute dipl path> --source <absolute source path>
                            --setup <example id> --output <absolute new directory>
-                           [--inputs-only]
+                           [--inputs-only] [--override-file <path>]
 ```
 
 The package should also offer a direct generation command for local development. The [Arepo implementation](../projects/arepo/dipl/src/arepo_dipl/hub.py) shows how to call `ProjectBundle.load()` and `prepare_setup()` with render and input-preparation callbacks. Do not put project scripts or parameter names in the generic runtime.
 
-An IC creator may use a pinned upstream example script, a declared supplied asset, or another documented generator. Review its dependencies and any network access before marking the recipe `complete`. Run it in the staged output directory and check that its files match the evaluated input paths, format, and key physical settings. If some setup values are hard-coded in the creator, reject incompatible overrides until the creator can receive those values.
+An IC creator may use a pinned upstream example script, a declared supplied asset, or another documented generator. Review its dependencies and any network access before marking the recipe `complete`. Run it in the staged output directory and check that its files match the evaluated input paths, format, and key physical settings. If some setup values are hard-coded in the creator, define a reviewed `ic_safe_overrides` list and reject other override targets until the creator can receive those values.
+
+Support per-run override files without mutating the installed project bundle. Pass the override through SNT3's `add_override_file()` before parsing, include the same override when validating IC output, and record its contents and digest with the generated setup. An override file registered this way contains bare assignments; a `$override` directive is used for an inline region in ordinary DIPL source.
 
 ## 4. Prove the declared status
 

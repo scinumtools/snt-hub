@@ -14,7 +14,8 @@
       "source_example": "mhd_shocktube_1d",
       "capability": "complete",
       "ic_creator": "create.py",
-      "ic_file": "IC.hdf5"
+      "ic_file": "IC.hdf5",
+      "ic_safe_overrides": ["resources.wall_clock.limit", "hydrodynamics.courant_factor"]
     },
     "noh_2d": {"source_example": "noh_2d", "capability": "native-inputs-only"},
     "noh_3d": {"source_example": "noh_3d", "capability": "native-inputs-only"},

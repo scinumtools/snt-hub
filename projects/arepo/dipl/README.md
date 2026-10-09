@@ -33,6 +33,20 @@ projects/arepo/dipl/.venv/bin/arepo-dipl setup --setup mhd_shock_tube --output .
 
 `generate` writes native files and DIPH5 for any of the 16 setups. `setup` writes to a fresh directory and also prepares ICs for recipes marked `complete`; currently this is `mhd_shock_tube`. For another example, use `setup --setup NAME --output DIR --inputs-only` until its IC recipe is reviewed. The complete MHD setup runs the pinned Arepo `create.py`, checks the resulting `IC.hdf5` against DIPL settings, and writes `setup-lock.json`. Existing output directories are rejected. The installed `snt hub install arepo` / `snt hub setup arepo mhd_shock_tube` commands use this project bundle and adapter entry point.
 
+To tune one run without editing the installed bundle, write an unwrapped override file and pass it to setup:
+
+```dipl
+resources.wall_clock.limit = 1800 s
+hydrodynamics.courant_factor = 0.25
+```
+
+```bash
+projects/arepo/dipl/.venv/bin/arepo-dipl setup --setup mhd_shock_tube \
+  --override-file ./tuning.dip --output ./runs/mhd_tuned
+```
+
+The same flag is accepted by `generate` and by the SNT Hub setup contract. The effective settings and override provenance go into `environment.diph5`; setup also copies the exact override text to `input-overrides.dip` and records its SHA-256 in `setup-lock.json`. Duplicate targets across the bundled and per-run override files are rejected. The pinned MHD IC creator fixes physical values, so its complete recipe currently permits only `resources.wall_clock.limit` and `hydrodynamics.courant_factor` overrides. Other override targets fail without publishing an output directory; use `--inputs-only` for broader parameter experiments until the IC creator and checks support them.
+
 The adapter package accepts `--bundle PATH` and `--source PATH` when invoked from an SNT-managed installation. To test locally, run `projects/arepo/dipl/.venv/bin/python -m pytest projects/arepo/dipl/tests`. Arepo compilation is a separate `make` operation using the generated `Config.sh`; see the [maintainer workflow](docs/verification.md).
 
 To tune a setup, edit its own `overrides.dip` and regenerate it. For example,
