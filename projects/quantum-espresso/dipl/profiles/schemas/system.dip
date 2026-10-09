@@ -4,7 +4,7 @@ $schema qe_system
   ?url "https://www.quantum-espresso.org/Doc/INPUT_PW.html"
 
   ibrav int
-    ?descr "Bravais lattice index; 2 is face-centered cubic. The current adapter renders 2 only."
+    ?descr "Bravais lattice index. The adapter renders the 0, 1, and 2 values present in the pinned inputs."
     ?native "ibrav"
 
   nat int

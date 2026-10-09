@@ -35,7 +35,7 @@ $schema qe_structure
 
   position_units str
     !options ["alat", "bohr", "angstrom", "crystal"]
-    ?descr "Coordinate mode for ATOMIC_POSITIONS. The current adapter renders alat only."
+    ?descr "Coordinate mode for ATOMIC_POSITIONS. The adapter renders the modes present in the pinned inputs."
 
   species list : qe_species
   atoms list : qe_atom

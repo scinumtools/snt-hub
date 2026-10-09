@@ -5,7 +5,7 @@ $schema qe_control
 
   calculation str
     !options ["scf", "nscf", "bands", "relax", "vc-relax"]
-    ?descr "Type of PWscf calculation. The current adapter renders SCF only."
+    ?descr "Type of PWscf calculation. The adapter renders the scf, nscf, and bands modes present in the pinned inputs."
     ?native "calculation"
 
   pseudo_dir str

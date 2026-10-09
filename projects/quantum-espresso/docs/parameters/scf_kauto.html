@@ -18,7 +18,7 @@
 <section><h2>Parameters</h2>
 <section id="snt-parameter-1"><h3>control.calculation</h3>
 <table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;scf&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
-<table class="snt-metadata"><tbody><tr><td>Description</td><td>Type of PWscf calculation. The current adapter renders SCF only.</td></tr><tr><td>Applied schemas</td><td>qe_control</td></tr><tr><td>Supplied by schema</td><td>qe_control</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Type of PWscf calculation. The adapter renders the scf, nscf, and bands modes present in the pinned inputs.</td></tr><tr><td>Applied schemas</td><td>qe_control</td></tr><tr><td>Supplied by schema</td><td>qe_control</td></tr></tbody></table>
 <table class="snt-metadata"><tbody><tr><td>Allowed options</td><td>scf, nscf, bands, relax, vc-relax</td></tr></tbody></table>
 <table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_kauto/../../profiles/schemas/control.dip:6</td></tr><tr><td>Declaration</td><td>  calculation str</td></tr><tr><td>Modified at</td><td>settings.dip:4</td></tr><tr><td>Modification</td><td>  calculation = &quot;scf&quot;</td></tr></tbody></table>
 </section>
@@ -116,7 +116,7 @@
 </section>
 <section id="snt-parameter-19"><h3>structure.position_units</h3>
 <table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;alat&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
-<table class="snt-metadata"><tbody><tr><td>Description</td><td>Coordinate mode for ATOMIC_POSITIONS. The current adapter renders alat only.</td></tr><tr><td>Applied schemas</td><td>qe_structure</td></tr><tr><td>Supplied by schema</td><td>qe_structure</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Coordinate mode for ATOMIC_POSITIONS. The adapter renders the modes present in the pinned inputs.</td></tr><tr><td>Applied schemas</td><td>qe_structure</td></tr><tr><td>Supplied by schema</td><td>qe_structure</td></tr></tbody></table>
 <table class="snt-metadata"><tbody><tr><td>Allowed options</td><td>alat, bohr, angstrom, crystal</td></tr></tbody></table>
 <table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_kauto/../../profiles/schemas/structure.dip:36</td></tr><tr><td>Declaration</td><td>  position_units str</td></tr><tr><td>Modified at</td><td>settings.dip:16</td></tr><tr><td>Modification</td><td>  position_units = &quot;alat&quot;</td></tr></tbody></table>
 </section>
@@ -150,7 +150,7 @@
 </section>
 <section id="snt-parameter-25"><h3>system.ibrav</h3>
 <table class="snt-primary"><tbody><tr><td>Value</td><td>2</td></tr><tr><td>Type</td><td>int64</td></tr></tbody></table>
-<table class="snt-metadata"><tbody><tr><td>Description</td><td>Bravais lattice index; 2 is face-centered cubic. The current adapter renders 2 only.</td></tr><tr><td>Applied schemas</td><td>qe_system, qe_system_celldm_1</td></tr><tr><td>Supplied by schema</td><td>qe_system</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Bravais lattice index. The adapter renders the 0, 1, and 2 values present in the pinned inputs.</td></tr><tr><td>Applied schemas</td><td>qe_system, qe_system_celldm_1</td></tr><tr><td>Supplied by schema</td><td>qe_system</td></tr></tbody></table>
 <table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_kauto/../../profiles/schemas/system.dip:6</td></tr><tr><td>Declaration</td><td>  ibrav int</td></tr><tr><td>Modified at</td><td>settings.dip:9</td></tr><tr><td>Modification</td><td>  ibrav = 2</td></tr></tbody></table>
 </section>
 <section id="snt-parameter-26"><h3>system.nat</h3>
@@ -273,16 +273,16 @@
 <table class="snt-source"><tbody><tr><td>Content hash</td><td>SHA-256: e3b0c44298fc1c14...</td></tr></tbody></table>
 </section>
 <section><h3>DIP0_FILE0</h3>
-<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_kauto/../../profiles/schemas/control.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>3</td></tr><tr><td>Content hash</td><td>SHA-256: 9114ca17402695e9...</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_kauto/../../profiles/schemas/control.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>3</td></tr><tr><td>Content hash</td><td>SHA-256: eeb5794d27063754...</td></tr></tbody></table>
 </section>
 <section><h3>DIP0_FILE1</h3>
-<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_kauto/../../profiles/schemas/system.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>6</td></tr><tr><td>Content hash</td><td>SHA-256: 3fb8373747f359c1...</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_kauto/../../profiles/schemas/system.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>6</td></tr><tr><td>Content hash</td><td>SHA-256: 40869cff2bddfc39...</td></tr></tbody></table>
 </section>
 <section><h3>DIP0_FILE2</h3>
 <table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_kauto/../../profiles/schemas/electrons.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>9</td></tr><tr><td>Content hash</td><td>SHA-256: 71d472ce53ea4248...</td></tr></tbody></table>
 </section>
 <section><h3>DIP0_FILE3</h3>
-<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_kauto/../../profiles/schemas/structure.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>12</td></tr><tr><td>Content hash</td><td>SHA-256: b98fe394aa093531...</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_kauto/../../profiles/schemas/structure.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>12</td></tr><tr><td>Content hash</td><td>SHA-256: 0e6dea023119bd34...</td></tr></tbody></table>
 </section>
 <section><h3>DIP0_FILE4</h3>
 <table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_kauto/../../profiles/schemas/sampling.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>15</td></tr><tr><td>Content hash</td><td>SHA-256: 7d35759e74f3e954...</td></tr></tbody></table>
