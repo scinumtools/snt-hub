@@ -4,6 +4,7 @@
   "name": "Arepo",
   "summary": "A massively parallel code for gravitational N-body and hydrodynamics simulations, including cosmological setups.",
   "scope": "DIPL models and native input generation for the 16 bundled examples in the pinned public Arepo source.",
+  "integration_mode": "External adapter",
   "support": "independent",
   "validation": "settings-parity",
   "validation_qualifier": "Locally verified on 2026-10-09: 38 tests and 28 subtests passed with SciNumTools3 0.9.0 against the pinned Arepo source. CI and physical simulation runs remain separate checks.",
@@ -30,6 +31,6 @@
       "url": "https://github.com/scinumtools/snt-hub/blob/main/projects/arepo/dipl/docs/verification.md"
     }
   ],
-  "limitations": "Active settings are compared for bundled examples; comments, ordering, file bytes, builds, and physical simulation results are outside that comparison. Upstream endorsement is not established.",
+  "limitations": "This is an external native-file adapter, not direct SNT3 integration in Arepo. Active settings are compared for bundled examples; comments, ordering, file bytes, builds, and physical simulation results are outside that comparison. Upstream endorsement is not established.",
   "reviewed_on": "2026-10-09"
 }

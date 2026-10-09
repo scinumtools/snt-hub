@@ -10,6 +10,8 @@ This directory keeps the original Arepo code and its optional DIPL parameter lay
 
 The DIPL implementation was moved from the local `arepo-snt` integration fork, based on commit `7924a04` plus local uncommitted DIPL changes present in the linked checkout on 2026-10-09. Generated output, virtual environments, and caches were excluded. The fork is a provenance source; the submodule points to Arepo's canonical repository. This integration is independent and does not imply Arepo maintainer endorsement.
 
+This is a **first-stage external adapter**: Arepo itself does not consume SNT3 or DIPL. The adapter could eventually be replaced by a maintainer-approved direct integration using SNT3's C++ or Python APIs, its experimental C binding, or generated static parameters where those fit Arepo's build and runtime needs. That is a possible path, not a current Arepo feature. The DIPL setups can already be inspected with the optional, read-only [SNT3 Parameter Viewer](https://scinumtools.github.io/snt3/integrations/viewer.html).
+
 From the hub root:
 
 ```sh

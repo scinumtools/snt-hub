@@ -2,11 +2,13 @@
 
 # SNT Hub
 
-A central registry of scientific codes and reusable DIPL layers for generating native simulation inputs.
+A central registry of scientific codes and reusable DIPL parameter layers, from native-input adapters to deeper SNT3 integrations.
 
 ## The initiative
 
-SNT Hub is the landing place for the [SNT initiative](https://scinumtools.github.io/snt3/initiative.html): one optional parameter layer for many established scientific codes. A DIPL model describes values, units, constraints, and dependencies. SNT3 evaluates it, and a code-specific adapter generates the input files the original solver already understands. Each project record separates maintainer support from evidence about generated settings, builds, and scientific results.
+SNT Hub is the landing place for the [SNT initiative](https://scinumtools.github.io/snt3/initiative.html): one optional parameter layer for many established scientific codes. A DIPL model describes values, units, constraints, and dependencies. The first integration can use a code-specific adapter to generate the original solver's native input files. As confidence grows, a project can replace that adapter with direct SNT3 use through C++ or Python APIs, the experimental C binding, or validated static parameter exports. The choice belongs to the code's maintainers.
+
+The optional, read-only [Parameter Viewer](https://scinumtools.github.io/snt3/integrations/viewer.html) can inspect evaluated values, units, provenance, and dependencies from a live DIPL project or a DIPH5 snapshot. A snapshot retains selected provenance but not the complete source text. Each hub record separates the **integration mode** from maintainer support and validation evidence; an adapter is an entry point, not a permanent requirement.
 
 | Explore | What it covers |
 | --- | --- |
@@ -15,6 +17,10 @@ SNT Hub is the landing place for the [SNT initiative](https://scinumtools.github
 | [Initiative overview](https://scinumtools.github.io/snt3/initiative.html) | Goals and collaboration path |
 | [DIPL specification](https://scinumtools.github.io/snt3/dipl/index.html) | Language syntax and semantics |
 | [Adapter guide](https://scinumtools.github.io/snt3/modules/dip/adapters.html) | Generating native files from evaluated models |
+| [C++ and Python interfaces](https://scinumtools.github.io/snt3/integrations/index.html) | Direct use of evaluated parameters |
+| [C binding](https://scinumtools.github.io/snt3/integrations/c.html) | Experimental C interface |
+| [Static parameter generation](https://scinumtools.github.io/snt3/modules/dip/generation.html) | Export to C++, C, Fortran, Rust, Julia, JSON, or YAML |
+| [Parameter Viewer](https://scinumtools.github.io/snt3/integrations/viewer.html) | Read-only inspection of DIPL projects and DIPH5 snapshots |
 
 ## Website
 

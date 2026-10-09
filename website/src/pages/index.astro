@@ -34,10 +34,11 @@ const validationLabels = {
 
     <main>
       <section class="hero shell" aria-labelledby="hero-title">
+        <img class="hero-landscape" src={base + '/initiative-mountains.webp'} alt="" aria-hidden="true" fetchpriority="high" />
         <div class="hero-copy">
           <div class="eyebrow"><span class="eyebrow-line"></span> AN OPEN SCIENTIFIC SOFTWARE INITIATIVE</div>
           <h1 id="hero-title">One parameter layer.<br /><span>Many scientific codes.</span></h1>
-          <p class="hero-lead">A common way to describe, validate, and share simulation inputs, while every code keeps its native format and workflow.</p>
+          <p class="hero-lead">A common way to describe, validate, inspect, and share simulation inputs. Start with an adapter for native files; move to direct SNT3 integration when a code is ready.</p>
           <div class="hero-actions">
             <a class="button button-bright" href="#registry">Explore the registry <span aria-hidden="true">↗</span></a>
             <a class="quiet-link" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a>
@@ -66,8 +67,17 @@ MaxSteps  <span>128</span>
         <div class="steps">
           <div class="step"><div class="step-number">01 / MODEL</div><div class="step-symbol">&#123; &#125;</div><h3>Describe the science</h3><p>DIPL keeps values, units, types, relationships, and constraints together in a portable definition.</p></div>
           <div class="step"><div class="step-number">02 / CHECK</div><div class="step-symbol">✓</div><h3>Make inputs inspectable</h3><p>SNT evaluates the model and catches declared errors before the settings reach a solver.</p></div>
-          <div class="step"><div class="step-number">03 / RUN</div><div class="step-symbol">↗</div><h3>Keep the native workflow</h3><p>A code-specific adapter writes familiar inputs. The solver and its ownership stay with the code.</p></div>
+          <div class="step"><div class="step-number">03 / FIRST STAGE</div><div class="step-symbol">↗</div><h3>Keep the native workflow</h3><p>A code-specific adapter writes familiar inputs first. The solver and its ownership stay with the code.</p></div>
         </div>
+      </section>
+
+      <section class="pathways shell" aria-labelledby="pathways-title">
+        <div class="pathways-heading"><div class="eyebrow"><span class="eyebrow-line"></span> BEYOND THE FIRST ADAPTER</div><h2 id="pathways-title">More ways to integrate<br /><span>when a code is ready.</span></h2><p>The native-file adapter is a practical starting point. A project may later replace it with direct SNT3 access or generated static parameters, after its maintainers review the fit.</p></div>
+        <div class="pathway-grid">
+          <div><span>PATH 01 / DIRECT USE</span><h3>Use evaluated parameters</h3><p>Connect a code to SNT3 through its C++ or Python APIs, or evaluate the experimental C binding where appropriate.</p><a href="https://scinumtools.github.io/snt3/integrations/index.html">Explore integrations ↗</a></div>
+          <div><span>PATH 02 / STATIC EXPORT</span><h3>Generate native parameters</h3><p>Export validated environments to C++, C, Fortran, Rust, Julia, JSON, or YAML for applications that should not parse DIPL at run time.</p><a href="https://scinumtools.github.io/snt3/modules/dip/generation.html">See static generation ↗</a></div>
+        </div>
+        <div class="viewer-note"><div><strong>Inspect the model at any stage.</strong><p>The optional, read-only Parameter Viewer shows evaluated values, units, provenance, and dependencies from a live DIPL project or DIPH5 snapshot.</p></div><a href="https://scinumtools.github.io/snt3/integrations/viewer.html">Explore the viewer ↗</a></div>
       </section>
 
       <section class="resources shell" id="resources" aria-labelledby="resources-title">
@@ -91,13 +101,14 @@ MaxSteps  <span>128</span>
             <h3>{project.name}</h3><p class="project-summary">{project.summary}</p>
             <div class="badge-row"><span class="badge support">{supportLabels[project.support] ?? project.support}</span><span class="badge validation">{validationLabels[project.validation] ?? project.validation}</span></div>
             <p class="validation-note">{project.validation_qualifier}</p>
+            {project.integration_mode && <div class="project-mode"><span>CURRENT INTEGRATION</span><strong>{project.integration_mode}</strong></div>}
             <div class="project-scope"><span>INTEGRATION SCOPE</span><p>{project.scope}</p></div>
             <details class="evidence"><summary>Evidence &amp; limitations <span aria-hidden="true">↗</span></summary><div class="evidence-body"><p>{project.validation_qualifier}</p><p>{project.limitations}</p><ul>{project.evidence.map((item) => <li><a href={item.url}>{item.label} ↗</a></li>)}</ul></div></details>
             <div class="project-links"><a class="project-main-link" href={project.adapter_url}>DIPL integration <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.source_url}>Original code <span aria-hidden="true">↗</span></a></div>
           </article>)}
           <div class="invite-card"><span class="invite-mark" aria-hidden="true">✳</span><p class="invite-overline">YOUR CODE COULD BE NEXT</p><h3>Build the next<br />bridge.</h3><p>Help describe an established code’s inputs or review an adapter for your project.</p><a href="https://github.com/scinumtools/snt-hub/issues">Start a conversation <span aria-hidden="true">↗</span></a></div>
         </div>
-        <p class="registry-footnote"><strong>About these statuses</strong> Support and validation are independent. “Settings parity” describes a comparison of generated native settings for a stated scope; it does not certify scientific results. <a href="https://github.com/scinumtools/snt-hub/blob/main/PROPOSAL/PROPOSAL.md">Read the status criteria ↗</a></p>
+        <p class="registry-footnote"><strong>About these statuses</strong> Integration mode, maintainer support, and validation are separate. Arepo's external adapter is the current first stage. “Settings parity” describes generated native settings for a stated scope; it does not certify scientific results. <a href={base + '/initiative/'}>Read the integration path ↗</a></p>
       </div></section>
 
       <section class="closing shell"><div class="closing-star" aria-hidden="true">✳</div><div><div class="eyebrow"><span class="eyebrow-line"></span> JOIN THE INITIATIVE</div><h2>Better inputs.<br /><span>Stronger science.</span></h2><p>Share a code, review a model, or contribute evidence. The registry grows with every well-described integration.</p><a class="button button-bright" href="https://github.com/scinumtools/snt-hub/issues">Get involved <span aria-hidden="true">↗</span></a></div></section>

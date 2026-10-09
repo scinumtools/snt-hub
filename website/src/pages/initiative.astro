@@ -20,6 +20,7 @@ const home = base.endsWith('/') ? base : base + '/';
     <SiteHeader />
     <main>
       <section class="initiative-hero shell">
+        <img class="initiative-landscape" src={home + 'initiative-mountains.webp'} alt="" aria-hidden="true" fetchpriority="high" />
         <div class="eyebrow"><span class="eyebrow-line"></span> THE SNT INITIATIVE</div>
         <h1>Shared inputs.<br /><span>Independent science.</span></h1>
         <p>Established scientific codes have their own input formats, unit conventions, and validation rules. This initiative explores a common, optional DIPL layer that makes those interfaces easier to inspect, check, and reuse.</p>
@@ -39,8 +40,16 @@ const home = base.endsWith('/') ? base : base + '/';
             <div><span>03</span><strong>Code adapter</strong><p>Apply code-specific checks and write native files.</p></div>
             <div><span>04</span><strong>Existing solver</strong><p>Run with its familiar parser, numerics, and workflow.</p></div>
           </div>
-          <p class="flow-note">Direct DIPL integration may come later when a project judges the model and tooling ready. Native input files remain usable throughout.</p>
+          <p class="flow-note">This external adapter is the first stage. It can be replaced if the code's maintainers later choose a deeper SNT3 integration. Native input files remain usable throughout.</p>
         </div>
+      </section>
+
+      <section class="initiative-next shell" aria-labelledby="initiative-next-title">
+        <div class="eyebrow"><span class="eyebrow-line"></span> POSSIBLE NEXT STAGE</div>
+        <h2 id="initiative-next-title">From wrapper<br /><span>to integration.</span></h2>
+        <p>A mature collaboration can move SNT3 into the code's own input path. C++ and Python APIs expose evaluated parameters directly; the C binding is experimental. For codes that prefer compiled or prebuilt inputs, SNT3 can export validated parameters as C++, C, Fortran, Rust, Julia, JSON, or YAML. Each code chooses whether and how to make that change.</p>
+        <div class="initiative-next-links"><a href="https://scinumtools.github.io/snt3/integrations/index.html">SNT3 interfaces ↗</a><a href="https://scinumtools.github.io/snt3/modules/dip/generation.html">Static generation ↗</a></div>
+        <div class="viewer-note"><div><strong>A model that can be inspected.</strong><p>The optional, read-only Parameter Viewer opens a live DIPL project or a DIPH5 snapshot and shows evaluated values, units, provenance, and recorded dependencies. Snapshots retain selected provenance, not complete source text.</p></div><a href="https://scinumtools.github.io/snt3/integrations/viewer.html">Viewer guide ↗</a></div>
       </section>
 
       <section class="initiative-principles shell">

@@ -8,6 +8,17 @@ and a reloadable `environment.diph5`. It does not modify the Arepo source tree
 and needs no local SciNumTools3 source checkout. The original Arepo code is
 pinned as the sibling `../source` Git submodule.
 
+This adapter is the first compatibility layer. A future Arepo integration could consume evaluated SNT3 parameters directly through C++ or Python, use the experimental C binding, or include generated static parameters instead of generating `Config.sh` and `param.txt` through this wrapper. Those paths require code-owner review and are not implemented here. The optional, read-only [Parameter Viewer](https://scinumtools.github.io/snt3/integrations/viewer.html) can inspect these live `DIPfile` projects or a generated `environment.diph5` snapshot; the snapshot does not contain full source text.
+
+With a source-built `snt` that has the optional viewer enabled, for example:
+
+```bash
+snt view projects/arepo/dipl/examples/mhd_shock_tube/DIPfile
+snt view projects/arepo/dipl/generated/mhd_shock_tube/environment.diph5
+```
+
+Generate the selected example before opening its snapshot. The Python package installed by `setup.sh -b` does not install this optional graphical executable; follow the viewer guide for its build requirements.
+
 ## Setup script
 
 The executable [setup.sh](setup.sh) runs the dependency, test, generation, and
