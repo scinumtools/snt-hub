@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { integrationLevels, supportStatuses, validationStatuses, supportLabels, validationLabels } from '../data/statuses';
+import arepo from '../../../projects/arepo/project.json';
+
+const base = import.meta.env.BASE_URL;
+const home = base.endsWith('/') ? base : base + '/';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#061d38" />
+    <meta name="description" content="What SNT Hub integration levels, maintainer support, and validation statuses mean." />
+    <link rel="icon" type="image/svg+xml" href={home + 'favicon.svg'} />
+    <title>Integration levels and statuses — SNT Hub</title>
+  </head>
+  <body>
+    <SiteHeader />
+    <main>
+      <section class="levels-hero shell" aria-labelledby="levels-title">
+        <img class="levels-landscape" src={home + 'initiative-mountains.webp'} alt="" aria-hidden="true" fetchpriority="high" />
+        <div class="eyebrow"><span class="eyebrow-line"></span> HOW TO READ THE REGISTRY</div>
+        <h1 id="levels-title">Clear labels.<br /><span>Honest evidence.</span></h1>
+        <p>A project can have a working adapter without upstream support, or official support before scientific results have been validated. The Hub records these as separate signals so you can judge the integration for your use.</p>
+        <div class="levels-hero-links"><a class="button button-bright" href="#integration">Explore the levels <span aria-hidden="true">↓</span></a><a class="quiet-link" href={home + '#registry'}>View the registry <span aria-hidden="true">↗</span></a></div>
+      </section>
+
+      <section class="levels-orientation" aria-label="Three registry signals"><div class="shell levels-orientation-grid">
+        <div><span>01 / INTEGRATION</span><strong>How does SNT reach the code?</strong></div>
+        <div><span>02 / SUPPORT</span><strong>Who stands behind this work?</strong></div>
+        <div><span>03 / VALIDATION</span><strong>What has been checked?</strong></div>
+      </div></section>
+
+      <section class="levels-integration" id="integration" aria-labelledby="integration-title"><div class="shell">
+        <div class="levels-section-head"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> 01 / TECHNICAL PATH</div><h2 id="integration-title">Integration levels<span>.</span></h2></div><p>The level describes the current connection to a code. Moving deeper is optional; an external adapter may be the right long-term fit.</p></div>
+        <div class="integration-level-grid">
+          {integrationLevels.map((level) => <article class="integration-level-card">
+            <div class="integration-level-number">{level.number}<span aria-hidden="true">↗</span></div>
+            <h3>{level.name}</h3><p>{level.description}</p>
+            <span class="integration-level-signal">{level.signal}</span>
+          </article>)}
+        </div>
+        <div class="levels-method-note"><strong>Integration can change.</strong><p>A native-file adapter can later give way to a direct C++ or Python connection, the experimental C binding, or generated static parameters. The registry changes its mode only when that implementation exists.</p></div>
+      </div></section>
+
+      <section class="levels-support" id="support" aria-labelledby="support-title"><div class="shell">
+        <div class="levels-section-head"><div><div class="eyebrow"><span class="eyebrow-line"></span> 02 / MAINTAINER RELATIONSHIP</div><h2 id="support-title">Support status<span>.</span></h2></div><p>A public evidence link is required before a listing claims maintainer review or official support.</p></div>
+        <div class="support-status-list">
+          {supportStatuses.map((status, index) => <article class="support-status-row">
+            <div class="support-status-marker"><span>{String(index + 1).padStart(2, '0')}</span><i aria-hidden="true"></i></div>
+            <div class="support-status-name"><span>{status.cue}</span><h3>{status.label}</h3></div>
+            <div class="support-status-copy"><p>{status.description}</p><small><strong>Evidence:</strong> {status.evidence}</small></div>
+          </article>)}
+        </div>
+        <aside class="supporter-note"><span class="supporter-symbol" aria-hidden="true">✳</span><div><h3>What about supporters?</h3><p>People and organizations can support the SNT initiative by contributing, reviewing, or funding work. That does not give an individual code an official support badge. Its status reflects evidence from that code’s maintainers.</p></div></aside>
+      </div></section>
+
+      <section class="levels-validation" id="validation" aria-labelledby="validation-title"><div class="shell">
+        <div class="levels-section-head"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> 03 / TESTED SCOPE</div><h2 id="validation-title">Validation status<span>.</span></h2></div><p>These labels describe the strongest published check for the stated examples and pinned code revision. They do not automatically cover every parameter or future release.</p></div>
+        <div class="validation-list">
+          {validationStatuses.map((status, index) => <article class="validation-row">
+            <span class="validation-index">{String(index + 1).padStart(2, '0')}</span><h3>{status.label}</h3><p>{status.description}</p>
+          </article>)}
+        </div>
+      </div></section>
+
+      <section class="levels-example shell" aria-labelledby="levels-example-title">
+        <div class="eyebrow"><span class="eyebrow-line"></span> SEE THE LABELS TOGETHER</div>
+        <div class="levels-example-grid"><div><h2 id="levels-example-title">{arepo.name}, today<span>.</span></h2><p>{arepo.scope}</p><a href={home + 'projects/arepo/'}>Explore the Arepo project <span aria-hidden="true">↗</span></a></div><div class="levels-example-facts">
+          <div><span>INTEGRATION</span><strong>{arepo.integration_mode}</strong></div>
+          <div><span>SUPPORT</span><strong>{supportLabels[arepo.support] ?? arepo.support}{arepo.support === 'independent' ? ' · unofficial' : ''}</strong></div>
+          <div><span>VALIDATION</span><strong>{validationLabels[arepo.validation] ?? arepo.validation}</strong></div>
+          <p>{arepo.validation_qualifier}</p>
+        </div></div>
+      </section>
+
+      <section class="levels-cta"><div class="shell"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> ADD EVIDENCE, ADVANCE A RECORD</div><h2>Help make a listing stronger.</h2><p>Contribute a parameter model, review native settings, run a reproducible build, or document a scientific comparison. Each result can strengthen a specific claim.</p></div><div class="levels-cta-links"><a href="https://github.com/scinumtools/snt-hub/blob/main/docs/ADDING_PROJECT.md">New project guide <span aria-hidden="true">↗</span></a><a href="https://github.com/scinumtools/snt-hub/issues">Discuss an integration <span aria-hidden="true">↗</span></a><a href={home + '#registry'}>Browse projects <span aria-hidden="true">↗</span></a></div></div></section>
+    </main>
+    <SiteFooter />
+  </body>
+</html>

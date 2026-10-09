@@ -12,6 +12,8 @@ In `projects/<id>/README.md`, state the supported code revision, which inputs ar
 
 Create `projects/<id>/project.json` using [Arepo's record](../projects/arepo/project.json) as a field example. Include the canonical `source_url`, full `source_revision`, source and adapter paths, current `integration_mode`, support and validation states, evidence links, limitations, and a review date. The registry builds directly from these records. Keep these three ideas separate:
 
+The [public status guide](https://scinumtools.github.io/snt-hub/integration-levels/) defines the labels and evidence expected for each state.
+
 | Field | What it says |
 | --- | --- |
 | `integration_mode` | How evaluated parameters reach the code now, such as `External adapter`. |
