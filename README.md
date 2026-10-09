@@ -40,15 +40,18 @@ npm run dev
 The hub command flow is:
 
 ```sh
-snt hub install arepo
-snt hub examples arepo
-snt hub setup arepo mhd_shock_tube --output ./runs/mhd_shock_tube
-snt hub install quantum-espresso
-snt hub setup quantum-espresso si_scf --output ./runs/si_scf
+mkdir arepo-study && cd arepo-study
+snt hub fetch arepo
+snt hub examples
+snt hub setup mhd_shock_tube
+snt hub build --setup runs/mhd_shock_tube
+snt hub run --setup runs/mhd_shock_tube
 ```
 
-Each integration has a pinned original-code submodule, a sibling DIPL implementation, and a registry record in its own directory. Start with [projects/arepo/](projects/arepo/). After cloning, run `git submodule update --init --recursive` before testing an adapter.
+For Quantum ESPRESSO, use a separate empty workspace with `snt hub fetch quantum-espresso`, `snt hub setup si_scf`, `snt hub build`, and `snt hub run --setup runs/si_scf`. Build/run use project-specific hooks and require local compilers and numerical libraries. The pinned QE build also needs its nested source submodules in the fetched workspace.
 
-The [Arepo integration guide](projects/arepo/README.md) and [Quantum ESPRESSO draft](projects/quantum-espresso/README.md) describe their scopes and evidence. Shared installation and setup behavior lives in the reusable [hub runtime](hub/README.md); each project supplies its own renderer and reviewed example recipes.
+Each integration in this Hub repository has a pinned original-code submodule, a sibling DIPL implementation, and a registry record in its own directory. Start with [projects/arepo/](projects/arepo/). For Hub repository development, run `git submodule update --init --recursive` after cloning before testing an adapter.
+
+The [Arepo integration guide](projects/arepo/README.md) and [Quantum ESPRESSO integration guide](projects/quantum-espresso/README.md) describe their scopes and evidence. Shared workspace checks live in the reusable [hub runtime](hub/README.md); each project supplies its own renderer and reviewed example and solver recipes.
 
 To integrate another code, follow the [new-project guide](docs/ADDING_PROJECT.md).

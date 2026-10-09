@@ -12,12 +12,22 @@
     "adapter_package": "projects/quantum-espresso/dipl",
     "adapter_executable": "qe-dipl",
     "adapter_protocol": 1,
-    "install_command": "snt hub install quantum-espresso",
-    "setup_command": "snt hub setup quantum-espresso si_scf --output ./runs/si_scf"
+    "fetch_command": "snt hub fetch quantum-espresso",
+    "setup_command": "snt hub setup si_scf",
+    "build": {
+      "protocol": 1,
+      "profiles": ["local"],
+      "default_profile": "local",
+      "requires_setup": false
+    },
+    "run": {
+      "protocol": 1,
+      "modes": ["local"]
+    }
   },
   "support": "independent",
   "validation": "settings-parity",
-  "validation_qualifier": "On 2026-10-09, all 27 generated inputs matched their pinned PWscf regression references under a semantic comparison; 34 project tests passed. Two complete setups stage checked pseudopotentials. No solver execution or scientific-result validation is claimed.",
+  "validation_qualifier": "On 2026-10-09, all 27 generated inputs matched pinned PWscf regression references under a semantic comparison; 36 project tests passed. A pinned pw.x build and si_scf smoke run completed on macOS. Scientific-result validation is not claimed.",
   "source_url": "https://gitlab.com/QEF/q-e",
   "source_path": "projects/quantum-espresso/source",
   "source_revision": "770a0b2d12928a67048e2f3da8d10d057e52179e",
@@ -28,7 +38,7 @@
   "verification": {
     "date": "2026-10-09",
     "scinumtools3": "0.9.2",
-    "tests_passed": 34
+    "tests_passed": 36
   },
   "evidence": [
     {
@@ -40,6 +50,6 @@
       "url": "https://github.com/scinumtools/snt-hub/blob/main/projects/quantum-espresso/dipl/tests/test_pw_scf_inventory.py"
     }
   ],
-  "limitations": "The scope is the 27 pinned PWscf regression inputs, not all pw.x features or other QE executables. Twenty-five recipes need pseudopotentials or preceding workflow state and are native-inputs-only. This independent adapter has no QE maintainer endorsement; input parity does not establish a successful build or physical result.",
+  "limitations": "The scope is the 27 pinned PWscf regression inputs, not all pw.x features or other QE executables. Twenty-five recipes need pseudopotentials or preceding workflow state and are native-inputs-only. A local macOS build and si_scf smoke run completed, but other platforms and scientific results are not validated. This independent adapter has no QE maintainer endorsement.",
   "reviewed_on": "2026-10-09"
 }

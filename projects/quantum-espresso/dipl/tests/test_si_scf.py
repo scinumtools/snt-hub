@@ -4,8 +4,12 @@ from __future__ import annotations
 
 from hashlib import sha256
 import json
+import os
 from pathlib import Path
 import re
+import shutil
+import subprocess
+import sys
 
 import pytest
 
@@ -90,3 +94,39 @@ def test_invalid_structure_and_unreviewed_pseudo_fail(tmp_path: Path) -> None:
     with pytest.raises(SetupError, match="bundled pseudo"):
         setup("si_scf", target, override_file=override)
     assert not target.exists()
+
+
+def test_setup_from_local_workspace_layout(tmp_path: Path) -> None:
+    workspace = tmp_path / "qe-study"
+    workspace.mkdir()
+    for name in ("project.json", "setups.json"):
+        shutil.copyfile(PROJECT / name, workspace / name)
+    shutil.copytree(PROJECT / "dipl", workspace / "dipl")
+    (workspace / "source").symlink_to(SOURCE, target_is_directory=True)
+    output = workspace / "runs" / "si_scf"
+    env = {**os.environ, "PYTHONPATH": os.pathsep.join((
+            str(PROJECT / "dipl/src"), str(PROJECT.parents[1] / "hub/src"),
+            os.environ.get("PYTHONPATH", ""),
+        ))}
+    command = [sys.executable, "-m", "qe_dipl", "setup", "--bundle", str(workspace / "dipl"),
+               "--source", str(workspace / "source")]
+    result = subprocess.run(
+        [*command, "--setup", "si_scf", "--output", str(output)],
+        cwd=workspace, capture_output=True, text=True, env=env,
+    )
+    assert result.returncode == 0, result.stderr
+    assert (output / "pw.in").is_file()
+    assert (output / "pseudo/Si.bhs").is_file()
+    assert json.loads((output / "setup-lock.json").read_text())["source_revision"] == json.loads(
+        (workspace / "project.json").read_text())["source_revision"]
+
+    inputs = workspace / "runs" / "scf_gamma"
+    result = subprocess.run(
+        [*command, "--setup", "scf_gamma", "--inputs-only", "--output", str(inputs)],
+        cwd=workspace, capture_output=True, text=True, env=env,
+    )
+    assert result.returncode == 0, result.stderr
+    assert (inputs / "pw.in").is_file()
+    assert not (inputs / "pseudo").exists()
+    assert json.loads((inputs / "setup-lock.json").read_text())["source_revision"] == json.loads(
+        (workspace / "project.json").read_text())["source_revision"]

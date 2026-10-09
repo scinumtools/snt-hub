@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .generator import ROOT, generate
 from .hub import SetupError, recipes, setup
+from .workflow import build, run
 
 
 def main() -> None:
@@ -24,6 +25,19 @@ def main() -> None:
     prepared.add_argument("--override-file", type=Path)
     listed = sub.add_parser("examples", help="List setup capabilities")
     listed.add_argument("--bundle", type=Path, default=ROOT)
+    building = sub.add_parser("build", help="Build Arepo for a prepared setup")
+    building.add_argument("--bundle", type=Path, required=True)
+    building.add_argument("--source", type=Path, required=True)
+    building.add_argument("--workspace", type=Path, required=True)
+    building.add_argument("--setup-dir", type=Path, required=True)
+    building.add_argument("--output", type=Path, required=True)
+    building.add_argument("--profile", default="local")
+    running = sub.add_parser("run", help="Run a complete setup as an MPI singleton")
+    running.add_argument("--bundle", type=Path, required=True)
+    running.add_argument("--source", type=Path, required=True)
+    running.add_argument("--workspace", type=Path, required=True)
+    running.add_argument("--setup-dir", type=Path, required=True)
+    running.add_argument("--executable", type=Path, required=True)
     args = parser.parse_args()
     try:
         if args.command == "generate":
@@ -35,6 +49,12 @@ def main() -> None:
         elif args.command == "examples":
             for name, record in recipes(args.bundle).items():
                 print(f"{name}\t{record['capability']}")
+        elif args.command == "build":
+            print(build(args.bundle, args.source, args.workspace, args.setup_dir,
+                        args.output, args.profile))
+        elif args.command == "run":
+            print(run(args.bundle, args.source, args.workspace, args.setup_dir,
+                      args.executable))
     except (SetupError, RuntimeError, OSError, ValueError) as exc:
         parser.error(str(exc))
 

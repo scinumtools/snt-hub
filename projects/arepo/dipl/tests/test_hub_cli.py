@@ -2,6 +2,7 @@
 
 import json
 from hashlib import sha256
+import shutil
 import subprocess
 import sys
 
@@ -54,6 +55,27 @@ def test_setup_command_accepts_bundle_and_source_paths(tmp_path):
     )
     assert result.returncode == 0, result.stderr
     assert (output / "IC.hdf5").is_file()
+
+
+def test_setup_from_local_workspace_layout(tmp_path):
+    workspace = tmp_path / "arepo-study"
+    workspace.mkdir()
+    project = ROOT.parent
+    for name in ("project.json", "setups.json"):
+        shutil.copyfile(project / name, workspace / name)
+    shutil.copytree(ROOT, workspace / "dipl")
+    (workspace / "source").symlink_to(project / "source", target_is_directory=True)
+    output = workspace / "runs" / "mhd_shock_tube"
+    result = subprocess.run(
+        [sys.executable, "-m", "arepo_dipl", "setup", "--bundle", str(workspace / "dipl"),
+         "--source", str(workspace / "source"), "--setup", "mhd_shock_tube",
+         "--output", str(output)],
+        cwd=workspace, capture_output=True, text=True,
+    )
+    assert result.returncode == 0, result.stderr
+    assert (output / "IC.hdf5").is_file()
+    assert json.loads((output / "setup-lock.json").read_text())["source_revision"] == json.loads(
+        (workspace / "project.json").read_text())["source_revision"]
 
 
 def test_unreviewed_ic_requires_explicit_inputs_only(tmp_path):

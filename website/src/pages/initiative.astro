@@ -55,7 +55,7 @@ const home = base.endsWith('/') ? base : base + '/';
       <section class="hub-journey shell" aria-labelledby="initiative-hub-title">
         <div class="eyebrow"><span class="eyebrow-line"></span> START WITH A PINNED CODE</div>
         <h2 id="initiative-hub-title">Two commands.<br /><span>A traceable setup.</span></h2>
-        <p><code>snt hub install &lt;project&gt;</code> gets a participating code at the revision pinned by its Hub bundle. <code>snt hub setup &lt;project&gt; &lt;example&gt; --output ./runs/example</code> prepares the example's native inputs and DIPH5 snapshot, together with any verified assets required for a complete setup. A per-run <code>--override-file</code> tunes evaluated values while keeping the installed bundle pinned.</p>
+        <p>From an empty local workspace, <code>snt hub fetch &lt;project&gt;</code> brings in the pinned source and DIPL layer. <code>snt hub setup &lt;example&gt;</code> prepares native inputs and a DIPH5 snapshot under <code>runs/</code>, together with verified assets for a complete setup. A per-run <code>--override-file</code> tunes evaluated values. Building and running the solver remain project-specific capabilities.</p>
       </section>
 
       <section class="initiative-principles shell">

@@ -7,9 +7,10 @@ The current scope is **all 27 inputs in QE's pinned `test-suite/pw_scf/` directo
 Two recipes, `si_scf` (the upstream `scf-ncpp.in`) and `scf_gth`, are marked **complete** because their pseudopotentials are in the pinned source. Setup checks each asset's SHA-256, copies it into `pseudo/`, and creates the run's scratch directory. The other 25 recipes produce **native inputs only**: their referenced pseudopotentials are absent from the source tree, or the input is a follow-up step that needs previous calculation state. Use `--inputs-only` for those recipes and resolve prerequisites separately.
 
 ```sh
-snt hub install quantum-espresso
-snt hub examples quantum-espresso
-snt hub setup quantum-espresso si_scf --output ./runs/si_scf
+mkdir qe-study && cd qe-study
+snt hub fetch quantum-espresso
+snt hub examples
+snt hub setup si_scf
 ```
 
 To change one run, pass `--override-file ./tuning.dip` to setup. The adapter evaluates the override before rendering, validates the supported cards, and records the exact override and SHA-256 in the setup output. For example:
@@ -22,4 +23,16 @@ The pseudopotential filenames and `./pseudo/` directory are fixed for complete r
 
 The [parameter references](docs/parameters/) are generated for all 27 DIPL projects with SNT's Brief++ reporter. They show bundled values; inspect a generated DIPH5 snapshot with the optional [Parameter Viewer](https://scinumtools.github.io/snt3/integrations/viewer.html) to see effective values after overrides. Regenerate the reports from the Hub root with `python3 scripts/generate_parameter_reports.py --project quantum-espresso --snt ../scinumtools3/build/bin/snt` while using the adjacent SNT3 build. Re-import the pinned native references with `python3 scripts/import_qe_pw_scf.py` after reviewing any source revision change.
 
-This is an **external adapter**, not direct SNT3 support in QE. It can eventually be replaced by a maintainer-led C++, Python, C, or static-parameter integration. The current status is independent with **settings parity for the 27 pinned inputs**: input comparison and asset staging do not establish build success or scientifically validated results. See [`dipl/README.md`](dipl/README.md) for development commands and limitations.
+This is an **external adapter**, not direct SNT3 support in QE. It can eventually be replaced by a maintainer-led C++, Python, C, or static-parameter integration. The current status is independent with **settings parity for the 27 pinned inputs**. A local macOS build and `si_scf` smoke run completed on 2026-10-09; this does not validate results for other inputs or platforms. See [`dipl/README.md`](dipl/README.md) for development commands and limitations.
+
+The local workflow for the reviewed example is:
+
+```sh
+mkdir qe-study && cd qe-study
+snt hub fetch quantum-espresso
+snt hub setup si_scf
+snt hub build
+snt hub run --setup runs/si_scf
+```
+
+The build hook targets PWscf's `qe_pw_exe` with serial CMake settings and writes `build/local/`. QE's pinned source requires the `external/mbd`, `external/wannier90`, and `external/devxlib` nested submodules for this recipe; initialize them in a fetched workspace before building if `fetch` has not already done so. A Fortran compiler, CMake, and numerical libraries are also required. The hooks refuse incomplete inputs and record build/run logs and executable hashes. Of the 27 modelled inputs, only complete setups with staged pseudopotentials and scratch directories are eligible for `run`.

@@ -72,13 +72,13 @@ MaxSteps  <span>128</span>
 
       <section class="hub-journey shell" aria-labelledby="hub-journey-title">
         <div class="eyebrow"><span class="eyebrow-line"></span> FROM REGISTRY TO RUN DIRECTORY</div>
-        <h2 id="hub-journey-title">Install once.<br /><span>Set up an example.</span></h2>
-        <p>SNT Hub fetches a participating code at the revision pinned by its project bundle, then prepares a selected DIPL example. Each project record states which inputs its adapter creates and what has been verified.</p>
-        {projects.filter((project) => project.hub).map((project) => <div class="hub-command-card">
-          <div class="hub-command-head"><strong>{project.name}</strong><span>PINNED SOURCE · REVIEWED EXAMPLE</span></div>
-          <div class="hub-command-lines"><div><span>01 / INSTALL</span><code>{project.hub.install_command}</code></div><div><span>02 / SETUP</span><code>{project.hub.setup_command}</code></div></div>
-          <p>See available examples with <code>snt hub examples {project.id}</code>. Add <code>--override-file tuning.dip</code> to tune one setup without editing the pinned bundle. Review the project guide for supported override targets and required assets.</p>
-        </div>)}
+        <h2 id="hub-journey-title">Fetch locally.<br /><span>Set up an example.</span></h2>
+        <p>Choose a project from the registry, create an empty directory, and work locally with its pinned source and DIPL layer. The project page lists available examples, prerequisites, and supported commands.</p>
+        <div class="hub-command-card">
+          <div class="hub-command-head"><strong>One workspace, one project</strong><span>GENERAL SNT HUB WORKFLOW</span></div>
+          <div class="hub-command-lines"><div><span>01 / WORKSPACE</span><code>mkdir my-study &amp;&amp; cd my-study</code></div><div><span>02 / FETCH</span><code>snt hub fetch PROJECT</code></div><div><span>03 / DISCOVER</span><code>snt hub examples</code></div><div><span>04 / SETUP</span><code>snt hub setup EXAMPLE</code></div><div><span>05 / BUILD</span><code>snt hub build</code></div><div><span>06 / RUN</span><code>snt hub run --setup runs/EXAMPLE</code></div></div>
+          <p>Replace <code>PROJECT</code> and <code>EXAMPLE</code> with registry and example IDs. Build and run are available where the project declares them; a setup-specific build also needs <code>--setup runs/EXAMPLE</code>.</p>
+        </div>
       </section>
 
       <section class="resources shell" id="resources" aria-labelledby="resources-title">

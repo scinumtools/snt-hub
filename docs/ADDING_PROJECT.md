@@ -20,7 +20,7 @@ The [public status guide](https://scinumtools.github.io/snt-hub/integration-leve
 | `support` | `independent`, `maintainer-reviewed`, or `official`; record evidence before advancing it. |
 | `validation` | `prototype`, `settings-parity`, `build-tested`, or `science-validated`; state the exact scope of the check. |
 
-Add a `hub` section with the relative `runtime_package`, `adapter_package`, `adapter_executable`, `adapter_protocol`, `setup_manifest`, and example install/setup commands. The static [catalogue](https://scinumtools.github.io/snt-hub/catalog/v1.json) publishes these values with an immutable hub revision on GitHub Pages. The installed SNT3 CLI should reject an unpublished local catalogue revision.
+Add a `hub` section with the relative `runtime_package`, `adapter_package`, `adapter_executable`, `adapter_protocol`, `setup_manifest`, and example fetch/setup commands. The static [catalogue](https://scinumtools.github.io/snt-hub/catalog/v1.json) publishes these values with an immutable hub revision on GitHub Pages. SNT3 should reject an unpublished local catalogue revision.
 
 Create `projects/<id>/setups.json` with `schema_version: 1` and a `setups` object. Each setup ID points to an actual `dipl/examples/<setup>/DIPfile`. Record an explicit source-example path (a directory or input file) and a `capability`:
 
@@ -44,9 +44,11 @@ Expose these executable arguments so the SNT3 `hub` module can call any project 
 
 The package should also offer a direct generation command for local development. The [Arepo implementation](../projects/arepo/dipl/src/arepo_dipl/hub.py) shows how to call `ProjectBundle.load()` and `prepare_setup()` with render and input-preparation callbacks. Do not put project scripts or parameter names in the generic runtime.
 
+Also test the adapter with the planned local workspace layout: copy `project.json`, `setups.json`, and `dipl/` to a new workspace root, place the pinned source checkout at `source/`, and invoke the same adapter command with `--bundle <workspace>/dipl --source <workspace>/source`. Keep the checked-in `hub.setup_manifest` path unchanged; the shared loader accepts it in both layouts. The setup lock should record the pinned source commit even for `--inputs-only`, plus the actual DIPL digest and source dirty state. A `.snthub/lock.json` written by the future `fetch` command may supply the Hub commit and fetched DIPL baseline.
+
 An IC creator may use a pinned upstream example script, a declared supplied asset, or another documented generator. Other codes may need a pseudopotential or similar prerequisite instead of a separate IC file; the [Quantum ESPRESSO draft](../projects/quantum-espresso/README.md) stages a checksummed pseudopotential from its pinned source. Review asset licences, dependencies, and any network access before marking a recipe `complete`. Prepare inputs in the staged output directory and check that their files match evaluated paths, formats, and key physical settings. If setup values are hard-coded in a creator, define a reviewed `ic_safe_overrides` list and reject other override targets until the creator can receive those values.
 
-Support per-run override files without mutating the installed project bundle. Pass the override through SNT3's `add_override_file()` before parsing, include the same override when validating IC output, and record its contents and digest with the generated setup. An override file registered this way contains bare assignments; a `$override` directive is used for an inline region in ordinary DIPL source.
+Support per-run override files without mutating the fetched project bundle. Pass the override through SNT3's `add_override_file()` before parsing, include the same override when validating IC output, and record its contents and digest with the generated setup. An override file registered this way contains bare assignments; a `$override` directive is used for an inline region in ordinary DIPL source.
 
 ## 4. Prove the declared status
 
@@ -59,3 +61,5 @@ Publish parsed parameter references beside the project under `projects/<id>/docs
 ## 5. Grow beyond the first adapter
 
 A native-file adapter is a practical first stage. Maintainers may later replace it with direct SNT3 C++ or Python access, the experimental C binding, or static parameter generation. Update `integration_mode`, the project guide, and evidence when that implementation actually changes. The optional, read-only [Parameter Viewer](https://scinumtools.github.io/snt3/integrations/viewer.html) can inspect the live DIPL project or generated DIPH5 snapshot at either stage.
+
+Local `snt hub build` and `snt hub run` are optional project capabilities, separate from the DIPL setup adapter. An absent `hub.build` or `hub.run` object in `project.json` means unsupported. Add the corresponding versioned capability and project adapter command only after a reviewed, testable build or run recipe exists; see the command proposal in `PROPOSAL/SNT_HUB_COMMAND_PROPOSAL.md` for the intended protocol. A `complete` setup means its input preparation is complete; it does not establish that the solver was built, ran, or produced validated science.

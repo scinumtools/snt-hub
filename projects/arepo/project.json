@@ -12,12 +12,22 @@
     "adapter_package": "projects/arepo/dipl",
     "adapter_executable": "arepo-dipl",
     "adapter_protocol": 1,
-    "install_command": "snt hub install arepo",
-    "setup_command": "snt hub setup arepo mhd_shock_tube --output ./runs/mhd_shock_tube"
+    "fetch_command": "snt hub fetch arepo",
+    "setup_command": "snt hub setup mhd_shock_tube",
+    "build": {
+      "protocol": 1,
+      "profiles": ["local"],
+      "default_profile": "local",
+      "requires_setup": true
+    },
+    "run": {
+      "protocol": 1,
+      "modes": ["local"]
+    }
   },
   "support": "independent",
   "validation": "settings-parity",
-  "validation_qualifier": "Locally verified on 2026-10-09: 38 tests and 28 subtests passed with SciNumTools3 0.9.0 against the pinned Arepo source. CI and physical simulation runs remain separate checks.",
+  "validation_qualifier": "Locally verified on 2026-10-09: 40 tests and 28 subtests passed against the pinned Arepo source, and mhd_shock_tube built and completed as a smoke run on macOS. Scientific-result validation and other platforms remain separate checks.",
   "source_url": "https://gitlab.mpcdf.mpg.de/vrs/arepo",
   "source_path": "projects/arepo/source",
   "source_revision": "351aa8111a32e2e7433866bf8367ab7eba155d39",
@@ -28,7 +38,7 @@
   "verification": {
     "date": "2026-10-09",
     "scinumtools3": "0.9.0",
-    "tests_passed": 38,
+    "tests_passed": 40,
     "subtests_passed": 28
   },
   "evidence": [
@@ -41,6 +51,6 @@
       "url": "https://github.com/scinumtools/snt-hub/blob/main/projects/arepo/dipl/docs/verification.md"
     }
   ],
-  "limitations": "This is an external native-file adapter, not direct SNT3 integration in Arepo. Active settings are compared for bundled examples; comments, ordering, file bytes, builds, and physical simulation results are outside that comparison. Upstream endorsement is not established.",
+  "limitations": "This is an external native-file adapter, not direct SNT3 integration in Arepo. Active settings are compared for bundled examples; comments, ordering, and file bytes are outside that comparison. The local build/run hook completed one mhd_shock_tube smoke run on macOS; other examples, platforms, and physical simulation results are not validated. Upstream endorsement is not established.",
   "reviewed_on": "2026-10-09"
 }
