@@ -2,6 +2,7 @@
 import '../../styles/global.css';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import ProjectStatus from '../../components/ProjectStatus.astro';
 
 export function getStaticPaths() {
   const records = import.meta.glob('../../../../projects/*/project.json', { eager: true, import: 'default' });
@@ -40,6 +41,8 @@ const readable = (name: string) => name.replaceAll('_', ' ').replace(/\b\w/g, (l
         <div class="eyebrow"><span class="eyebrow-line"></span> PROJECT / {project.id.toUpperCase()}</div>
         <h1>{project.name}<span>.</span></h1>
         <p>{project.summary}</p>
+        <ProjectStatus project={project} variant="hero" />
+        <p class="project-status-evidence">{project.validation_qualifier}</p>
         <div class="project-hero-links"><a href={project.adapter_url}>DIPL integration ↗</a><a href={project.source_url}>Original code ↗</a></div>
       </section>
       <section class="parameter-section"><div class="shell">

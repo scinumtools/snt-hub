@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { supportLabels, validationLabels } from '../data/statuses';
+import ProjectStatus from '../components/ProjectStatus.astro';
 
 const projectModules = import.meta.glob('../../../projects/*/project.json', { eager: true, import: 'default' });
 const projects = Object.values(projectModules).sort((a, b) => a.name.localeCompare(b.name));
@@ -100,9 +100,8 @@ MaxSteps  <span>128</span>
           {projects.map((project) => <article class="project-card">
             <div class="project-card-top"><span class="project-initials">{project.name.slice(0, 2).toUpperCase()}</span><span class="project-number">PROJECT / {project.id.toUpperCase()}</span></div>
             <h3>{project.name}</h3><p class="project-summary">{project.summary}</p>
-            <div class="badge-row"><a class="badge support" href={base + '/integration-levels/#support'} aria-label={`Support status: ${supportLabels[project.support] ?? project.support}. See status guide.`}>{supportLabels[project.support] ?? project.support}</a><a class="badge validation" href={base + '/integration-levels/#validation'} aria-label={`Validation status: ${validationLabels[project.validation] ?? project.validation}. See status guide.`}>{validationLabels[project.validation] ?? project.validation}</a></div>
+            <ProjectStatus project={project} />
             <p class="validation-note">{project.validation_qualifier}</p>
-            {project.integration_mode && <div class="project-mode"><span>CURRENT INTEGRATION</span><strong>{project.integration_mode}</strong></div>}
             <div class="project-scope"><span>INTEGRATION SCOPE</span><p>{project.scope}</p></div>
             <details class="evidence"><summary>Evidence &amp; limitations <span aria-hidden="true">↗</span></summary><div class="evidence-body"><p>{project.validation_qualifier}</p><p>{project.limitations}</p><ul>{project.evidence.map((item) => <li><a href={item.url}>{item.label} ↗</a></li>)}</ul></div></details>
             <div class="project-links"><a class="project-main-link" href={`${base}/projects/${project.id}/`}>Project &amp; parameters <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.adapter_url}>DIPL integration <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.source_url}>Original code <span aria-hidden="true">↗</span></a></div>

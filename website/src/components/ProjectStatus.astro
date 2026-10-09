@@ -1,0 +1,36 @@
+---
+import { supportStatuses, validationStatuses } from '../data/statuses';
+
+interface Props {
+  project: {
+    name: string;
+    integration_mode?: string;
+    support?: string;
+    validation?: string;
+  };
+  variant?: 'card' | 'hero';
+}
+
+const { project, variant = 'card' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const support = supportStatuses.find((status) => status.key === project.support);
+const validation = validationStatuses.find((status) => status.key === project.validation);
+---
+
+<div class={`project-status-panel ${variant}`} role="group" aria-label={`${project.name} integration, support, and validation status`}>
+  <a href={`${base}/integration-levels/#integration`} aria-label={`Integration: ${project.integration_mode ?? 'Unspecified'}. See integration levels.`}>
+    <span>INTEGRATION <b aria-hidden="true">↗</b></span>
+    <strong>{project.integration_mode ?? 'Unspecified'}</strong>
+    <small>How SNT connects</small>
+  </a>
+  <a href={`${base}/integration-levels/#support`} aria-label={`Support: ${support?.label ?? project.support ?? 'Unspecified'}. See support statuses.`}>
+    <span>SUPPORT <b aria-hidden="true">↗</b></span>
+    <strong>{support?.label ?? project.support ?? 'Unspecified'}</strong>
+    <small>{support?.cue ?? 'Maintainer relationship'}</small>
+  </a>
+  <a href={`${base}/integration-levels/#validation`} aria-label={`Validation: ${validation?.label ?? project.validation ?? 'Unspecified'}. See validation statuses.`}>
+    <span>VALIDATION <b aria-hidden="true">↗</b></span>
+    <strong>{validation?.label ?? project.validation ?? 'Unspecified'}</strong>
+    <small>What has been checked</small>
+  </a>
+</div>

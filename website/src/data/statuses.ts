@@ -9,7 +9,7 @@ export const integrationLevels = [
     number: '02',
     name: 'External adapter',
     description: 'SNT evaluates the model; an adapter writes the code’s familiar input files. The original solver stays unchanged.',
-    signal: 'Arepo today',
+    signal: 'Native files',
   },
   {
     number: '03',
