@@ -115,7 +115,7 @@ MaxSteps  <span>128</span>
             {project.integration_mode && <div class="project-mode"><span>CURRENT INTEGRATION</span><strong>{project.integration_mode}</strong></div>}
             <div class="project-scope"><span>INTEGRATION SCOPE</span><p>{project.scope}</p></div>
             <details class="evidence"><summary>Evidence &amp; limitations <span aria-hidden="true">↗</span></summary><div class="evidence-body"><p>{project.validation_qualifier}</p><p>{project.limitations}</p><ul>{project.evidence.map((item) => <li><a href={item.url}>{item.label} ↗</a></li>)}</ul></div></details>
-            <div class="project-links"><a class="project-main-link" href={project.adapter_url}>DIPL integration <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.source_url}>Original code <span aria-hidden="true">↗</span></a></div>
+            <div class="project-links"><a class="project-main-link" href={`${base}/projects/${project.id}/`}>Project &amp; parameters <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.adapter_url}>DIPL integration <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.source_url}>Original code <span aria-hidden="true">↗</span></a></div>
           </article>)}
           <div class="invite-card"><span class="invite-mark" aria-hidden="true">✳</span><p class="invite-overline">YOUR CODE COULD BE NEXT</p><h3>Build the next<br />bridge.</h3><p>Help describe an established code’s inputs or review an adapter for your project.</p><a href="https://github.com/scinumtools/snt-hub/blob/main/docs/ADDING_PROJECT.md">Add a project <span aria-hidden="true">↗</span></a></div>
         </div>

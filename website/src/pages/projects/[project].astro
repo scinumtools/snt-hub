@@ -1,0 +1,60 @@
+---
+import '../../styles/global.css';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+export function getStaticPaths() {
+  const records = import.meta.glob('../../../../projects/*/project.json', { eager: true, import: 'default' });
+  const setupRecords = import.meta.glob('../../../../projects/*/setups.json', { eager: true, import: 'default' });
+  const reportPaths = Object.keys(import.meta.glob('../../../../projects/*/docs/parameters/*.html', { query: '?raw', import: 'default' }));
+  return Object.values(records).map((project: any) => {
+    const setupRecord = Object.entries(setupRecords).find(([path]) => path.includes(`/projects/${project.id}/`));
+    const reports = reportPaths
+      .filter((path) => path.includes(`/projects/${project.id}/docs/parameters/`))
+      .map((path) => path.split('/').at(-1)!.replace(/\.html$/, ''))
+      .sort();
+    return { params: { project: project.id }, props: { project, setups: setupRecord ? (setupRecord[1] as any).setups : {}, reports } };
+  });
+}
+
+const { project, setups, reports } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const readable = (name: string) => name.replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#061d38" />
+    <meta name="description" content={`${project.name} integration and parameter references in SNT Hub.`} />
+    <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
+    <title>{project.name} parameters — SNT Hub</title>
+  </head>
+  <body>
+    <SiteHeader />
+    <main>
+      <section class="project-hero shell">
+        <a class="project-back" href={base + '/#registry'}>← All projects</a>
+        <div class="eyebrow"><span class="eyebrow-line"></span> PROJECT / {project.id.toUpperCase()}</div>
+        <h1>{project.name}<span>.</span></h1>
+        <p>{project.summary}</p>
+        <div class="project-hero-links"><a href={project.adapter_url}>DIPL integration ↗</a><a href={project.source_url}>Original code ↗</a></div>
+      </section>
+      <section class="parameter-section"><div class="shell">
+        <div class="parameter-heading"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> EVALUATED DIPL MODELS</div><h2>Parameter references<span>.</span></h2><p>Generated with SNT's Brief++ reporter from the DIPL projects in this pinned Hub bundle. Each report shows effective values, units, descriptions, source history, and schema details for one example.</p></div><div class="parameter-count"><strong>{String(reports.length).padStart(2, '0')}</strong><span>REPORTS</span></div></div>
+        <div class="parameter-list">
+          {reports.map((name: string) => <a class="parameter-card" href={`${base}/projects/${project.id}/parameters/${name}.html`}>
+            <span>EXAMPLE / {name.replaceAll('_', ' ').toUpperCase()}</span>
+            <strong>{readable(name)}</strong>
+            <small>{setups[name]?.capability === 'complete' ? 'Complete setup' : 'Native inputs only'}</small>
+            <b aria-hidden="true">↗</b>
+          </a>)}
+        </div>
+        <p class="parameter-source">These reports describe the bundled example values. A personal run with <code>--override-file</code> can have different values; inspect its <code>environment.diph5</code> or generate a report from that snapshot. Arepo source revision: <code>{project.source_revision}</code>.</p>
+      </div></section>
+    </main>
+    <SiteFooter />
+  </body>
+</html>

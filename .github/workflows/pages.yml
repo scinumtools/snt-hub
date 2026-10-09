@@ -6,6 +6,8 @@ on:
     paths:
       - "website/**"
       - "projects/**/project.json"
+      - "projects/**/setups.json"
+      - "projects/**/docs/parameters/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 

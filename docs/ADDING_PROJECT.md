@@ -52,6 +52,8 @@ At minimum, test that each DIPL setup parses, its native outputs match the state
 
 Run the project tests and `cd website && npm run build`; confirm the project appears in the registry and `/catalog/v1.json`. Add links and a short explanation to the website only after the commands and evidence correspond to the checked-in records. The Pages workflow builds the registry and catalogue from the project data.
 
+Publish parsed parameter references beside the project under `projects/<id>/docs/parameters/<setup>.html`. Generate each file from its bundled `DIPfile` with `snt report --project ... --format html`, using a report-enabled SNT build. Include all setup IDs in `setups.json`, keep generated source paths repository-relative, and regenerate the reports whenever a DIPL model changes. The website publishes these checked-in Brief++ reports at `/projects/<id>/parameters/<setup>.html`; its project page lists the available reports. See [Arepo's generator](../scripts/generate_parameter_reports.py) for the first implementation. The reports show bundled example values, so direct users to DIPH5 inspection for per-run overrides.
+
 ## 5. Grow beyond the first adapter
 
 A native-file adapter is a practical first stage. Maintainers may later replace it with direct SNT3 C++ or Python access, the experimental C binding, or static parameter generation. Update `integration_mode`, the project guide, and evidence when that implementation actually changes. The optional, read-only [Parameter Viewer](https://scinumtools.github.io/snt3/integrations/viewer.html) can inspect the live DIPL project or generated DIPH5 snapshot at either stage.
