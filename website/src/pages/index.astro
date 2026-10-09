@@ -73,11 +73,11 @@ MaxSteps  <span>128</span>
       <section class="hub-journey shell" aria-labelledby="hub-journey-title">
         <div class="eyebrow"><span class="eyebrow-line"></span> FROM REGISTRY TO RUN DIRECTORY</div>
         <h2 id="hub-journey-title">Install once.<br /><span>Set up an example.</span></h2>
-        <p>SNT Hub fetches a participating code at the revision pinned by its project bundle, then prepares a selected DIPL example. Arepo's MHD shock tube setup includes native parameter files, tables, a DIPH5 snapshot, and <code>IC.hdf5</code>.</p>
+        <p>SNT Hub fetches a participating code at the revision pinned by its project bundle, then prepares a selected DIPL example. Each project record states which inputs its adapter creates and what has been verified.</p>
         {projects.filter((project) => project.hub).map((project) => <div class="hub-command-card">
           <div class="hub-command-head"><strong>{project.name}</strong><span>PINNED SOURCE · REVIEWED EXAMPLE</span></div>
           <div class="hub-command-lines"><div><span>01 / INSTALL</span><code>{project.hub.install_command}</code></div><div><span>02 / SETUP</span><code>{project.hub.setup_command}</code></div></div>
-          <p>See available examples with <code>snt hub examples {project.id}</code>. Add <code>--override-file tuning.dip</code> to tune one setup without editing the pinned bundle; complete IC recipes accept only reviewed override targets. Other Arepo examples currently produce native inputs while their IC recipes are reviewed.</p>
+          <p>See available examples with <code>snt hub examples {project.id}</code>. Add <code>--override-file tuning.dip</code> to tune one setup without editing the pinned bundle. Review the project guide for supported override targets and required assets.</p>
         </div>)}
       </section>
 
@@ -118,7 +118,7 @@ MaxSteps  <span>128</span>
           </article>)}
           <div class="invite-card"><span class="invite-mark" aria-hidden="true">✳</span><p class="invite-overline">YOUR CODE COULD BE NEXT</p><h3>Build the next<br />bridge.</h3><p>Help describe an established code’s inputs or review an adapter for your project.</p><a href="https://github.com/scinumtools/snt-hub/blob/main/docs/ADDING_PROJECT.md">Add a project <span aria-hidden="true">↗</span></a></div>
         </div>
-        <p class="registry-footnote"><strong>About these statuses</strong> Integration mode, maintainer support, and validation are separate. Arepo's external adapter is independent and unofficial; “settings parity” describes generated native settings for a stated scope. <a href={base + '/integration-levels/'}>Explore levels and statuses ↗</a></p>
+        <p class="registry-footnote"><strong>About these statuses</strong> Integration mode, maintainer support, and validation are separate. Independent adapters do not imply code-owner endorsement; each validation label describes evidence for its stated scope. <a href={base + '/integration-levels/'}>Explore levels and statuses ↗</a></p>
       </div></section>
 
       <section class="closing shell"><div class="closing-star" aria-hidden="true">✳</div><div><div class="eyebrow"><span class="eyebrow-line"></span> JOIN THE INITIATIVE</div><h2>Better inputs.<br /><span>Stronger science.</span></h2><p>Share a code, review a model, or contribute evidence. The registry grows with every well-described integration.</p><a class="button button-bright" href="https://github.com/scinumtools/snt-hub/issues">Get involved <span aria-hidden="true">↗</span></a></div></section>

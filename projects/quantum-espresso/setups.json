@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "setups": {
+    "scf_1": {
+      "source_example": "test-suite/pw_scf/scf-1.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_2": {
+      "source_example": "test-suite/pw_scf/scf-2.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_allfrac": {
+      "source_example": "test-suite/pw_scf/scf-allfrac.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_cg_gamma": {
+      "source_example": "test-suite/pw_scf/scf-cg-gamma.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "H.pbe-hgh.UPF",
+        "C.pbe-hgh.UPF"
+      ]
+    },
+    "scf_cg": {
+      "source_example": "test-suite/pw_scf/scf-cg.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_disk_io_1": {
+      "source_example": "test-suite/pw_scf/scf-disk_io-1.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_disk_io_2": {
+      "source_example": "test-suite/pw_scf/scf-disk_io-2.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_disk_io": {
+      "source_example": "test-suite/pw_scf/scf-disk_io.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_gamma": {
+      "source_example": "test-suite/pw_scf/scf-gamma.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_gth": {
+      "source_example": "test-suite/pw_scf/scf-gth.in",
+      "capability": "complete",
+      "required_pseudos": [
+        "C-q4.gth",
+        "O-q6.gth",
+        "H-q1.gth"
+      ],
+      "pseudo_assets": [
+        {
+          "source": "pseudo/C-q4.gth",
+          "file": "C-q4.gth",
+          "sha256": "0bc738387f9848829b8c78b1c31f4975ff7b9c0eeafdf117759d496675ad06e6"
+        },
+        {
+          "source": "pseudo/O-q6.gth",
+          "file": "O-q6.gth",
+          "sha256": "3b02e354031bf9b1ffca4b392745919e51c19df4ddbb8402d7886574545bde9f"
+        },
+        {
+          "source": "pseudo/H-q1.gth",
+          "file": "H-q1.gth",
+          "sha256": "c57d38f1c8f558a570806bf7bdce63f06112bb803bf5487117174eed03c07c1b"
+        }
+      ]
+    },
+    "scf_k0": {
+      "source_example": "test-suite/pw_scf/scf-k0.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_kauto": {
+      "source_example": "test-suite/pw_scf/scf-kauto.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_kcrys": {
+      "source_example": "test-suite/pw_scf/scf-kcrys.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_mixing_tf": {
+      "source_example": "test-suite/pw_scf/scf-mixing_TF.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_mixing_beta": {
+      "source_example": "test-suite/pw_scf/scf-mixing_beta.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_mixing_localtf": {
+      "source_example": "test-suite/pw_scf/scf-mixing_localTF.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_mixing_ndim": {
+      "source_example": "test-suite/pw_scf/scf-mixing_ndim.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "si_scf": {
+      "source_example": "test-suite/pw_scf/scf-ncpp.in",
+      "capability": "complete",
+      "required_pseudos": [
+        "Si.bhs"
+      ],
+      "pseudo_assets": [
+        {
+          "source": "pseudo/Si.bhs",
+          "file": "Si.bhs",
+          "sha256": "94579ea79d0356639fd2f574d624d14842894f36c3eb28aaf58cedf7528d5546"
+        }
+      ]
+    },
+    "scf_nofrac": {
+      "source_example": "test-suite/pw_scf/scf-nofrac.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_occ": {
+      "source_example": "test-suite/pw_scf/scf-occ.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    },
+    "scf_paro_gamma": {
+      "source_example": "test-suite/pw_scf/scf-paro-gamma.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "H.pbe-hgh.UPF",
+        "C.pbe-hgh.UPF"
+      ]
+    },
+    "scf_paro_k": {
+      "source_example": "test-suite/pw_scf/scf-paro-k.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pbe-rrkj.UPF"
+      ]
+    },
+    "scf_rmm_gamma": {
+      "source_example": "test-suite/pw_scf/scf-rmm-gamma.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "H.pbe-hgh.UPF",
+        "C.pbe-hgh.UPF"
+      ]
+    },
+    "scf_rmm_k": {
+      "source_example": "test-suite/pw_scf/scf-rmm-k.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pbe-rrkj.UPF"
+      ]
+    },
+    "scf_rmm_paro_gamma": {
+      "source_example": "test-suite/pw_scf/scf-rmm-paro-gamma.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "H.pbe-hgh.UPF",
+        "C.pbe-hgh.UPF"
+      ]
+    },
+    "scf_rmm_paro_k": {
+      "source_example": "test-suite/pw_scf/scf-rmm-paro-k.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pbe-rrkj.UPF"
+      ]
+    },
+    "scf": {
+      "source_example": "test-suite/pw_scf/scf.in",
+      "capability": "native-inputs-only",
+      "required_pseudos": [
+        "Si.pz-vbc.UPF"
+      ]
+    }
+  }
+}

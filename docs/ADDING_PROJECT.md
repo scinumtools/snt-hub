@@ -22,7 +22,7 @@ The [public status guide](https://scinumtools.github.io/snt-hub/integration-leve
 
 Add a `hub` section with the relative `runtime_package`, `adapter_package`, `adapter_executable`, `adapter_protocol`, `setup_manifest`, and example install/setup commands. The static [catalogue](https://scinumtools.github.io/snt-hub/catalog/v1.json) publishes these values with an immutable hub revision on GitHub Pages. The installed SNT3 CLI should reject an unpublished local catalogue revision.
 
-Create `projects/<id>/setups.json` with `schema_version: 1` and a `setups` object. Each setup ID points to an actual `dipl/examples/<setup>/DIPfile`. Record an explicit source-example directory and a `capability`:
+Create `projects/<id>/setups.json` with `schema_version: 1` and a `setups` object. Each setup ID points to an actual `dipl/examples/<setup>/DIPfile`. Record an explicit source-example path (a directory or input file) and a `capability`:
 
 - `complete`: the recipe creates every required example input, including an IC file when the code needs one, and tests check the result.
 - `native-inputs-only`: the adapter generates parameter files, but the IC or another prerequisite is supplied separately. `snt hub setup` requires `--inputs-only` for this state.
@@ -44,7 +44,7 @@ Expose these executable arguments so the SNT3 `hub` module can call any project 
 
 The package should also offer a direct generation command for local development. The [Arepo implementation](../projects/arepo/dipl/src/arepo_dipl/hub.py) shows how to call `ProjectBundle.load()` and `prepare_setup()` with render and input-preparation callbacks. Do not put project scripts or parameter names in the generic runtime.
 
-An IC creator may use a pinned upstream example script, a declared supplied asset, or another documented generator. Review its dependencies and any network access before marking the recipe `complete`. Run it in the staged output directory and check that its files match the evaluated input paths, format, and key physical settings. If some setup values are hard-coded in the creator, define a reviewed `ic_safe_overrides` list and reject other override targets until the creator can receive those values.
+An IC creator may use a pinned upstream example script, a declared supplied asset, or another documented generator. Other codes may need a pseudopotential or similar prerequisite instead of a separate IC file; the [Quantum ESPRESSO draft](../projects/quantum-espresso/README.md) stages a checksummed pseudopotential from its pinned source. Review asset licences, dependencies, and any network access before marking a recipe `complete`. Prepare inputs in the staged output directory and check that their files match evaluated paths, formats, and key physical settings. If setup values are hard-coded in a creator, define a reviewed `ic_safe_overrides` list and reject other override targets until the creator can receive those values.
 
 Support per-run override files without mutating the installed project bundle. Pass the override through SNT3's `add_override_file()` before parsing, include the same override when validating IC output, and record its contents and digest with the generated setup. An override file registered this way contains bare assignments; a `$override` directive is used for an inline region in ordinary DIPL source.
 

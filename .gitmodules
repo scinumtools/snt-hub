@@ -1,3 +1,6 @@
 [submodule "projects/arepo/source"]
 	path = projects/arepo/source
 	url = https://gitlab.mpcdf.mpg.de/vrs/arepo.git
+[submodule "projects/quantum-espresso/source"]
+	path = projects/quantum-espresso/source
+	url = https://gitlab.com/QEF/q-e.git

@@ -1,0 +1,60 @@
+# Imported from pinned QE test-suite/pw_scf/scf-disk_io-1.in.
+
+control : qe_control, qe_control_disk_io
+  calculation = "bands"
+  disk_io = "none"
+  pseudo_dir = "./pseudo/"
+  outdir = "./tmp/"
+
+system : qe_system, qe_system_celldm_1, qe_system_nbnd
+  ibrav = 2
+  celldm_1 = 10.2
+  nat = 2
+  ntyp = 1
+  ecutwfc = 12.0
+  nbnd = 8
+
+structure : qe_structure
+  position_units = "alat"
+  species[]
+    symbol = "Si"
+    mass = 28.086
+    pseudo_file = "Si.pz-vbc.UPF"
+  atoms[]
+    species = "Si"
+    x = 0.0
+    y = 0.0
+    z = 0.0
+  atoms[]
+    species = "Si"
+    x = 0.25
+    y = 0.25
+    z = 0.25
+
+sampling : qe_sampling, qe_sampling_band_path
+  mode = "tpiba_b"
+  path_points[]
+    x = 0.0
+    y = 0.0
+    z = 0.0
+    segment_points = 5
+  path_points[]
+    x = 1.0
+    y = 0.0
+    z = 0.0
+    segment_points = 5
+  path_points[]
+    x = 1.0
+    y = 0.25
+    z = 0.25
+    segment_points = 5
+  path_points[]
+    x = 0.5
+    y = 0.5
+    z = 0.5
+    segment_points = 5
+  path_points[]
+    x = 0.0
+    y = 0.0
+    z = 0.0
+    segment_points = 1

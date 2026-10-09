@@ -1,0 +1,32 @@
+# Reusable PWscf CONTROL fields currently rendered by the Hub adapter.
+$schema qe_control
+  ?descr "PWscf calculation and output paths."
+  ?url "https://www.quantum-espresso.org/Doc/INPUT_PW.html"
+
+  calculation str
+    !options ["scf", "nscf", "bands", "relax", "vc-relax"]
+    ?descr "Type of PWscf calculation. The current adapter renders SCF only."
+    ?native "calculation"
+
+  pseudo_dir str
+    ?descr "Directory containing files named by ATOMIC_SPECIES."
+    ?native "pseudo_dir"
+
+  outdir str
+    ?descr "Directory for QE temporary data."
+    ?native "outdir"
+
+$schema qe_control_tstress
+  tstress bool
+    ?descr "Calculate the stress tensor."
+    ?native "tstress"
+
+$schema qe_control_tprnfor
+  tprnfor bool
+    ?descr "Calculate and print atomic forces."
+    ?native "tprnfor"
+
+$schema qe_control_disk_io
+  disk_io str
+    ?descr "Temporary-data I/O policy."
+    ?native "disk_io"

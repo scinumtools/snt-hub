@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Quantum ESPRESSO · Scf Rmm Paro Gamma parameters</title>
+</head>
+<body>
+<h1>Quantum ESPRESSO · Scf Rmm Paro Gamma parameters</h1>
+<p class="subtitle">Version: 0.9.2</p>
+<p class="author">Not specified</p>
+<p class="date">2026-10-09</p>
+<p class="institution">Input: projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/DIPfile</p>
+<section><h2>Parameter guide</h2>
+<p>A quick index to the full reference entries. Scalars show effective values; arrays show shape and units.</p>
+<table><thead><tr><th scope="col">Parameter</th><th scope="col">Value / summary</th></tr></thead><tbody><tr><td><a href="#snt-parameter-1">control.calculation</a></td><td>&quot;scf&quot;</td></tr><tr><td><a href="#snt-parameter-2">control.outdir</a></td><td>&quot;./tmp/&quot;</td></tr><tr><td><a href="#snt-parameter-3">control.pseudo_dir</a></td><td>&quot;./pseudo/&quot;</td></tr><tr><td><a href="#snt-parameter-4">control.tprnfor</a></td><td>true</td></tr><tr><td><a href="#snt-parameter-5">electrons.conv_thr</a></td><td>1e-12</td></tr><tr><td><a href="#snt-parameter-6">electrons.diagonalization</a></td><td>&quot;rmm-paro&quot;</td></tr><tr><td><a href="#snt-parameter-7">sampling.mode</a></td><td>&quot;gamma&quot;</td></tr><tr><td><a href="#snt-parameter-8">structure.atoms[0].species</a></td><td>&quot;H&quot;</td></tr><tr><td><a href="#snt-parameter-9">structure.atoms[0].x</a></td><td>-2.717</td></tr><tr><td><a href="#snt-parameter-10">structure.atoms[0].y</a></td><td>-2.458</td></tr><tr><td><a href="#snt-parameter-11">structure.atoms[0].z</a></td><td>2.362</td></tr><tr><td><a href="#snt-parameter-12">structure.atoms[1].species</a></td><td>&quot;H&quot;</td></tr><tr><td><a href="#snt-parameter-13">structure.atoms[1].x</a></td><td>-2.913</td></tr><tr><td><a href="#snt-parameter-14">structure.atoms[1].y</a></td><td>2.491</td></tr><tr><td><a href="#snt-parameter-15">structure.atoms[1].z</a></td><td>0.9529</td></tr><tr><td><a href="#snt-parameter-16">structure.atoms[2].species</a></td><td>&quot;H&quot;</td></tr><tr><td><a href="#snt-parameter-17">structure.atoms[2].x</a></td><td>2.036</td></tr><tr><td><a href="#snt-parameter-18">structure.atoms[2].y</a></td><td>-2.704</td></tr><tr><td><a href="#snt-parameter-19">structure.atoms[2].z</a></td><td>-1.049</td></tr><tr><td><a href="#snt-parameter-20">structure.atoms[3].species</a></td><td>&quot;H&quot;</td></tr><tr><td><a href="#snt-parameter-21">structure.atoms[3].x</a></td><td>3.109</td></tr><tr><td><a href="#snt-parameter-22">structure.atoms[3].y</a></td><td>-1.63</td></tr><tr><td><a href="#snt-parameter-23">structure.atoms[3].z</a></td><td>1.893</td></tr><tr><td><a href="#snt-parameter-24">structure.atoms[4].species</a></td><td>&quot;H&quot;</td></tr><tr><td><a href="#snt-parameter-25">structure.atoms[4].x</a></td><td>2.448</td></tr><tr><td><a href="#snt-parameter-26">structure.atoms[4].y</a></td><td>2.638</td></tr><tr><td><a href="#snt-parameter-27">structure.atoms[4].z</a></td><td>0.3327</td></tr><tr><td><a href="#snt-parameter-28">structure.atoms[5].species</a></td><td>&quot;H&quot;</td></tr><tr><td><a href="#snt-parameter-29">structure.atoms[5].x</a></td><td>0.9408</td></tr><tr><td><a href="#snt-parameter-30">structure.atoms[5].y</a></td><td>1.602</td></tr><tr><td><a href="#snt-parameter-31">structure.atoms[5].z</a></td><td>-2.584</td></tr><tr><td><a href="#snt-parameter-32">structure.atoms[6].species</a></td><td>&quot;C&quot;</td></tr><tr><td><a href="#snt-parameter-33">structure.atoms[6].x</a></td><td>-1.215</td></tr><tr><td><a href="#snt-parameter-34">structure.atoms[6].y</a></td><td>-1.309</td></tr><tr><td><a href="#snt-parameter-35">structure.atoms[6].z</a></td><td>1.317</td></tr><tr><td><a href="#snt-parameter-36">structure.atoms[7].species</a></td><td>&quot;C&quot;</td></tr><tr><td><a href="#snt-parameter-37">structure.atoms[7].x</a></td><td>-1.361</td></tr><tr><td><a href="#snt-parameter-38">structure.atoms[7].y</a></td><td>1.166</td></tr><tr><td><a href="#snt-parameter-39">structure.atoms[7].z</a></td><td>0.8252</td></tr><tr><td><a href="#snt-parameter-40">structure.atoms[8].species</a></td><td>&quot;C&quot;</td></tr><tr><td><a href="#snt-parameter-41">structure.atoms[8].x</a></td><td>1.549</td></tr><tr><td><a href="#snt-parameter-42">structure.atoms[8].y</a></td><td>-1.434</td></tr><tr><td><a href="#snt-parameter-43">structure.atoms[8].z</a></td><td>0.5106</td></tr><tr><td><a href="#snt-parameter-44">structure.atoms[9].species</a></td><td>&quot;C&quot;</td></tr><tr><td><a href="#snt-parameter-45">structure.atoms[9].x</a></td><td>1.095</td></tr><tr><td><a href="#snt-parameter-46">structure.atoms[9].y</a></td><td>1.371</td></tr><tr><td><a href="#snt-parameter-47">structure.atoms[9].z</a></td><td>-0.497</td></tr><tr><td><a href="#snt-parameter-48">structure.position_units</a></td><td>&quot;bohr&quot;</td></tr><tr><td><a href="#snt-parameter-49">structure.species[0].mass</a></td><td>1.008</td></tr><tr><td><a href="#snt-parameter-50">structure.species[0].pseudo_file</a></td><td>&quot;H.pbe-hgh.UPF&quot;</td></tr><tr><td><a href="#snt-parameter-51">structure.species[0].symbol</a></td><td>&quot;H&quot;</td></tr><tr><td><a href="#snt-parameter-52">structure.species[1].mass</a></td><td>12</td></tr><tr><td><a href="#snt-parameter-53">structure.species[1].pseudo_file</a></td><td>&quot;C.pbe-hgh.UPF&quot;</td></tr><tr><td><a href="#snt-parameter-54">structure.species[1].symbol</a></td><td>&quot;C&quot;</td></tr><tr><td><a href="#snt-parameter-55">system.celldm_1</a></td><td>8</td></tr><tr><td><a href="#snt-parameter-56">system.ecutwfc</a></td><td>60</td></tr><tr><td><a href="#snt-parameter-57">system.ibrav</a></td><td>1</td></tr><tr><td><a href="#snt-parameter-58">system.input_dft</a></td><td>&quot;pbe&quot;</td></tr><tr><td><a href="#snt-parameter-59">system.nat</a></td><td>10</td></tr><tr><td><a href="#snt-parameter-60">system.nbnd</a></td><td>11</td></tr><tr><td><a href="#snt-parameter-61">system.ntyp</a></td><td>2</td></tr></tbody></table>
+<p>Inputs below are values read during evaluation; a read does not always mean the value was necessary for the result.</p>
+</section>
+<section><h2>Parameters</h2>
+<section id="snt-parameter-1"><h3>control.calculation</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;scf&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Type of PWscf calculation. The current adapter renders SCF only.</td></tr><tr><td>Applied schemas</td><td>qe_control, qe_control_tprnfor</td></tr><tr><td>Supplied by schema</td><td>qe_control</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Allowed options</td><td>scf, nscf, bands, relax, vc-relax</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/control.dip:6</td></tr><tr><td>Declaration</td><td>  calculation str</td></tr><tr><td>Modified at</td><td>settings.dip:4</td></tr><tr><td>Modification</td><td>  calculation = &quot;scf&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-2"><h3>control.outdir</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;./tmp/&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Directory for QE temporary data.</td></tr><tr><td>Applied schemas</td><td>qe_control, qe_control_tprnfor</td></tr><tr><td>Supplied by schema</td><td>qe_control</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/control.dip:15</td></tr><tr><td>Declaration</td><td>  outdir str</td></tr><tr><td>Modified at</td><td>settings.dip:7</td></tr><tr><td>Modification</td><td>  outdir = &quot;./tmp/&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-3"><h3>control.pseudo_dir</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;./pseudo/&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Directory containing files named by ATOMIC_SPECIES.</td></tr><tr><td>Applied schemas</td><td>qe_control, qe_control_tprnfor</td></tr><tr><td>Supplied by schema</td><td>qe_control</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/control.dip:11</td></tr><tr><td>Declaration</td><td>  pseudo_dir str</td></tr><tr><td>Modified at</td><td>settings.dip:6</td></tr><tr><td>Modification</td><td>  pseudo_dir = &quot;./pseudo/&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-4"><h3>control.tprnfor</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>true</td></tr><tr><td>Type</td><td>bool</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Calculate and print atomic forces.</td></tr><tr><td>Applied schemas</td><td>qe_control, qe_control_tprnfor</td></tr><tr><td>Supplied by schema</td><td>qe_control_tprnfor</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/control.dip:25</td></tr><tr><td>Declaration</td><td>  tprnfor bool</td></tr><tr><td>Modified at</td><td>settings.dip:5</td></tr><tr><td>Modification</td><td>  tprnfor = true</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-5"><h3>electrons.conv_thr</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>1e-12</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Self-consistency convergence threshold, in Ry.</td></tr><tr><td>Applied schemas</td><td>qe_electrons_conv_thr, qe_electrons_diagonalization</td></tr><tr><td>Supplied by schema</td><td>qe_electrons_conv_thr</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Validation condition</td><td>{.} &gt; 0</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/electrons.dip:14</td></tr><tr><td>Declaration</td><td>  conv_thr float</td></tr><tr><td>Modified at</td><td>settings.dip:20</td></tr><tr><td>Modification</td><td>  conv_thr = 1e-12</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-6"><h3>electrons.diagonalization</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;rmm-paro&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Diagonalization algorithm.</td></tr><tr><td>Applied schemas</td><td>qe_electrons_conv_thr, qe_electrons_diagonalization</td></tr><tr><td>Supplied by schema</td><td>qe_electrons_diagonalization</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/electrons.dip:9</td></tr><tr><td>Declaration</td><td>  diagonalization str</td></tr><tr><td>Modified at</td><td>settings.dip:19</td></tr><tr><td>Modification</td><td>  diagonalization = &quot;rmm-paro&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-7"><h3>sampling.mode</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;gamma&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>K_POINTS coordinate and generation mode.</td></tr><tr><td>Applied schemas</td><td>qe_sampling</td></tr><tr><td>Supplied by schema</td><td>qe_sampling</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Allowed options</td><td>tpiba, crystal, tpiba_b, gamma, automatic</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/sampling.dip:22</td></tr><tr><td>Declaration</td><td>  mode str</td></tr><tr><td>Modified at</td><td>settings.dip:84</td></tr><tr><td>Modification</td><td>  mode = &quot;gamma&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-8"><h3>structure.atoms[0].species</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;H&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Label of a declared atomic species.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:20</td></tr><tr><td>Declaration</td><td>  species str</td></tr><tr><td>Modified at</td><td>settings.dip:33</td></tr><tr><td>Modification</td><td>    species = &quot;H&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-9"><h3>structure.atoms[0].x</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-2.717</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>First coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:23</td></tr><tr><td>Declaration</td><td>  x float</td></tr><tr><td>Modified at</td><td>settings.dip:34</td></tr><tr><td>Modification</td><td>    x = -2.71695</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-10"><h3>structure.atoms[0].y</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-2.458</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Second coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:26</td></tr><tr><td>Declaration</td><td>  y float</td></tr><tr><td>Modified at</td><td>settings.dip:35</td></tr><tr><td>Modification</td><td>    y = -2.45822</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-11"><h3>structure.atoms[0].z</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>2.362</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Third coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:29</td></tr><tr><td>Declaration</td><td>  z float</td></tr><tr><td>Modified at</td><td>settings.dip:36</td></tr><tr><td>Modification</td><td>    z = 2.36174</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-12"><h3>structure.atoms[1].species</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;H&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Label of a declared atomic species.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:20</td></tr><tr><td>Declaration</td><td>  species str</td></tr><tr><td>Modified at</td><td>settings.dip:38</td></tr><tr><td>Modification</td><td>    species = &quot;H&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-13"><h3>structure.atoms[1].x</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-2.913</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>First coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:23</td></tr><tr><td>Declaration</td><td>  x float</td></tr><tr><td>Modified at</td><td>settings.dip:39</td></tr><tr><td>Modification</td><td>    x = -2.91292</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-14"><h3>structure.atoms[1].y</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>2.491</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Second coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:26</td></tr><tr><td>Declaration</td><td>  y float</td></tr><tr><td>Modified at</td><td>settings.dip:40</td></tr><tr><td>Modification</td><td>    y = 2.49129</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-15"><h3>structure.atoms[1].z</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>0.9529</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Third coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:29</td></tr><tr><td>Declaration</td><td>  z float</td></tr><tr><td>Modified at</td><td>settings.dip:41</td></tr><tr><td>Modification</td><td>    z = 0.952936</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-16"><h3>structure.atoms[2].species</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;H&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Label of a declared atomic species.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:20</td></tr><tr><td>Declaration</td><td>  species str</td></tr><tr><td>Modified at</td><td>settings.dip:43</td></tr><tr><td>Modification</td><td>    species = &quot;H&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-17"><h3>structure.atoms[2].x</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>2.036</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>First coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:23</td></tr><tr><td>Declaration</td><td>  x float</td></tr><tr><td>Modified at</td><td>settings.dip:44</td></tr><tr><td>Modification</td><td>    x = 2.03629</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-18"><h3>structure.atoms[2].y</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-2.704</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Second coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:26</td></tr><tr><td>Declaration</td><td>  y float</td></tr><tr><td>Modified at</td><td>settings.dip:45</td></tr><tr><td>Modification</td><td>    y = -2.70414</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-19"><h3>structure.atoms[2].z</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-1.049</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Third coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:29</td></tr><tr><td>Declaration</td><td>  z float</td></tr><tr><td>Modified at</td><td>settings.dip:46</td></tr><tr><td>Modification</td><td>    z = -1.04887</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-20"><h3>structure.atoms[3].species</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;H&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Label of a declared atomic species.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:20</td></tr><tr><td>Declaration</td><td>  species str</td></tr><tr><td>Modified at</td><td>settings.dip:48</td></tr><tr><td>Modification</td><td>    species = &quot;H&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-21"><h3>structure.atoms[3].x</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>3.109</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>First coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:23</td></tr><tr><td>Declaration</td><td>  x float</td></tr><tr><td>Modified at</td><td>settings.dip:49</td></tr><tr><td>Modification</td><td>    x = 3.10911</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-22"><h3>structure.atoms[3].y</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-1.63</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Second coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:26</td></tr><tr><td>Declaration</td><td>  y float</td></tr><tr><td>Modified at</td><td>settings.dip:50</td></tr><tr><td>Modification</td><td>    y = -1.62987</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-23"><h3>structure.atoms[3].z</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>1.893</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Third coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:29</td></tr><tr><td>Declaration</td><td>  z float</td></tr><tr><td>Modified at</td><td>settings.dip:51</td></tr><tr><td>Modification</td><td>    z = 1.89331</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-24"><h3>structure.atoms[4].species</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;H&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Label of a declared atomic species.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:20</td></tr><tr><td>Declaration</td><td>  species str</td></tr><tr><td>Modified at</td><td>settings.dip:53</td></tr><tr><td>Modification</td><td>    species = &quot;H&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-25"><h3>structure.atoms[4].x</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>2.448</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>First coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:23</td></tr><tr><td>Declaration</td><td>  x float</td></tr><tr><td>Modified at</td><td>settings.dip:54</td></tr><tr><td>Modification</td><td>    x = 2.44815</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-26"><h3>structure.atoms[4].y</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>2.638</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Second coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:26</td></tr><tr><td>Declaration</td><td>  y float</td></tr><tr><td>Modified at</td><td>settings.dip:55</td></tr><tr><td>Modification</td><td>    y = 2.63846</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-27"><h3>structure.atoms[4].z</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>0.3327</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Third coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:29</td></tr><tr><td>Declaration</td><td>  z float</td></tr><tr><td>Modified at</td><td>settings.dip:56</td></tr><tr><td>Modification</td><td>    z = 0.33267</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-28"><h3>structure.atoms[5].species</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;H&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Label of a declared atomic species.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:20</td></tr><tr><td>Declaration</td><td>  species str</td></tr><tr><td>Modified at</td><td>settings.dip:58</td></tr><tr><td>Modification</td><td>    species = &quot;H&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-29"><h3>structure.atoms[5].x</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>0.9408</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>First coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:23</td></tr><tr><td>Declaration</td><td>  x float</td></tr><tr><td>Modified at</td><td>settings.dip:59</td></tr><tr><td>Modification</td><td>    x = 0.940835</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-30"><h3>structure.atoms[5].y</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>1.602</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Second coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:26</td></tr><tr><td>Declaration</td><td>  y float</td></tr><tr><td>Modified at</td><td>settings.dip:60</td></tr><tr><td>Modification</td><td>    y = 1.60187</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-31"><h3>structure.atoms[5].z</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-2.584</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Third coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:29</td></tr><tr><td>Declaration</td><td>  z float</td></tr><tr><td>Modified at</td><td>settings.dip:61</td></tr><tr><td>Modification</td><td>    z = -2.58377</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-32"><h3>structure.atoms[6].species</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;C&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Label of a declared atomic species.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:20</td></tr><tr><td>Declaration</td><td>  species str</td></tr><tr><td>Modified at</td><td>settings.dip:63</td></tr><tr><td>Modification</td><td>    species = &quot;C&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-33"><h3>structure.atoms[6].x</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-1.215</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>First coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:23</td></tr><tr><td>Declaration</td><td>  x float</td></tr><tr><td>Modified at</td><td>settings.dip:64</td></tr><tr><td>Modification</td><td>    x = -1.21505</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-34"><h3>structure.atoms[6].y</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-1.309</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Second coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:26</td></tr><tr><td>Declaration</td><td>  y float</td></tr><tr><td>Modified at</td><td>settings.dip:65</td></tr><tr><td>Modification</td><td>    y = -1.30902</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-35"><h3>structure.atoms[6].z</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>1.317</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Third coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:29</td></tr><tr><td>Declaration</td><td>  z float</td></tr><tr><td>Modified at</td><td>settings.dip:66</td></tr><tr><td>Modification</td><td>    z = 1.31661</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-36"><h3>structure.atoms[7].species</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;C&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Label of a declared atomic species.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:20</td></tr><tr><td>Declaration</td><td>  species str</td></tr><tr><td>Modified at</td><td>settings.dip:68</td></tr><tr><td>Modification</td><td>    species = &quot;C&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-37"><h3>structure.atoms[7].x</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-1.361</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>First coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:23</td></tr><tr><td>Declaration</td><td>  x float</td></tr><tr><td>Modified at</td><td>settings.dip:69</td></tr><tr><td>Modification</td><td>    x = -1.36126</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-38"><h3>structure.atoms[7].y</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>1.166</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Second coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:26</td></tr><tr><td>Declaration</td><td>  y float</td></tr><tr><td>Modified at</td><td>settings.dip:70</td></tr><tr><td>Modification</td><td>    y = 1.16614</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-39"><h3>structure.atoms[7].z</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>0.8252</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Third coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:29</td></tr><tr><td>Declaration</td><td>  z float</td></tr><tr><td>Modified at</td><td>settings.dip:71</td></tr><tr><td>Modification</td><td>    z = 0.825189</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-40"><h3>structure.atoms[8].species</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;C&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Label of a declared atomic species.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:20</td></tr><tr><td>Declaration</td><td>  species str</td></tr><tr><td>Modified at</td><td>settings.dip:73</td></tr><tr><td>Modification</td><td>    species = &quot;C&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-41"><h3>structure.atoms[8].x</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>1.549</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>First coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:23</td></tr><tr><td>Declaration</td><td>  x float</td></tr><tr><td>Modified at</td><td>settings.dip:74</td></tr><tr><td>Modification</td><td>    x = 1.54872</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-42"><h3>structure.atoms[8].y</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-1.434</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Second coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:26</td></tr><tr><td>Declaration</td><td>  y float</td></tr><tr><td>Modified at</td><td>settings.dip:75</td></tr><tr><td>Modification</td><td>    y = -1.43358</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-43"><h3>structure.atoms[8].z</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>0.5106</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Third coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:29</td></tr><tr><td>Declaration</td><td>  z float</td></tr><tr><td>Modified at</td><td>settings.dip:76</td></tr><tr><td>Modification</td><td>    z = 0.510627</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-44"><h3>structure.atoms[9].species</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;C&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Label of a declared atomic species.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:20</td></tr><tr><td>Declaration</td><td>  species str</td></tr><tr><td>Modified at</td><td>settings.dip:78</td></tr><tr><td>Modification</td><td>    species = &quot;C&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-45"><h3>structure.atoms[9].x</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>1.095</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>First coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:23</td></tr><tr><td>Declaration</td><td>  x float</td></tr><tr><td>Modified at</td><td>settings.dip:79</td></tr><tr><td>Modification</td><td>    x = 1.09484</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-46"><h3>structure.atoms[9].y</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>1.371</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Second coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:26</td></tr><tr><td>Declaration</td><td>  y float</td></tr><tr><td>Modified at</td><td>settings.dip:80</td></tr><tr><td>Modification</td><td>    y = 1.37081</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-47"><h3>structure.atoms[9].z</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>-0.497</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Third coordinate in the selected position units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_atom</td></tr><tr><td>Supplied by schema</td><td>qe_atom</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:29</td></tr><tr><td>Declaration</td><td>  z float</td></tr><tr><td>Modified at</td><td>settings.dip:81</td></tr><tr><td>Modification</td><td>    z = -0.496954</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-48"><h3>structure.position_units</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;bohr&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Coordinate mode for ATOMIC_POSITIONS. The current adapter renders alat only.</td></tr><tr><td>Applied schemas</td><td>qe_structure</td></tr><tr><td>Supplied by schema</td><td>qe_structure</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Allowed options</td><td>alat, bohr, angstrom, crystal</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:36</td></tr><tr><td>Declaration</td><td>  position_units str</td></tr><tr><td>Modified at</td><td>settings.dip:23</td></tr><tr><td>Modification</td><td>  position_units = &quot;bohr&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-49"><h3>structure.species[0].mass</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>1.008</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Atomic mass in atomic mass units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_species</td></tr><tr><td>Supplied by schema</td><td>qe_species</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Validation condition</td><td>{.} &gt; 0</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:9</td></tr><tr><td>Declaration</td><td>  mass float</td></tr><tr><td>Modified at</td><td>settings.dip:26</td></tr><tr><td>Modification</td><td>    mass = 1.007825035</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-50"><h3>structure.species[0].pseudo_file</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;H.pbe-hgh.UPF&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Pseudopotential filename relative to CONTROL.pseudo_dir.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_species</td></tr><tr><td>Supplied by schema</td><td>qe_species</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:13</td></tr><tr><td>Declaration</td><td>  pseudo_file str</td></tr><tr><td>Modified at</td><td>settings.dip:27</td></tr><tr><td>Modification</td><td>    pseudo_file = &quot;H.pbe-hgh.UPF&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-51"><h3>structure.species[0].symbol</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;H&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Species label used by atom records.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_species</td></tr><tr><td>Supplied by schema</td><td>qe_species</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:6</td></tr><tr><td>Declaration</td><td>  symbol str</td></tr><tr><td>Modified at</td><td>settings.dip:25</td></tr><tr><td>Modification</td><td>    symbol = &quot;H&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-52"><h3>structure.species[1].mass</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>12</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Atomic mass in atomic mass units.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_species</td></tr><tr><td>Supplied by schema</td><td>qe_species</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Validation condition</td><td>{.} &gt; 0</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:9</td></tr><tr><td>Declaration</td><td>  mass float</td></tr><tr><td>Modified at</td><td>settings.dip:30</td></tr><tr><td>Modification</td><td>    mass = 12.0</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-53"><h3>structure.species[1].pseudo_file</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;C.pbe-hgh.UPF&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Pseudopotential filename relative to CONTROL.pseudo_dir.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_species</td></tr><tr><td>Supplied by schema</td><td>qe_species</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:13</td></tr><tr><td>Declaration</td><td>  pseudo_file str</td></tr><tr><td>Modified at</td><td>settings.dip:31</td></tr><tr><td>Modification</td><td>    pseudo_file = &quot;C.pbe-hgh.UPF&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-54"><h3>structure.species[1].symbol</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;C&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Species label used by atom records.</td></tr><tr><td>Applied schemas</td><td>qe_structure, qe_species</td></tr><tr><td>Supplied by schema</td><td>qe_species</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:6</td></tr><tr><td>Declaration</td><td>  symbol str</td></tr><tr><td>Modified at</td><td>settings.dip:29</td></tr><tr><td>Modification</td><td>    symbol = &quot;C&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-55"><h3>system.celldm_1</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>8</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Lattice parameter celldm(1), in bohr.</td></tr><tr><td>Applied schemas</td><td>qe_system, qe_system_celldm_1, qe_system_input_dft, qe_system_nbnd</td></tr><tr><td>Supplied by schema</td><td>qe_system_celldm_1</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Validation condition</td><td>{.} &gt; 0</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:26</td></tr><tr><td>Declaration</td><td>  celldm_1 float</td></tr><tr><td>Modified at</td><td>settings.dip:11</td></tr><tr><td>Modification</td><td>  celldm_1 = 8.0</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-56"><h3>system.ecutwfc</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>60</td></tr><tr><td>Type</td><td>float64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Wavefunction kinetic-energy cutoff, in Ry.</td></tr><tr><td>Applied schemas</td><td>qe_system, qe_system_celldm_1, qe_system_input_dft, qe_system_nbnd</td></tr><tr><td>Supplied by schema</td><td>qe_system</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Validation condition</td><td>{.} &gt; 0</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:20</td></tr><tr><td>Declaration</td><td>  ecutwfc float</td></tr><tr><td>Modified at</td><td>settings.dip:15</td></tr><tr><td>Modification</td><td>  ecutwfc = 60.0</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-57"><h3>system.ibrav</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>1</td></tr><tr><td>Type</td><td>int64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Bravais lattice index; 2 is face-centered cubic. The current adapter renders 2 only.</td></tr><tr><td>Applied schemas</td><td>qe_system, qe_system_celldm_1, qe_system_input_dft, qe_system_nbnd</td></tr><tr><td>Supplied by schema</td><td>qe_system</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:6</td></tr><tr><td>Declaration</td><td>  ibrav int</td></tr><tr><td>Modified at</td><td>settings.dip:10</td></tr><tr><td>Modification</td><td>  ibrav = 1</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-58"><h3>system.input_dft</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>&quot;pbe&quot;</td></tr><tr><td>Type</td><td>str</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Exchange-correlation functional selection.</td></tr><tr><td>Applied schemas</td><td>qe_system, qe_system_celldm_1, qe_system_input_dft, qe_system_nbnd</td></tr><tr><td>Supplied by schema</td><td>qe_system_input_dft</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:43</td></tr><tr><td>Declaration</td><td>  input_dft str</td></tr><tr><td>Modified at</td><td>settings.dip:16</td></tr><tr><td>Modification</td><td>  input_dft = &quot;pbe&quot;</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-59"><h3>system.nat</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>10</td></tr><tr><td>Type</td><td>int64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Number of atom records in ATOMIC_POSITIONS.</td></tr><tr><td>Applied schemas</td><td>qe_system, qe_system_celldm_1, qe_system_input_dft, qe_system_nbnd</td></tr><tr><td>Supplied by schema</td><td>qe_system</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Validation condition</td><td>{.} &gt; 0</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:10</td></tr><tr><td>Declaration</td><td>  nat int</td></tr><tr><td>Modified at</td><td>settings.dip:12</td></tr><tr><td>Modification</td><td>  nat = 10</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-60"><h3>system.nbnd</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>11</td></tr><tr><td>Type</td><td>int64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Number of electronic bands.</td></tr><tr><td>Applied schemas</td><td>qe_system, qe_system_celldm_1, qe_system_input_dft, qe_system_nbnd</td></tr><tr><td>Supplied by schema</td><td>qe_system_nbnd</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Validation condition</td><td>{.} &gt; 0</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:32</td></tr><tr><td>Declaration</td><td>  nbnd int</td></tr><tr><td>Modified at</td><td>settings.dip:14</td></tr><tr><td>Modification</td><td>  nbnd = 11</td></tr></tbody></table>
+</section>
+<section id="snt-parameter-61"><h3>system.ntyp</h3>
+<table class="snt-primary"><tbody><tr><td>Value</td><td>2</td></tr><tr><td>Type</td><td>int64</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Number of species records in ATOMIC_SPECIES.</td></tr><tr><td>Applied schemas</td><td>qe_system, qe_system_celldm_1, qe_system_input_dft, qe_system_nbnd</td></tr><tr><td>Supplied by schema</td><td>qe_system</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>Validation condition</td><td>{.} &gt; 0</td></tr></tbody></table>
+<table class="snt-source"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:15</td></tr><tr><td>Declaration</td><td>  ntyp int</td></tr><tr><td>Modified at</td><td>settings.dip:13</td></tr><tr><td>Modification</td><td>  ntyp = 2</td></tr></tbody></table>
+</section>
+</section>
+<section><h2>Schemas</h2>
+<p>Each schema lists the evaluated parameters it supplied. A schema may also apply to a path without supplying every value on that path.</p>
+<section><h3>qe_atom</h3>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>One atomic position.</td></tr><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:16</td></tr><tr><td>Supplied parameters</td><td>structure.atoms[0].species, structure.atoms[0].x, structure.atoms[0].y, structure.atoms[0].z, structure.atoms[1].species, structure.atoms[1].x, structure.atoms[1].y, structure.atoms[1].z, structure.atoms[2].species, structure.atoms[2].x, structure.atoms[2].y, structure.atoms[2].z, structure.atoms[3].species, structure.atoms[3].x, structure.atoms[3].y, structure.atoms[3].z, structure.atoms[4].species, structure.atoms[4].x, structure.atoms[4].y, structure.atoms[4].z, structure.atoms[5].species, structure.atoms[5].x, structure.atoms[5].y, structure.atoms[5].z, structure.atoms[6].species, structure.atoms[6].x, structure.atoms[6].y, structure.atoms[6].z, structure.atoms[7].species, structure.atoms[7].x, structure.atoms[7].y, structure.atoms[7].z, structure.atoms[8].species, structure.atoms[8].x, structure.atoms[8].y, structure.atoms[8].z, structure.atoms[9].species, structure.atoms[9].x, structure.atoms[9].y, structure.atoms[9].z</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>URL</td><td>https://www.quantum-espresso.org/Doc/INPUT_PW.html</td></tr></tbody></table>
+</section>
+<section><h3>qe_band_path_point</h3>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>One point in a band-path segment.</td></tr><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/sampling.dip:29</td></tr></tbody></table>
+</section>
+<section><h3>qe_cell_vector</h3>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>One cell vector in the selected cell units.</td></tr><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:43</td></tr></tbody></table>
+</section>
+<section><h3>qe_control</h3>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>PWscf calculation and output paths.</td></tr><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/control.dip:2</td></tr><tr><td>Supplied parameters</td><td>control.calculation, control.outdir, control.pseudo_dir</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>URL</td><td>https://www.quantum-espresso.org/Doc/INPUT_PW.html</td></tr></tbody></table>
+</section>
+<section><h3>qe_control_disk_io</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/control.dip:29</td></tr></tbody></table>
+</section>
+<section><h3>qe_control_tprnfor</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/control.dip:24</td></tr><tr><td>Supplied parameters</td><td>control.tprnfor</td></tr></tbody></table>
+</section>
+<section><h3>qe_control_tstress</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/control.dip:19</td></tr></tbody></table>
+</section>
+<section><h3>qe_electrons_conv_thr</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/electrons.dip:13</td></tr><tr><td>Supplied parameters</td><td>electrons.conv_thr</td></tr></tbody></table>
+</section>
+<section><h3>qe_electrons_diago_david_ndim</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/electrons.dip:19</td></tr></tbody></table>
+</section>
+<section><h3>qe_electrons_diago_thr_init</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/electrons.dip:2</td></tr></tbody></table>
+</section>
+<section><h3>qe_electrons_diagonalization</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/electrons.dip:8</td></tr><tr><td>Supplied parameters</td><td>electrons.diagonalization</td></tr></tbody></table>
+</section>
+<section><h3>qe_electrons_mixing_beta</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/electrons.dip:30</td></tr></tbody></table>
+</section>
+<section><h3>qe_electrons_mixing_mode</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/electrons.dip:25</td></tr></tbody></table>
+</section>
+<section><h3>qe_electrons_mixing_ndim</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/electrons.dip:36</td></tr></tbody></table>
+</section>
+<section><h3>qe_kpoint</h3>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>One explicit k-point and its weight.</td></tr><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/sampling.dip:2</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>URL</td><td>https://www.quantum-espresso.org/Doc/INPUT_PW.html</td></tr></tbody></table>
+</section>
+<section><h3>qe_occupation_values</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/occupations.dip:2</td></tr></tbody></table>
+</section>
+<section><h3>qe_sampling</h3>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>Brillouin-zone sampling for PWscf.</td></tr><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/sampling.dip:19</td></tr><tr><td>Supplied parameters</td><td>sampling.mode</td></tr></tbody></table>
+</section>
+<section><h3>qe_sampling_automatic</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/sampling.dip:41</td></tr></tbody></table>
+</section>
+<section><h3>qe_sampling_band_path</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/sampling.dip:38</td></tr></tbody></table>
+</section>
+<section><h3>qe_sampling_explicit</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/sampling.dip:26</td></tr></tbody></table>
+</section>
+<section><h3>qe_species</h3>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>One species on the ATOMIC_SPECIES card.</td></tr><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:2</td></tr><tr><td>Supplied parameters</td><td>structure.species[0].mass, structure.species[0].pseudo_file, structure.species[0].symbol, structure.species[1].mass, structure.species[1].pseudo_file, structure.species[1].symbol</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>URL</td><td>https://www.quantum-espresso.org/Doc/INPUT_PW.html</td></tr></tbody></table>
+</section>
+<section><h3>qe_structure</h3>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>PWscf atom species and positions.</td></tr><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:32</td></tr><tr><td>Supplied parameters</td><td>structure.position_units</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>URL</td><td>https://www.quantum-espresso.org/Doc/INPUT_PW.html</td></tr></tbody></table>
+</section>
+<section><h3>qe_structure_cell</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip:50</td></tr></tbody></table>
+</section>
+<section><h3>qe_system</h3>
+<table class="snt-metadata"><tbody><tr><td>Description</td><td>PWscf lattice and plane-wave settings.</td></tr><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:2</td></tr><tr><td>Supplied parameters</td><td>system.ecutwfc, system.ibrav, system.nat, system.ntyp</td></tr></tbody></table>
+<table class="snt-metadata"><tbody><tr><td>URL</td><td>https://www.quantum-espresso.org/Doc/INPUT_PW.html</td></tr></tbody></table>
+</section>
+<section><h3>qe_system_celldm_1</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:25</td></tr><tr><td>Supplied parameters</td><td>system.celldm_1</td></tr></tbody></table>
+</section>
+<section><h3>qe_system_force_symmorphic</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:52</td></tr></tbody></table>
+</section>
+<section><h3>qe_system_input_dft</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:42</td></tr><tr><td>Supplied parameters</td><td>system.input_dft</td></tr></tbody></table>
+</section>
+<section><h3>qe_system_nbnd</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:31</td></tr><tr><td>Supplied parameters</td><td>system.nbnd</td></tr></tbody></table>
+</section>
+<section><h3>qe_system_occupations</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:57</td></tr></tbody></table>
+</section>
+<section><h3>qe_system_use_all_frac</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:37</td></tr></tbody></table>
+</section>
+<section><h3>qe_system_vdw_corr</h3>
+<table class="snt-metadata"><tbody><tr><td>Declared at</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip:47</td></tr></tbody></table>
+</section>
+</section>
+<section><h2>Sources</h2>
+<section><h3>DIP0</h3>
+<table class="snt-source"><tbody><tr><td>Content hash</td><td>SHA-256: e3b0c44298fc1c14...</td></tr></tbody></table>
+</section>
+<section><h3>DIP0_FILE0</h3>
+<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/control.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>3</td></tr><tr><td>Content hash</td><td>SHA-256: 9114ca17402695e9...</td></tr></tbody></table>
+</section>
+<section><h3>DIP0_FILE1</h3>
+<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/system.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>6</td></tr><tr><td>Content hash</td><td>SHA-256: 3fb8373747f359c1...</td></tr></tbody></table>
+</section>
+<section><h3>DIP0_FILE2</h3>
+<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/electrons.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>9</td></tr><tr><td>Content hash</td><td>SHA-256: 71d472ce53ea4248...</td></tr></tbody></table>
+</section>
+<section><h3>DIP0_FILE3</h3>
+<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/structure.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>12</td></tr><tr><td>Content hash</td><td>SHA-256: b98fe394aa093531...</td></tr></tbody></table>
+</section>
+<section><h3>DIP0_FILE4</h3>
+<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/sampling.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>15</td></tr><tr><td>Content hash</td><td>SHA-256: 7d35759e74f3e954...</td></tr></tbody></table>
+</section>
+<section><h3>DIP0_FILE5</h3>
+<table class="snt-source"><tbody><tr><td>Path</td><td>projects/quantum-espresso/dipl/examples/scf_rmm_paro_gamma/../../profiles/schemas/occupations.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>18</td></tr><tr><td>Content hash</td><td>SHA-256: 9e6328ca6604473f...</td></tr></tbody></table>
+</section>
+<section><h3>DIP0_FILE6</h3>
+<table class="snt-source"><tbody><tr><td>Path</td><td>settings.dip</td></tr><tr><td>Parent</td><td>DIP0_project0</td></tr><tr><td>Parent line</td><td>21</td></tr><tr><td>Content hash</td><td>SHA-256: 57c31a1d60086b2b...</td></tr></tbody></table>
+</section>
+<section><h3>DIP0_project0</h3>
+<table class="snt-source"><tbody><tr><td>Path</td><td>DIPfile</td></tr><tr><td>Parent</td><td>DIP0</td></tr><tr><td>Content hash</td><td>SHA-256: d897b94364af2294...</td></tr></tbody></table>
+</section>
+</section>
+<section><h2>Custom units</h2>
+<p>No custom units are registered.</p>
+</section>
+</body>
+</html>

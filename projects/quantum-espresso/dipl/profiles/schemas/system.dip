@@ -1,0 +1,60 @@
+# Reusable PWscf SYSTEM fields represented by the first Hub adapter.
+$schema qe_system
+  ?descr "PWscf lattice and plane-wave settings."
+  ?url "https://www.quantum-espresso.org/Doc/INPUT_PW.html"
+
+  ibrav int
+    ?descr "Bravais lattice index; 2 is face-centered cubic. The current adapter renders 2 only."
+    ?native "ibrav"
+
+  nat int
+    !condition ({.} > 0)
+    ?descr "Number of atom records in ATOMIC_POSITIONS."
+    ?native "nat"
+
+  ntyp int
+    !condition ({.} > 0)
+    ?descr "Number of species records in ATOMIC_SPECIES."
+    ?native "ntyp"
+
+  ecutwfc float
+    !condition ({.} > 0)
+    ?descr "Wavefunction kinetic-energy cutoff, in Ry."
+    ?native "ecutwfc"
+
+$schema qe_system_celldm_1
+  celldm_1 float
+    !condition ({.} > 0)
+    ?descr "Lattice parameter celldm(1), in bohr."
+    ?native "celldm(1)"
+
+$schema qe_system_nbnd
+  nbnd int
+    !condition ({.} > 0)
+    ?descr "Number of electronic bands."
+    ?native "nbnd"
+
+$schema qe_system_use_all_frac
+  use_all_frac bool
+    ?descr "Use all fractional translations in symmetry operations."
+    ?native "use_all_frac"
+
+$schema qe_system_input_dft
+  input_dft str
+    ?descr "Exchange-correlation functional selection."
+    ?native "input_dft"
+
+$schema qe_system_vdw_corr
+  vdw_corr str
+    ?descr "Dispersion correction."
+    ?native "vdw_corr"
+
+$schema qe_system_force_symmorphic
+  force_symmorphic bool
+    ?descr "Restrict symmetry to symmorphic operations."
+    ?native "force_symmorphic"
+
+$schema qe_system_occupations
+  occupations str
+    ?descr "Occupation mode; from_input requires the OCCUPATIONS card."
+    ?native "occupations"

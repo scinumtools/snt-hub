@@ -1,0 +1,21 @@
+# Pinned upstream input: test-suite/pw_scf/scf-cg.in.
+code[]
+  file = "../../profiles/schemas/control.dip"
+
+code[]
+  file = "../../profiles/schemas/system.dip"
+
+code[]
+  file = "../../profiles/schemas/electrons.dip"
+
+code[]
+  file = "../../profiles/schemas/structure.dip"
+
+code[]
+  file = "../../profiles/schemas/sampling.dip"
+
+code[]
+  file = "../../profiles/schemas/occupations.dip"
+
+code[]
+  file = "settings.dip"

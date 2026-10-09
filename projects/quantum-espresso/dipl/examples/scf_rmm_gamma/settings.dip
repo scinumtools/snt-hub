@@ -1,0 +1,84 @@
+# Imported from pinned QE test-suite/pw_scf/scf-rmm-gamma.in.
+
+control : qe_control, qe_control_tprnfor
+  calculation = "scf"
+  tprnfor = true
+  pseudo_dir = "./pseudo/"
+  outdir = "./tmp/"
+
+system : qe_system, qe_system_celldm_1, qe_system_input_dft, qe_system_nbnd
+  ibrav = 1
+  celldm_1 = 8.0
+  nat = 10
+  ntyp = 2
+  nbnd = 11
+  ecutwfc = 60.0
+  input_dft = "pbe"
+
+electrons : qe_electrons_conv_thr, qe_electrons_diagonalization
+  diagonalization = "rmm-davidson"
+  conv_thr = 1e-12
+
+structure : qe_structure
+  position_units = "bohr"
+  species[]
+    symbol = "H"
+    mass = 1.007825035
+    pseudo_file = "H.pbe-hgh.UPF"
+  species[]
+    symbol = "C"
+    mass = 12.0
+    pseudo_file = "C.pbe-hgh.UPF"
+  atoms[]
+    species = "H"
+    x = -2.71695
+    y = -2.45822
+    z = 2.36174
+  atoms[]
+    species = "H"
+    x = -2.91292
+    y = 2.49129
+    z = 0.952936
+  atoms[]
+    species = "H"
+    x = 2.03629
+    y = -2.70414
+    z = -1.04887
+  atoms[]
+    species = "H"
+    x = 3.10911
+    y = -1.62987
+    z = 1.89331
+  atoms[]
+    species = "H"
+    x = 2.44815
+    y = 2.63846
+    z = 0.33267
+  atoms[]
+    species = "H"
+    x = 0.940835
+    y = 1.60187
+    z = -2.58377
+  atoms[]
+    species = "C"
+    x = -1.21505
+    y = -1.30902
+    z = 1.31661
+  atoms[]
+    species = "C"
+    x = -1.36126
+    y = 1.16614
+    z = 0.825189
+  atoms[]
+    species = "C"
+    x = 1.54872
+    y = -1.43358
+    z = 0.510627
+  atoms[]
+    species = "C"
+    x = 1.09484
+    y = 1.37081
+    z = -0.496954
+
+sampling : qe_sampling
+  mode = "gamma"

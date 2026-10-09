@@ -1,0 +1,189 @@
+# Imported from pinned QE test-suite/pw_scf/scf-gth.in.
+
+control : qe_control, qe_control_tprnfor, qe_control_tstress
+  calculation = "scf"
+  tprnfor = true
+  tstress = true
+  pseudo_dir = "./pseudo/"
+  outdir = "./tmp/"
+
+system : qe_system, qe_system_vdw_corr
+  ibrav = 0
+  nat = 28
+  ntyp = 3
+  ecutwfc = 40.0
+  vdw_corr = "dft-d2"
+
+electrons : qe_electrons_conv_thr
+  conv_thr = 1e-08
+
+structure : qe_structure, qe_structure_cell
+  position_units = "angstrom"
+  species[]
+    symbol = "C"
+    mass = 12.011
+    pseudo_file = "C-q4.gth"
+  species[]
+    symbol = "O"
+    mass = 15.999
+    pseudo_file = "O-q6.gth"
+  species[]
+    symbol = "H"
+    mass = 1.008
+    pseudo_file = "H-q1.gth"
+  atoms[]
+    species = "H"
+    x = 5.1888
+    y = 7.2772
+    z = 4.6038
+  atoms[]
+    species = "H"
+    x = 0.1309
+    y = 1.463
+    z = 0.4955
+  atoms[]
+    species = "H"
+    x = 5.2619
+    y = 5.8332
+    z = 2.0509
+  atoms[]
+    species = "H"
+    x = 0.0578
+    y = 2.9071
+    z = 3.0483
+  atoms[]
+    species = "H"
+    x = 0.9992
+    y = 7.8018
+    z = 0.7289
+  atoms[]
+    species = "H"
+    x = 4.3206
+    y = 0.9385
+    z = 4.3703
+  atoms[]
+    species = "H"
+    x = 0.9261
+    y = 5.3086
+    z = 3.2818
+  atoms[]
+    species = "H"
+    x = 4.3936
+    y = 3.4317
+    z = 1.8175
+  atoms[]
+    species = "H"
+    x = 2.9177
+    y = 7.73
+    z = 3.0256
+  atoms[]
+    species = "H"
+    x = 2.402
+    y = 1.0102
+    z = 2.0737
+  atoms[]
+    species = "H"
+    x = 2.9908
+    y = 5.3803
+    z = 0.4727
+  atoms[]
+    species = "H"
+    x = 2.329
+    y = 3.3599
+    z = 4.6265
+  atoms[]
+    species = "C"
+    x = 0.3081
+    y = 8.1495
+    z = 4.9473
+  atoms[]
+    species = "C"
+    x = 5.0117
+    y = 0.5907
+    z = 0.1519
+  atoms[]
+    species = "C"
+    x = 0.3811
+    y = 4.9608
+    z = 2.3945
+  atoms[]
+    species = "C"
+    x = 4.9386
+    y = 3.7794
+    z = 2.7048
+  atoms[]
+    species = "C"
+    x = 1.3235
+    y = 8.4468
+    z = 3.8714
+  atoms[]
+    species = "C"
+    x = 3.9963
+    y = 0.2935
+    z = 1.2278
+  atoms[]
+    species = "C"
+    x = 1.3965
+    y = 4.6636
+    z = 1.3185
+  atoms[]
+    species = "C"
+    x = 3.9232
+    y = 4.0767
+    z = 3.7807
+  atoms[]
+    species = "O"
+    x = 1.2795
+    y = 0.7091
+    z = 3.1444
+  atoms[]
+    species = "O"
+    x = 4.0403
+    y = 8.0311
+    z = 1.9548
+  atoms[]
+    species = "O"
+    x = 1.3526
+    y = 3.661
+    z = 0.5916
+  atoms[]
+    species = "O"
+    x = 3.9672
+    y = 5.0792
+    z = 4.5077
+  atoms[]
+    species = "O"
+    x = 2.2588
+    y = 7.5193
+    z = 3.7784
+  atoms[]
+    species = "O"
+    x = 3.0609
+    y = 1.2209
+    z = 1.3208
+  atoms[]
+    species = "O"
+    x = 2.3319
+    y = 5.591
+    z = 1.2255
+  atoms[]
+    species = "O"
+    x = 2.9878
+    y = 3.1492
+    z = 3.8737
+  cell_units = "angstrom"
+  cell_vectors[]
+    x = 5.4658881
+    y = 0.0
+    z = -0.0064642
+  cell_vectors[]
+    x = 0.0
+    y = 8.7402311
+    z = 0.0
+  cell_vectors[]
+    x = -0.1461485
+    y = 0.0
+    z = 5.1056962
+
+sampling : qe_sampling
+  mode = "gamma"

@@ -1,0 +1,4 @@
+# Explicit band occupations, needed only when SYSTEM.occupations is from_input.
+$schema qe_occupation_values
+  bands float[:]
+    ?descr "Band occupation numbers in the order expected by OCCUPATIONS."

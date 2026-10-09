@@ -1,0 +1,40 @@
+# Optional ELECTRONS controls observed in the pinned PWscf regression set.
+$schema qe_electrons_diago_thr_init
+  diago_thr_init float
+    !condition ({.} > 0)
+    ?descr "Initial diagonalization threshold."
+    ?native "diago_thr_init"
+
+$schema qe_electrons_diagonalization
+  diagonalization str
+    ?descr "Diagonalization algorithm."
+    ?native "diagonalization"
+
+$schema qe_electrons_conv_thr
+  conv_thr float
+    !condition ({.} > 0)
+    ?descr "Self-consistency convergence threshold, in Ry."
+    ?native "conv_thr"
+
+$schema qe_electrons_diago_david_ndim
+  diago_david_ndim int
+    !condition ({.} > 0)
+    ?descr "Davidson subspace dimension."
+    ?native "diago_david_ndim"
+
+$schema qe_electrons_mixing_mode
+  mixing_mode str
+    ?descr "Charge mixing method."
+    ?native "mixing_mode"
+
+$schema qe_electrons_mixing_beta
+  mixing_beta float
+    !condition ({.} > 0)
+    ?descr "Charge mixing factor."
+    ?native "mixing_beta"
+
+$schema qe_electrons_mixing_ndim
+  mixing_ndim int
+    !condition ({.} > 0)
+    ?descr "Number of iterations retained for charge mixing."
+    ?native "mixing_ndim"

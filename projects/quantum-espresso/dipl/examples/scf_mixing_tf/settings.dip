@@ -1,0 +1,46 @@
+# Imported from pinned QE test-suite/pw_scf/scf-mixing_TF.in.
+
+control : qe_control
+  calculation = "scf"
+  pseudo_dir = "./pseudo/"
+  outdir = "./tmp/"
+
+system : qe_system, qe_system_celldm_1
+  ibrav = 2
+  celldm_1 = 10.2
+  nat = 2
+  ntyp = 1
+  ecutwfc = 12.0
+
+electrons : qe_electrons_mixing_mode
+  mixing_mode = "TF"
+
+structure : qe_structure
+  position_units = "alat"
+  species[]
+    symbol = "Si"
+    mass = 28.086
+    pseudo_file = "Si.pz-vbc.UPF"
+  atoms[]
+    species = "Si"
+    x = 0.0
+    y = 0.0
+    z = 0.0
+  atoms[]
+    species = "Si"
+    x = 0.25
+    y = 0.25
+    z = 0.25
+
+sampling : qe_sampling, qe_sampling_explicit
+  mode = "tpiba"
+  points[]
+    x = 0.25
+    y = 0.25
+    z = 0.25
+    weight = 1.0
+  points[]
+    x = 0.25
+    y = 0.25
+    z = 0.75
+    weight = 3.0

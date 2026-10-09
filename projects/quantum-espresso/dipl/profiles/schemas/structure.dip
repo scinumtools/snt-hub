@@ -1,0 +1,55 @@
+# Reusable records for the PWscf ATOMIC_SPECIES and ATOMIC_POSITIONS cards.
+$schema qe_species
+  ?descr "One species on the ATOMIC_SPECIES card."
+  ?url "https://www.quantum-espresso.org/Doc/INPUT_PW.html"
+
+  symbol str
+    ?descr "Species label used by atom records."
+
+  mass float
+    !condition ({.} > 0)
+    ?descr "Atomic mass in atomic mass units."
+
+  pseudo_file str
+    ?descr "Pseudopotential filename relative to CONTROL.pseudo_dir."
+
+$schema qe_atom
+  ?descr "One atomic position."
+  ?url "https://www.quantum-espresso.org/Doc/INPUT_PW.html"
+
+  species str
+    ?descr "Label of a declared atomic species."
+
+  x float
+    ?descr "First coordinate in the selected position units."
+
+  y float
+    ?descr "Second coordinate in the selected position units."
+
+  z float
+    ?descr "Third coordinate in the selected position units."
+
+$schema qe_structure
+  ?descr "PWscf atom species and positions."
+  ?url "https://www.quantum-espresso.org/Doc/INPUT_PW.html"
+
+  position_units str
+    !options ["alat", "bohr", "angstrom", "crystal"]
+    ?descr "Coordinate mode for ATOMIC_POSITIONS. The current adapter renders alat only."
+
+  species list : qe_species
+  atoms list : qe_atom
+
+$schema qe_cell_vector
+  ?descr "One cell vector in the selected cell units."
+
+  x float
+  y float
+  z float
+
+$schema qe_structure_cell
+  cell_units str
+    !options ["bohr", "angstrom", "alat"]
+    ?descr "Unit mode for CELL_PARAMETERS."
+
+  cell_vectors list : qe_cell_vector

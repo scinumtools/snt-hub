@@ -1,0 +1,53 @@
+# Reusable explicit-point records for the PWscf K_POINTS card.
+$schema qe_kpoint
+  ?descr "One explicit k-point and its weight."
+  ?url "https://www.quantum-espresso.org/Doc/INPUT_PW.html"
+
+  x float
+    ?descr "First reciprocal-coordinate component."
+
+  y float
+    ?descr "Second reciprocal-coordinate component."
+
+  z float
+    ?descr "Third reciprocal-coordinate component."
+
+  weight float
+    !condition ({.} >= 0)
+    ?descr "Weight of this k-point."
+
+$schema qe_sampling
+  ?descr "Brillouin-zone sampling for PWscf."
+
+  mode str
+    !options ["tpiba", "crystal", "tpiba_b", "gamma", "automatic"]
+    ?descr "K_POINTS coordinate and generation mode."
+
+$schema qe_sampling_explicit
+  points list : qe_kpoint
+
+$schema qe_band_path_point
+  ?descr "One point in a band-path segment."
+  x float
+  y float
+  z float
+  segment_points int
+    !condition ({.} > 0)
+    ?descr "Number of points in the segment starting here."
+
+$schema qe_sampling_band_path
+  path_points list : qe_band_path_point
+
+$schema qe_sampling_automatic
+  grid_x int
+    !condition ({.} > 0)
+  grid_y int
+    !condition ({.} > 0)
+  grid_z int
+    !condition ({.} > 0)
+  shift_x int
+    !options [0, 1]
+  shift_y int
+    !options [0, 1]
+  shift_z int
+    !options [0, 1]
