@@ -109,7 +109,7 @@ MaxSteps  <span>128</span>
         <div class="project-grid">
           {projects.map((project) => <article class="project-card">
             <div class="project-card-top"><span class="project-initials">{project.name.slice(0, 2).toUpperCase()}</span><span class="project-number">PROJECT / {project.id.toUpperCase()}</span></div>
-            <h3>{project.name}</h3><p class="project-summary">{project.summary}</p>
+            <h3><a class="project-title-link" href={`${base}/projects/${project.id}/`}>{project.name}<span aria-hidden="true">↗</span></a></h3><p class="project-summary">{project.summary}</p>
             <ProjectStatus project={project} />
             <p class="validation-note">{project.validation_qualifier}</p>
             <div class="project-scope"><span>INTEGRATION SCOPE</span><p>{project.scope}</p></div>
