@@ -1,6 +1,7 @@
 """The shared runner must never publish a partial project setup."""
 
 import json
+from hashlib import sha256
 import subprocess
 
 import pytest
@@ -100,3 +101,33 @@ def test_workspace_bundle_accepts_hub_relative_manifest_and_records_source(tmp_p
     (workspace / "project.json").write_text(json.dumps(record))
     with pytest.raises(HubSetupError, match="Setup manifest"):
         ProjectBundle.load(workspace)
+
+
+def test_override_is_snapshotted_and_change_prevents_publication(tmp_path):
+    project = tmp_path / "project"
+    project.mkdir()
+    source, revision = _local_source(project)
+    (project / "project.json").write_text(json.dumps({"id": "test", "source_revision": revision}))
+    (project / "setups.json").write_text(json.dumps({
+        "schema_version": 1, "setups": {"example": {"capability": "native-inputs-only"}},
+    }))
+    bundle = ProjectBundle.load(project)
+    override = tmp_path / "tuning.dip"
+    override.write_text("setting = 1\n")
+    output = tmp_path / "ready"
+    prepare_setup(bundle, "example", output, source_root=source,
+                  render=lambda context: (context.stage / "input.txt").write_text("ready\n"),
+                  inputs_only=True, override_file=override)
+    assert (output / "input-overrides.dip").read_bytes() == override.read_bytes()
+    lock = json.loads((output / "setup-lock.json").read_text())
+    assert lock["inputs"] == {"override_file": "input-overrides.dip",
+                              "override_sha256": sha256(override.read_bytes()).hexdigest()}
+
+    def changed_render(context):
+        override.write_text("setting = 2\n")
+
+    failed = tmp_path / "failed"
+    with pytest.raises(HubSetupError, match="Override file changed"):
+        prepare_setup(bundle, "example", failed, source_root=source,
+                      render=changed_render, inputs_only=True, override_file=override)
+    assert not failed.exists()

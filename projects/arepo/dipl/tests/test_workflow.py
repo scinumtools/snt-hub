@@ -69,7 +69,7 @@ def test_run_refuses_inputs_only_and_records_failure(tmp_path, monkeypatch):
     class Result:
         returncode = 7
 
-    monkeypatch.setattr(workflow.subprocess, "run", lambda *args, **kwargs: Result())
+    monkeypatch.setattr("snt_hub_runtime.workflow.subprocess.run", lambda *args, **kwargs: Result())
     with pytest.raises(HubSetupError, match="run failed"):
         workflow.run(root / "dipl", root / "source", root, setup, executable)
     assert json.loads((setup / "run-lock.json").read_text())["exit_status"] == 7

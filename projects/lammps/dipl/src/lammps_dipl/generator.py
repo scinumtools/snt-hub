@@ -5,7 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from scinumtools3.dip import Adapter, DIP, ExistingOutputPolicy, run_adapter
+from scinumtools3.dip import Adapter, ExistingOutputPolicy, run_adapter
+from snt_hub_runtime.dipl import evaluate_project
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -20,11 +21,7 @@ def load_environment(setup: str, bundle_root: Path = ROOT,
     manifest = Path(bundle_root) / "examples" / setup / "DIPfile"
     if not manifest.is_file():
         raise GenerationError(f"Unknown LAMMPS setup: {setup}")
-    dip = DIP()
-    dip.add_project(manifest)
-    if override_file is not None:
-        dip.add_override_file(Path(override_file).resolve())
-    return dip.parse()
+    return evaluate_project(manifest, override_file)
 
 
 def value(env: Any, name: str) -> Any:

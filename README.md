@@ -35,6 +35,8 @@ npm run dev
 
 `npm run build` writes the GitHub Pages artifact to `website/dist/`. The Pages workflow builds on changes to the website, project records, setup manifests, or checked-in parameter references. In repository Settings → Pages, select **GitHub Actions** as the publishing source. Astro is configured for `https://scinumtools.github.io/snt-hub/`.
 
+To check all project bundles, Python tests, and the static site in one pass, use `python3 scripts/test_all.py` from the repository root. The Python environment needs `pytest` and the dependencies declared by the runtime and three DIPL packages, including SNT3's Python bindings and Arepo's `h5py`. When using a local SNT3 build instead of an installed binding, pass `--snt-python-dir ../scinumtools3/build/python`. The [test workflow](.github/workflows/tests.yml) runs the same command on pushes and pull requests with a pinned SNT3 source checkout.
+
 ## Project integrations
 
 The hub command flow is:

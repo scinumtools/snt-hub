@@ -26,31 +26,17 @@ def setup(name: str, output: Path, *, bundle_root: Path = ROOT,
     recipe = bundle.recipe(name)
     source = Path(source_root).resolve() if source_root else bundle.root / "source"
     override = Path(override_file).resolve() if override_file else None
-    if override is not None and not override.is_file():
-        raise SetupError(f"Override file does not exist: {override}")
-    digest = sha256(override.read_bytes()).hexdigest() if override else None
     provenance: dict = {}
-    if override:
-        provenance.update({"override_file": "input-overrides.dip", "override_sha256": digest})
     if not inputs_only:
         provenance["pseudopotentials"] = [
             {"file": asset["file"], "sha256": asset["sha256"]}
             for asset in recipe.get("pseudo_assets", [])
         ]
 
-    def check_override() -> None:
-        if override is not None and sha256(override.read_bytes()).hexdigest() != digest:
-            raise SetupError("Override file changed during setup")
-
     def render(context: SetupContext) -> None:
-        check_override()
         generate(context.stage, context.name, bundle_root, override)
-        if override is not None:
-            shutil.copyfile(override, context.stage / "input-overrides.dip")
-            check_override()
 
     def prepare_pseudo(context: SetupContext) -> None:
-        check_override()
         env = load_environment(context.name, bundle_root, override)
         species = records(env, "structure.species", ("symbol", "mass", "pseudo_file"))
         assets = context.recipe.get("pseudo_assets", [])
@@ -69,8 +55,8 @@ def setup(name: str, output: Path, *, bundle_root: Path = ROOT,
             if sha256(destination.read_bytes()).hexdigest() != asset["sha256"]:
                 raise SetupError(f"Staged pseudopotential {asset['file']} differs from the pinned asset")
         (context.stage / value(env, "control.outdir")).mkdir(parents=True, exist_ok=True)
-        check_override()
 
     return prepare_setup(bundle, name, output, source_root=source,
                          render=render, prepare_inputs=prepare_pseudo,
-                         inputs_only=inputs_only, input_provenance=provenance)
+                         inputs_only=inputs_only, input_provenance=provenance,
+                         override_file=override)

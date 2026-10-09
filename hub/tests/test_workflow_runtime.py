@@ -3,7 +3,21 @@ import json
 import pytest
 
 from snt_hub_runtime.setup import HubSetupError, ProjectBundle
-from snt_hub_runtime.workflow import digest, verify_executable
+from snt_hub_runtime.workflow import digest, new_build_output, verify_executable
+
+
+def test_build_output_must_be_new_and_inside_workspace(tmp_path):
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    target = workspace / "build" / "local"
+    assert new_build_output(workspace, target) == target
+    target.mkdir(parents=True)
+    with pytest.raises(HubSetupError, match="new directory"):
+        new_build_output(workspace, target)
+    with pytest.raises(HubSetupError, match="inside the workspace"):
+        new_build_output(workspace, tmp_path / "elsewhere")
+    with pytest.raises(HubSetupError, match="inside the workspace"):
+        new_build_output(workspace, workspace)
 
 
 def test_workspace_executable_must_match_build_and_setup_locks(tmp_path):

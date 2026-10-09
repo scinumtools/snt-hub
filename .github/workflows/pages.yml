@@ -8,6 +8,8 @@ on:
       - "projects/**/project.json"
       - "projects/**/setups.json"
       - "projects/**/docs/parameters/**"
+      - "projects/**/dipl/examples/**"
+      - "scripts/check_project_bundles.py"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -30,6 +32,8 @@ jobs:
           node-version: "24"
           cache: npm
           cache-dependency-path: website/package-lock.json
+      - name: Check project bundles
+        run: python3 scripts/check_project_bundles.py
       - name: Install dependencies
         run: npm ci
         working-directory: website

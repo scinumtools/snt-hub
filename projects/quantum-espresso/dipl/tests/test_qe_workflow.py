@@ -64,7 +64,7 @@ def test_run_uses_pw_input_and_records_exit(tmp_path, monkeypatch):
         seen.append((command, kwargs["cwd"]))
         return Result()
 
-    monkeypatch.setattr(workflow.subprocess, "run", fake_run)
+    monkeypatch.setattr("snt_hub_runtime.workflow.subprocess.run", fake_run)
     workflow.run(root / "dipl", root / "source", root, setup, executable)
     assert seen == [([str(executable), "-i", "pw.in"], setup)]
     assert json.loads((setup / "run-lock.json").read_text())["exit_status"] == 0

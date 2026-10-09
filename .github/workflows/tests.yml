@@ -1,0 +1,50 @@
+name: Test Hub
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Hub and pinned solver sources
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Check out SNT3 Python binding source
+        uses: actions/checkout@v4
+        with:
+          repository: scinumtools/snt3
+          ref: 579e246b9ab5e9b8cdb803ae57f6ac030268c17a
+          path: .ci/snt3
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - name: Install native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libhdf5-dev
+      - name: Install Python packages
+        env:
+          CMAKE_BUILD_PARALLEL_LEVEL: "2"
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ./.ci/snt3
+          python -m pip install -e ./hub -e './projects/arepo/dipl[test]' -e './projects/quantum-espresso/dipl[test]' -e './projects/lammps/dipl[test]'
+      - name: Install website packages
+        run: npm ci
+        working-directory: website
+      - name: Run all checks
+        run: python scripts/test_all.py

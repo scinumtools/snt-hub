@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 from pathlib import Path
-import subprocess
 
 from snt_hub_runtime.setup import HubSetupError, _source_dirty
-from snt_hub_runtime.workflow import (complete_setup, digest, execute, verify_executable,
+from snt_hub_runtime.workflow import (complete_setup, digest, execute, new_build_output, run_project,
                                       workspace, write_lock)
 
 
@@ -18,9 +17,7 @@ def build(bundle_path: Path, source_path: Path, workspace_path: Path,
         raise HubSetupError(f"Unknown LAMMPS build profile: {profile}")
     if not (source / "cmake" / "CMakeLists.txt").is_file():
         raise HubSetupError("Pinned LAMMPS source has no CMake project")
-    output = output_path.resolve()
-    if root not in output.parents or output.exists():
-        raise HubSetupError("Build output must be a new directory inside the workspace")
+    output = new_build_output(root, output_path)
     output.mkdir(parents=True)
     cmake_dir = output / "cmake"
     configure = ["cmake", "-S", str(source / "cmake"), "-B", str(cmake_dir),
@@ -53,32 +50,7 @@ def build(bundle_path: Path, source_path: Path, workspace_path: Path,
 def run(bundle_path: Path, source_path: Path, workspace_path: Path,
         setup_path: Path, executable_path: Path) -> Path:
     bundle, _, _ = workspace(bundle_path, source_path, workspace_path)
-    setup, _ = complete_setup(bundle, setup_path)
-    native = setup / "in.lammps"
-    if not native.is_file():
-        raise HubSetupError("Prepared LAMMPS setup has no in.lammps")
-    executable = verify_executable(bundle, setup, executable_path)
-    if (setup / "run-lock.json").exists():
-        raise HubSetupError("This setup already has a run-lock.json")
-    command = [str(executable), "-in", "in.lammps", "-log", "log.lammps"]
-    result = None
-    with (setup / "run.log").open("w") as output:
-        try:
-            result = subprocess.run(command, cwd=setup, stdout=output, stderr=subprocess.STDOUT,
-                                    check=False)
-            status = result.returncode
-        except OSError as exc:
-            status = None
-            error = str(exc)
-    write_lock(setup / "run-lock.json", {
-        "project": "lammps", "source_revision": bundle.record["source_revision"],
-        "setup_lock_sha256": digest(setup / "setup-lock.json"),
-        "input_sha256": {"in.lammps": digest(native)},
-        "command": command, "executable": str(executable),
-        "executable_sha256": digest(executable), "exit_status": status,
-        "run_log": str(setup / "run.log"), "solver_log": str(setup / "log.lammps"),
-        **({"start_error": error} if result is None else {}),
-    })
-    if status != 0:
-        raise HubSetupError(f"LAMMPS run failed; see {setup / 'run.log'}")
-    return setup
+    return run_project(bundle, setup_path, executable_path, input_file="in.lammps",
+                       arguments=["-in", "in.lammps", "-log", "log.lammps"],
+                       log_name="run.log", project_label="LAMMPS",
+                       extra_lock={"solver_log": str(setup_path.resolve() / "log.lammps")})

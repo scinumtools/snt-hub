@@ -67,7 +67,7 @@ def test_run_requires_complete_setup_and_records_solver_failure(tmp_path, monkey
     class Result:
         returncode = 4
 
-    monkeypatch.setattr(workflow.subprocess, "run", lambda *args, **kwargs: Result())
+    monkeypatch.setattr("snt_hub_runtime.workflow.subprocess.run", lambda *args, **kwargs: Result())
     with pytest.raises(HubSetupError, match="run failed"):
         workflow.run(root / "dipl", root / "source", root, setup, executable)
     assert json.loads((setup / "run-lock.json").read_text())["exit_status"] == 4

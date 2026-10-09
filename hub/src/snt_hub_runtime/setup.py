@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 from tempfile import TemporaryDirectory
 from typing import Callable
@@ -78,6 +79,33 @@ class SetupContext:
     inputs_only: bool
 
 
+@dataclass(frozen=True)
+class InputOverride:
+    path: Path
+    sha256: str
+
+    @classmethod
+    def load(cls, path: Path | None) -> InputOverride | None:
+        if path is None:
+            return None
+        resolved = Path(path).resolve()
+        if not resolved.is_file():
+            raise HubSetupError(f"Override file does not exist: {resolved}")
+        return cls(resolved, sha256(resolved.read_bytes()).hexdigest())
+
+    def verify(self) -> None:
+        if sha256(self.path.read_bytes()).hexdigest() != self.sha256:
+            raise HubSetupError("Override file changed while preparing the setup")
+
+    def record(self, stage: Path) -> dict[str, str]:
+        self.verify()
+        target = stage / "input-overrides.dip"
+        shutil.copyfile(self.path, target)
+        if sha256(target.read_bytes()).hexdigest() != self.sha256:
+            raise HubSetupError("Recorded override differs from the evaluated input")
+        return {"override_file": target.name, "override_sha256": self.sha256}
+
+
 def _pinned_revision(source_root: Path, expected: str) -> str:
     try:
         actual = subprocess.check_output(
@@ -136,6 +164,7 @@ def prepare_setup(
     prepare_inputs: Callable[[SetupContext], None] | None = None,
     inputs_only: bool = False,
     input_provenance: dict | None = None,
+    override_file: Path | None = None,
 ) -> Path:
     """Build in a sibling temporary directory and publish only on success."""
     recipe = bundle.recipe(name)
@@ -150,14 +179,20 @@ def prepare_setup(
     revision = _pinned_revision(source_root, bundle.record["source_revision"])
     source_dirty = _source_dirty(source_root)
     dipl_digest = _dipl_digest(bundle.root / "dipl")
+    override = InputOverride.load(override_file)
     output.parent.mkdir(parents=True, exist_ok=True)
     with TemporaryDirectory(prefix=f".{bundle.record['id']}-setup-", dir=output.parent) as directory:
         stage = Path(directory) / "result"
         stage.mkdir()
         context = SetupContext(bundle, name, recipe, source_root, stage, inputs_only)
+        if override is not None:
+            override.verify()
         render(context)
+        if override is not None:
+            override.verify()
         if not inputs_only:
             prepare_inputs(context)
+        override_provenance = override.record(stage) if override is not None else {}
         lock = {
             "schema_version": 1,
             "project": bundle.record["id"],
@@ -165,7 +200,7 @@ def prepare_setup(
             "capability": "native-inputs-only" if inputs_only else "complete",
             "source_revision": revision,
             "source_dirty": source_dirty,
-            "inputs": input_provenance or {},
+            "inputs": {**(input_provenance or {}), **override_provenance},
             "files": sorted(str(path.relative_to(stage)) for path in stage.rglob("*") if path.is_file()),
         }
         if dipl_digest is not None:

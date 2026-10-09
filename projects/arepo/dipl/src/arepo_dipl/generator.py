@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from scinumtools3.dip import Adapter, ExistingOutputPolicy, run_adapter
+from snt_hub_runtime.dipl import evaluate_project
 
 from .rendering import GenerationError, format_value, render_native, value_at
 from .tables import render_tables
@@ -48,11 +49,7 @@ def load_environment(
         manifest = manifests[setup]
     except KeyError as exc:
         raise GenerationError(f"Unknown setup `{setup}`. Choose one of: {', '.join(manifests)}.") from exc
-    dip = DIP()
-    dip.add_project(manifest)
-    if override_file is not None:
-        dip.add_override_file(Path(override_file).resolve())
-    return dip.parse()
+    return evaluate_project(manifest, override_file, dip_factory=DIP)
 
 
 def _collection_values(env: Any, fqp: str, member: str = "length") -> list[Any]:
