@@ -16,6 +16,13 @@ EXAMPLES = ROOT / "examples"
 SETUPS = {manifest.parent.name: manifest for manifest in sorted(EXAMPLES.glob("*/DIPfile"))}
 
 
+def setup_manifests(bundle_root: Path | None = None) -> dict[str, Path]:
+    if bundle_root is None:
+        return SETUPS
+    root = Path(bundle_root)
+    return {manifest.parent.name: manifest for manifest in sorted((root / "examples").glob("*/DIPfile"))}
+
+
 def _require_dipl() -> Any:
     try:
         from scinumtools3.dip import DIP  # type: ignore
@@ -29,13 +36,14 @@ def _require_dipl() -> Any:
 _value = value_at
 
 
-def load_environment(setup: str = "cosmological_star_formation") -> Any:
+def load_environment(setup: str = "cosmological_star_formation", bundle_root: Path | None = None) -> Any:
     """Load one self-contained DIPL setup and its reference-derived units."""
     DIP = _require_dipl()
     try:
-        manifest = SETUPS[setup]
+        manifests = setup_manifests(bundle_root)
+        manifest = manifests[setup]
     except KeyError as exc:
-        raise GenerationError(f"Unknown setup `{setup}`. Choose one of: {', '.join(SETUPS)}.") from exc
+        raise GenerationError(f"Unknown setup `{setup}`. Choose one of: {', '.join(manifests)}.") from exc
     dip = DIP()
     dip.add_project(manifest)
     return dip.parse()
@@ -95,11 +103,16 @@ def _render_schedule(env: Any) -> str:
     return "\n".join(f"{a:.12g} {int(b)}" for a, b in zip(times, flags)) + "\n"
 
 
-def generate(output: Path, setup: str = "cosmological_star_formation") -> Path:
-    env = load_environment(setup)
+def generate(
+    output: Path,
+    setup: str = "cosmological_star_formation",
+    bundle_root: Path | None = None,
+    existing_output_policy: ExistingOutputPolicy = ExistingOutputPolicy.ReplaceRegistered,
+) -> Path:
+    env = load_environment(setup, bundle_root)
     run_adapter(
         env, ArepoAdapter(), output, "environment.diph5",
-        existing_output_policy=ExistingOutputPolicy.ReplaceRegistered,
+        existing_output_policy=existing_output_policy,
     )
     return output
 

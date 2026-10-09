@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "snt-hub-arepo"
+version = "0.1.0"
+description = "Arepo DIPL adapter for SNT Hub"
+requires-python = ">=3.10"
+dependencies = ["scinumtools3>=0.9.0", "snt-hub-runtime>=0.1.0", "numpy", "h5py"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+arepo-dipl = "arepo_dipl.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

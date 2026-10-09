@@ -17,36 +17,23 @@ snt view projects/arepo/dipl/examples/mhd_shock_tube/DIPfile
 snt view projects/arepo/dipl/generated/mhd_shock_tube/environment.diph5
 ```
 
-Generate the selected example before opening its snapshot. The Python package installed by `setup.sh -b` does not install this optional graphical executable; follow the viewer guide for its build requirements.
+Generate the selected example before opening its snapshot. The Python adapter package does not install the optional graphical `snt view` executable; follow the viewer guide for its build requirements.
 
-## Setup script
+## Package and setup commands
 
-The executable [setup.sh](setup.sh) runs the dependency, test, generation, and
-Arepo build workflow.
-From the repository root:
+From the hub root, install the shared runtime and the Arepo adapter in an isolated Python environment:
 
 ```bash
-projects/arepo/dipl/setup.sh -b
-projects/arepo/dipl/setup.sh -t
-projects/arepo/dipl/setup.sh -g mhd_shock_tube
-projects/arepo/dipl/setup.sh -c mhd_shock_tube
-projects/arepo/dipl/setup.sh -b -t -g mhd_shock_tube
+python3 -m venv projects/arepo/dipl/.venv
+projects/arepo/dipl/.venv/bin/python -m pip install -e hub -e 'projects/arepo/dipl[test]'
+projects/arepo/dipl/.venv/bin/arepo-dipl examples
+projects/arepo/dipl/.venv/bin/arepo-dipl generate --setup mhd_shock_tube --output projects/arepo/dipl/generated/mhd_shock_tube
+projects/arepo/dipl/.venv/bin/arepo-dipl setup --setup mhd_shock_tube --output ./runs/mhd_shock_tube
 ```
 
-`-b` creates `projects/arepo/dipl/.venv` and installs the newest `scinumtools3>=0.9.0`,
-pytest, and their Python dependencies from PyPI. It does not use a local
-SciNumTools3 directory. Later commands use that venv automatically. `-t` runs
-the tests with pytest, `-g SETUP` generates the selected example, and `-c SETUP`
-regenerates and compiles Arepo with its generated `Config.sh`. Results go to
-`projects/arepo/dipl/generated/SETUP/`, including the compiled `Arepo` executable when `-c`
-succeeds. Use `projects/arepo/dipl/setup.sh -h` for options. Compilation requires either a
-configured `Makefile.systype` or a `SYSTYPE` value supported by the Arepo
-Makefile; it does not launch a simulation. The script resolves repository
-paths from its own location, so it also works when called by absolute path
-from another directory. Set `PYTHON` to choose a Python 3 interpreter or
-`DIP_OUTPUT_ROOT` to put generated files elsewhere. See the
-[maintainer workflow](docs/verification.md) for build requirements and test
-coverage.
+`generate` writes native files and DIPH5 for any of the 16 setups. `setup` writes to a fresh directory and also prepares ICs for recipes marked `complete`; currently this is `mhd_shock_tube`. For another example, use `setup --setup NAME --output DIR --inputs-only` until its IC recipe is reviewed. The complete MHD setup runs the pinned Arepo `create.py`, checks the resulting `IC.hdf5` against DIPL settings, and writes `setup-lock.json`. Existing output directories are rejected. The installed `snt hub install arepo` / `snt hub setup arepo mhd_shock_tube` commands use this project bundle and adapter entry point.
+
+The adapter package accepts `--bundle PATH` and `--source PATH` when invoked from an SNT-managed installation. To test locally, run `projects/arepo/dipl/.venv/bin/python -m pytest projects/arepo/dipl/tests`. Arepo compilation is a separate `make` operation using the generated `Config.sh`; see the [maintainer workflow](docs/verification.md).
 
 To tune a setup, edit its own `overrides.dip` and regenerate it. For example,
 [`alfven_wave_1d/overrides.dip`](examples/alfven_wave_1d/overrides.dip) can

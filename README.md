@@ -37,6 +37,16 @@ npm run dev
 
 ## Project integrations
 
+The hub command flow is:
+
+```sh
+snt hub install arepo
+snt hub examples arepo
+snt hub setup arepo mhd_shock_tube --output ./runs/mhd_shock_tube
+```
+
 Each integration has a pinned original-code submodule, a sibling DIPL implementation, and a registry record in its own directory. Start with [projects/arepo/](projects/arepo/). After cloning, run `git submodule update --init --recursive` before testing an adapter.
 
-The [Arepo integration guide](projects/arepo/README.md) describes the first bundle, its status, and the evidence behind it.
+The [Arepo integration guide](projects/arepo/README.md) describes the first bundle, its status, and the evidence behind it. Shared installation and setup behavior lives in the reusable [hub runtime](hub/README.md); each project supplies its own renderer and reviewed example recipes.
+
+To integrate another code, follow the [new-project guide](docs/ADDING_PROJECT.md).

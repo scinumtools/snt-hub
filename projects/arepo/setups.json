@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "setups": {
+    "alfven_wave_1d": {"source_example": "alfven_wave_1d", "capability": "native-inputs-only"},
+    "cosmo_zoom_gravity_only_3d": {"source_example": "cosmo_zoom_gravity_only_3d", "capability": "native-inputs-only"},
+    "cosmological_gravity_only": {"source_example": "cosmo_box_gravity_only_3d", "capability": "native-inputs-only"},
+    "cosmological_star_formation": {"source_example": "cosmo_box_star_formation_3d", "capability": "native-inputs-only"},
+    "current_sheet_2d": {"source_example": "current_sheet_2d", "capability": "native-inputs-only"},
+    "galaxy_merger_star_formation_3d": {"source_example": "galaxy_merger_star_formation_3d", "capability": "native-inputs-only"},
+    "gresho_2d": {"source_example": "gresho_2d", "capability": "native-inputs-only"},
+    "interacting_blastwaves_1d": {"source_example": "interacting_blastwaves_1d", "capability": "native-inputs-only"},
+    "isolated_galaxy_collisionless_3d": {"source_example": "isolated_galaxy_collisionless_3d", "capability": "native-inputs-only"},
+    "mhd_shock_tube": {
+      "source_example": "mhd_shocktube_1d",
+      "capability": "complete",
+      "ic_creator": "create.py",
+      "ic_file": "IC.hdf5"
+    },
+    "noh_2d": {"source_example": "noh_2d", "capability": "native-inputs-only"},
+    "noh_3d": {"source_example": "noh_3d", "capability": "native-inputs-only"},
+    "polytrope_1d_spherical": {"source_example": "polytrope_1d_spherical", "capability": "native-inputs-only"},
+    "shocktube_1d": {"source_example": "shocktube_1d", "capability": "native-inputs-only"},
+    "wave_1d": {"source_example": "wave_1d", "capability": "native-inputs-only"},
+    "yee_2d": {"source_example": "yee_2d", "capability": "native-inputs-only"}
+  }
+}

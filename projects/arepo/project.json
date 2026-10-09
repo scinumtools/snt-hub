@@ -5,6 +5,16 @@
   "summary": "A massively parallel code for gravitational N-body and hydrodynamics simulations, including cosmological setups.",
   "scope": "DIPL models and native input generation for the 16 bundled examples in the pinned public Arepo source.",
   "integration_mode": "External adapter",
+  "hub": {
+    "status": "adapter-ready",
+    "setup_manifest": "projects/arepo/setups.json",
+    "runtime_package": "hub",
+    "adapter_package": "projects/arepo/dipl",
+    "adapter_executable": "arepo-dipl",
+    "adapter_protocol": 1,
+    "install_command": "snt hub install arepo",
+    "setup_command": "snt hub setup arepo mhd_shock_tube --output ./runs/mhd_shock_tube"
+  },
   "support": "independent",
   "validation": "settings-parity",
   "validation_qualifier": "Locally verified on 2026-10-09: 38 tests and 28 subtests passed with SciNumTools3 0.9.0 against the pinned Arepo source. CI and physical simulation runs remain separate checks.",
