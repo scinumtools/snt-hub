@@ -29,8 +29,11 @@ $schema qe_sampling_explicit
 $schema qe_band_path_point
   ?descr "One point in a band-path segment."
   x float
+    ?descr "First coordinate of this band-path point in the selected K_POINTS mode."
   y float
+    ?descr "Second coordinate of this band-path point in the selected K_POINTS mode."
   z float
+    ?descr "Third coordinate of this band-path point in the selected K_POINTS mode."
   segment_points int
     !condition ({.} > 0)
     ?descr "Number of points in the segment starting here."
@@ -41,13 +44,19 @@ $schema qe_sampling_band_path
 $schema qe_sampling_automatic
   grid_x int
     !condition ({.} > 0)
+    ?descr "Number of k-point grid divisions along the first reciprocal-lattice direction."
   grid_y int
     !condition ({.} > 0)
+    ?descr "Number of k-point grid divisions along the second reciprocal-lattice direction."
   grid_z int
     !condition ({.} > 0)
+    ?descr "Number of k-point grid divisions along the third reciprocal-lattice direction."
   shift_x int
     !options [0, 1]
+    ?descr "First-direction k-point grid offset: 0 for none, 1 for half a grid step."
   shift_y int
     !options [0, 1]
+    ?descr "Second-direction k-point grid offset: 0 for none, 1 for half a grid step."
   shift_z int
     !options [0, 1]
+    ?descr "Third-direction k-point grid offset: 0 for none, 1 for half a grid step."

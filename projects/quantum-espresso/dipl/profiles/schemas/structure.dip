@@ -44,8 +44,11 @@ $schema qe_cell_vector
   ?descr "One cell vector in the selected cell units."
 
   x float
+    ?descr "First Cartesian component of this CELL_PARAMETERS vector in the selected cell units."
   y float
+    ?descr "Second Cartesian component of this CELL_PARAMETERS vector in the selected cell units."
   z float
+    ?descr "Third Cartesian component of this CELL_PARAMETERS vector in the selected cell units."
 
 $schema qe_structure_cell
   cell_units str
