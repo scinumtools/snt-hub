@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import ProjectStatus from '../components/ProjectStatus.astro';
+
+const projectModules = import.meta.glob('../../../projects/*/project.json', { eager: true, import: 'default' });
+const projects = Object.values(projectModules).sort((a, b) => a.name.localeCompare(b.name));
+const base = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#061d38" />
+    <meta name="description" content="Explore SNT Hub project integrations, parameter references, support status, and validation evidence." />
+    <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
+    <title>Project registry — SNT Hub</title>
+  </head>
+  <body>
+    <SiteHeader />
+    <main>
+      <section class="registry-page-intro shell" aria-labelledby="registry-title">
+        <div class="eyebrow"><span class="eyebrow-line"></span> THE REGISTRY</div>
+        <h1 id="registry-title">Explore integrations<span>.</span></h1>
+        <p>Find a scientific code, inspect its DIPL parameter model, and see the evidence behind its integration, support, and validation labels.</p>
+      </section>
+      <section class="registry-section" id="projects" aria-labelledby="projects-title"><div class="shell">
+        <div class="registry-heading"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> PARTICIPATING CODES</div><h2 id="projects-title">Projects in the Hub<span class="heading-dot">.</span></h2><p>Each listing links to its examples, parameter references, and original source.</p></div><div class="registry-total"><strong>{String(projects.length).padStart(2, '0')}</strong><span>{projects.length === 1 ? 'PROJECT' : 'PROJECTS'} LISTED</span></div></div>
+        <div class="project-grid">
+          {projects.map((project) => <article class="project-card">
+            <div class="project-card-top"><span class="project-initials">{project.name.slice(0, 2).toUpperCase()}</span><span class="project-number">PROJECT / {project.id.toUpperCase()}</span></div>
+            <h3><a class="project-title-link" href={`${base}/projects/${project.id}/`}>{project.name}<span aria-hidden="true">↗</span></a></h3><p class="project-summary">{project.summary}</p>
+            <ProjectStatus project={project} />
+            <p class="validation-note">{project.validation_qualifier}</p>
+            <div class="project-scope"><span>INTEGRATION SCOPE</span><p>{project.scope}</p></div>
+            <details class="evidence"><summary>Evidence &amp; limitations <span aria-hidden="true">↗</span></summary><div class="evidence-body"><p>{project.validation_qualifier}</p><p>{project.limitations}</p><ul>{project.evidence.map((item) => <li><a href={item.url}>{item.label} ↗</a></li>)}</ul></div></details>
+            <div class="project-links"><a class="project-main-link" href={`${base}/projects/${project.id}/`}>Project &amp; parameters <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.adapter_url}>DIPL integration <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.source_url}>Original code <span aria-hidden="true">↗</span></a></div>
+          </article>)}
+          <div class="invite-card"><span class="invite-mark" aria-hidden="true">✳</span><p class="invite-overline">YOUR CODE COULD BE NEXT</p><h3>Build the next<br />bridge.</h3><p>Help describe an established code’s inputs or review an adapter for your project.</p><a href="https://github.com/scinumtools/snt-hub/blob/main/docs/ADDING_PROJECT.md">Add a project <span aria-hidden="true">↗</span></a></div>
+        </div>
+        <p class="registry-footnote"><strong>About these statuses</strong> Integration mode, maintainer support, and validation are separate. Independent adapters do not imply code-owner endorsement; each validation label describes evidence for its stated scope. <a href={base + '/integration-levels/'}>Explore levels and statuses ↗</a></p>
+      </div></section>
+    </main>
+    <SiteFooter />
+  </body>
+</html>

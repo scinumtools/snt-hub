@@ -57,6 +57,21 @@ export function sourceLocationUrl(location: string, projectId: string, setup: st
   return `https://github.com/scinumtools/snt-hub/blob/main/${encodedPath}#L${match[2]}`;
 }
 
+export function schemaSourceUrls(report: BriefDocument, projectId: string, setup: string): Record<string, string> {
+  const section = report.children.find((node) => node.type === 'section' && inlineText(node.title) === 'Schemas');
+  const result: Record<string, string> = {};
+  for (const schema of section?.children ?? []) {
+    if (schema.type !== 'section') continue;
+    const origin = (schema.children ?? [])
+      .filter((node) => node.type === 'table')
+      .flatMap(fields)
+      .find((item) => item.label === 'Declared at')?.value;
+    const url = origin ? sourceLocationUrl(origin, projectId, setup) : null;
+    if (url) result[inlineText(schema.title)] = url;
+  }
+  return result;
+}
+
 export function parametersFromBriefpp(report: BriefDocument): Parameter[] {
   if (report.schema !== 'briefpp/1') throw new Error(`Unsupported Brief++ schema: ${report.schema}`);
   const section = report.children.find((node) => node.type === 'section' && inlineText(node.title) === 'Parameters');

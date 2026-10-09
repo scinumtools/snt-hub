@@ -2,7 +2,6 @@
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import ProjectStatus from '../components/ProjectStatus.astro';
 
 const projectModules = import.meta.glob('../../../projects/*/project.json', { eager: true, import: 'default' });
 const projects = Object.values(projectModules).sort((a, b) => a.name.localeCompare(b.name));
@@ -30,7 +29,7 @@ const base = import.meta.env.BASE_URL;
           <h1 id="hero-title">One parameter layer.<br /><span>Many scientific codes.</span></h1>
           <p class="hero-lead">A common way to describe, validate, inspect, and share simulation inputs. Start with an adapter for native files; move to direct SNT3 integration when a code is ready.</p>
           <div class="hero-actions">
-            <a class="button button-bright" href="#registry">Explore the registry <span aria-hidden="true">↗</span></a>
+            <a class="button button-bright" href={base + '/registry/'}>Explore the registry <span aria-hidden="true">↗</span></a>
             <a class="quiet-link" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a>
           </div>
           <div class="hero-meta"><span><i></i> Starting October 2026</span><span><i></i> Open source</span><span><i></i> Optional integration</span><span><i></i> Evidence led</span></div>
@@ -110,22 +109,10 @@ snt hub run --setup runs/EXAMPLE  <span class="hub-command-comment"># Run the pr
         </div>
       </section>
 
-      <section class="registry-section" id="registry" aria-labelledby="registry-title"><div class="shell">
-        <div class="registry-heading"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> THE REGISTRY</div><h2 id="registry-title">Explore integrations<span class="heading-dot">.</span></h2><p>Every listing says what exists, who supports it, and what has actually been checked.</p></div><div class="registry-total"><strong>{String(projects.length).padStart(2, '0')}</strong><span>{projects.length === 1 ? 'PROJECT' : 'PROJECTS'} LISTED</span></div></div>
-        <div class="project-grid">
-          {projects.map((project) => <article class="project-card">
-            <div class="project-card-top"><span class="project-initials">{project.name.slice(0, 2).toUpperCase()}</span><span class="project-number">PROJECT / {project.id.toUpperCase()}</span></div>
-            <h3><a class="project-title-link" href={`${base}/projects/${project.id}/`}>{project.name}<span aria-hidden="true">↗</span></a></h3><p class="project-summary">{project.summary}</p>
-            <ProjectStatus project={project} />
-            <p class="validation-note">{project.validation_qualifier}</p>
-            <div class="project-scope"><span>INTEGRATION SCOPE</span><p>{project.scope}</p></div>
-            <details class="evidence"><summary>Evidence &amp; limitations <span aria-hidden="true">↗</span></summary><div class="evidence-body"><p>{project.validation_qualifier}</p><p>{project.limitations}</p><ul>{project.evidence.map((item) => <li><a href={item.url}>{item.label} ↗</a></li>)}</ul></div></details>
-            <div class="project-links"><a class="project-main-link" href={`${base}/projects/${project.id}/`}>Project &amp; parameters <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.adapter_url}>DIPL integration <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.source_url}>Original code <span aria-hidden="true">↗</span></a></div>
-          </article>)}
-          <div class="invite-card"><span class="invite-mark" aria-hidden="true">✳</span><p class="invite-overline">YOUR CODE COULD BE NEXT</p><h3>Build the next<br />bridge.</h3><p>Help describe an established code’s inputs or review an adapter for your project.</p><a href="https://github.com/scinumtools/snt-hub/blob/main/docs/ADDING_PROJECT.md">Add a project <span aria-hidden="true">↗</span></a></div>
-        </div>
-        <p class="registry-footnote"><strong>About these statuses</strong> Integration mode, maintainer support, and validation are separate. Independent adapters do not imply code-owner endorsement; each validation label describes evidence for its stated scope. <a href={base + '/integration-levels/'}>Explore levels and statuses ↗</a></p>
-      </div></section>
+      <section class="registry-teaser shell" id="registry" aria-labelledby="registry-title">
+        <div><div class="eyebrow"><span class="eyebrow-line"></span> THE REGISTRY</div><h2 id="registry-title">Explore integrations<span>.</span></h2><p>Browse {projects.length} {projects.length === 1 ? 'project' : 'projects'}, their parameter references, support status, and validation evidence in the growing registry.</p></div>
+        <a class="button button-bright" href={base + '/registry/'}>View the registry <span aria-hidden="true">↗</span></a>
+      </section>
 
       <section class="closing shell"><div class="closing-star" aria-hidden="true">✳</div><div><div class="eyebrow"><span class="eyebrow-line"></span> JOIN THE INITIATIVE</div><h2>Better inputs.<br /><span>Stronger science.</span></h2><p>Share a code, review a model, or contribute evidence. The registry grows with every well-described integration.</p><a class="button button-bright" href="https://github.com/scinumtools/snt-hub/issues">Get involved <span aria-hidden="true">↗</span></a></div></section>
     </main>

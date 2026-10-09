@@ -1,0 +1,219 @@
+---
+import '../../../../../styles/global.css';
+import '../../../../../styles/parameter-graph.css';
+import SiteHeader from '../../../../../components/SiteHeader.astro';
+import SiteFooter from '../../../../../components/SiteFooter.astro';
+import { field, parametersFromBriefpp, schemaSourceUrls, type BriefDocument } from '../../../../../utils/briefpp';
+import { buildParameterGraph, type GraphParameter } from '../../../../../utils/parameter-graph';
+
+export function getStaticPaths() {
+  const reports = import.meta.glob('../../../../../../../projects/*/docs/parameters/*.json', { eager: true, import: 'default' });
+  const records = import.meta.glob('../../../../../../../projects/*/project.json', { eager: true, import: 'default' });
+  return Object.entries(reports).map(([path, report]) => {
+    const match = path.match(/\/projects\/([^/]+)\/docs\/parameters\/([^/]+)\.json$/);
+    if (!match) throw new Error(`Unexpected parameter report path: ${path}`);
+    const project = Object.values(records).find((record: any) => record.id === match[1]);
+    if (!project) throw new Error(`Missing project record for ${match[1]}`);
+    return { params: { project: match[1], setup: match[2] }, props: { project, report } };
+  });
+}
+
+const { project, report } = Astro.props as { project: any; report: BriefDocument };
+const { setup } = Astro.params;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const referenceUrl = `${base}/projects/${project.id}/parameters/${setup}/`;
+const parameters: GraphParameter[] = parametersFromBriefpp(report).map((parameter) => ({
+  id: parameter.id,
+  path: parameter.path,
+  value: parameter.value,
+  description: parameter.description,
+  internal: parameter.internal,
+  schema: field(parameter.metadata, 'Supplied by schema'),
+  reads: [...(field(parameter.metadata, 'Reads during evaluation').matchAll(/\?([^,\s]+)/g))].map((match) => match[1]),
+}));
+const schemaSources = schemaSourceUrls(report, project.id, setup ?? '');
+const publicGraph = buildParameterGraph(parameters, false, schemaSources);
+const visibleParameters = parameters.filter((parameter) => !parameter.internal);
+const dependencyCount = publicGraph.links.filter((link) => link.kind === 'dependency').length;
+const graphData = JSON.stringify({ parameters, schemaSources }).replaceAll('<', '\\u003c');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#061d38" />
+    <meta name="description" content={`Explore a 3D network of ${project.name} parameters for ${setup}.`} />
+    <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
+    <title>{project.name} · {setup?.replaceAll('_', ' ')} parameter graph — SNT Hub</title>
+  </head>
+  <body class="parameter-graph-page">
+    <SiteHeader />
+    <main>
+      <section class="graph-intro shell">
+        <a class="graph-back" href={referenceUrl}>← Parameter reference</a>
+        <div class="eyebrow"><span class="eyebrow-line"></span> EXPLORE THE MODEL</div>
+        <div class="graph-heading"><div><h1>Parameter cloud<span>.</span></h1><p>{project.name} / {setup?.replaceAll('_', ' ')}. Rotate the model, hover for names, and select a node to inspect it.</p></div><div class="graph-stats"><span><strong>{visibleParameters.length}</strong> parameters</span><span><strong>{dependencyCount}</strong> recorded reads</span></div></div>
+      </section>
+      <section class="graph-workspace shell" aria-label="Interactive parameter graph">
+        {dependencyCount === 0 && <p class="graph-zero-note">This setup has no recorded evaluation reads. The visible links show parameter paths and the schemas that supplied values.</p>}
+        <div class="graph-toolbar">
+          <label for="graph-search">Find a parameter</label>
+          <input id="graph-search" type="search" list="graph-parameter-options" placeholder="Search a parameter path…" autocomplete="off" />
+          <datalist id="graph-parameter-options">{parameters.map((parameter) => <option value={parameter.path} />)}</datalist>
+          <button id="graph-find" type="button">Focus</button>
+          <button id="graph-reset" type="button">Fit graph</button>
+          <label class="graph-toggle"><input id="graph-internals" type="checkbox" /> Adapter controls</label>
+        </div>
+        <div class="graph-stage">
+          <div id="parameter-graph" class="graph-canvas" data-reference-url={referenceUrl} aria-label="3D parameter network. Drag to rotate and scroll to zoom."><div class="graph-loading">Loading 3D graph…</div></div>
+          <aside class="graph-inspector" aria-live="polite">
+            <div class="graph-inspector-eyebrow">SELECTED NODE</div>
+            <h2 id="graph-selected-title">Explore the cloud</h2>
+            <p id="graph-selected-path">Select a parameter, group, or schema node.</p>
+            <p id="graph-selected-description">Drag to rotate, scroll to zoom, or use search to focus a parameter. Open a parameter to read its values, metadata, and source history.</p>
+            <a id="graph-selected-link" href={referenceUrl} hidden>Open parameter reference ↗</a>
+            <a id="graph-schema-link" href={referenceUrl} target="_blank" rel="noopener noreferrer" hidden>Open schema definition ↗</a>
+          </aside>
+          <div class="graph-legend" aria-label="Graph legend"><span><i class="graph-dot parameter"></i> Parameter</span><span><i class="graph-dot group"></i> Path group</span><span><i class="graph-dot schema"></i> Supplying schema</span><span><i class="graph-line dependency"></i> Recorded read</span></div>
+        </div>
+        <p class="graph-context">Thin blue lines follow parameter paths; green lines connect a schema to values it supplied. Bright arrows show reads recorded by SNT during evaluation. These are different relationships. Literal settings may have no recorded reads, even when they matter scientifically. The graph describes the bundled setup; overrides can change evaluated values and dependencies.</p>
+      </section>
+    </main>
+    <SiteFooter />
+    <script id="parameter-graph-data" type="application/json" set:html={graphData}></script>
+    <script>
+      import { buildParameterGraph, type GraphParameter, type GraphNode, type GraphLink } from '../../../../../utils/parameter-graph';
+
+      const mount = document.querySelector<HTMLElement>('#parameter-graph')!;
+      const source = document.querySelector<HTMLScriptElement>('#parameter-graph-data')!;
+      const payload = JSON.parse(source.textContent ?? '{}') as { parameters: GraphParameter[]; schemaSources: Record<string, string> };
+      const { parameters, schemaSources } = payload;
+      const search = document.querySelector<HTMLInputElement>('#graph-search')!;
+      const findButton = document.querySelector<HTMLButtonElement>('#graph-find')!;
+      const resetButton = document.querySelector<HTMLButtonElement>('#graph-reset')!;
+      const internals = document.querySelector<HTMLInputElement>('#graph-internals')!;
+      const title = document.querySelector<HTMLElement>('#graph-selected-title')!;
+      const path = document.querySelector<HTMLElement>('#graph-selected-path')!;
+      const description = document.querySelector<HTMLElement>('#graph-selected-description')!;
+      const detailLink = document.querySelector<HTMLAnchorElement>('#graph-selected-link')!;
+      const schemaLink = document.querySelector<HTMLAnchorElement>('#graph-schema-link')!;
+      const referenceUrl = mount.dataset.referenceUrl!;
+
+      type VisualNode = GraphNode & { x?: number; y?: number; z?: number };
+      type VisualLink = GraphLink & { source: string | VisualNode; target: string | VisualNode };
+      const idOf = (endpoint: string | VisualNode) => typeof endpoint === 'string' ? endpoint : endpoint.id;
+      const escapeHtml = (value: string) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+      let selectedId = '';
+      let neighbors = new Set<string>();
+      let graph: any;
+      let fitTimer: ReturnType<typeof setTimeout> | undefined;
+
+      function showDetails(node: VisualNode) {
+        title.textContent = node.kind === 'root' ? 'DIPL model' : node.label.replaceAll('_', ' ');
+        path.textContent = node.kind === 'schema' ? `Schema · ${node.label} · ${node.count ?? 0} supplied values` : node.path ?? 'Evaluated setup';
+        description.textContent = node.kind === 'parameter'
+          ? `${node.description || 'No description supplied in the DIPL model.'}${node.value ? ` Effective value: ${node.value}` : ''}`
+          : node.kind === 'schema' ? 'This reusable schema supplied the connected parameter values.'
+          : 'Follow the connected path branches to reach evaluated parameters.';
+        detailLink.hidden = !node.parameterId;
+        if (node.parameterId) detailLink.href = `${referenceUrl}#${encodeURIComponent(node.parameterId)}`;
+        schemaLink.hidden = !node.sourceUrl;
+        if (node.sourceUrl) schemaLink.href = node.sourceUrl;
+      }
+
+      function selectNode(node: VisualNode, focus = true) {
+        selectedId = node.id;
+        neighbors = new Set([selectedId]);
+        for (const link of graph.graphData().links as VisualLink[]) {
+          if (idOf(link.source) === selectedId) neighbors.add(idOf(link.target));
+          if (idOf(link.target) === selectedId) neighbors.add(idOf(link.source));
+        }
+        graph.nodeColor(nodeColor).linkColor(linkColor);
+        showDetails(node);
+        if (focus && Number.isFinite(node.x) && Number.isFinite(node.y) && Number.isFinite(node.z)) {
+          const x = node.x!, y = node.y!, z = node.z!;
+          const distance = Math.hypot(x, y, z) || 1;
+          graph.cameraPosition({ x: x + 115 * x / distance, y: y + 115 * y / distance, z: z + 115 * z / distance }, { x, y, z }, 750);
+        }
+      }
+
+      function nodeColor(node: VisualNode) {
+        if (selectedId && !neighbors.has(node.id)) return '#24415a';
+        if (node.id === selectedId) return '#ffd08d';
+        if (node.kind === 'root') return '#3ce0e6';
+        if (node.kind === 'schema') return '#96e7a6';
+        if (node.kind === 'group') return '#69a8d2';
+        return '#cde9fa';
+      }
+
+      function linkColor(link: VisualLink) {
+        if (selectedId && idOf(link.source) !== selectedId && idOf(link.target) !== selectedId) return '#24415a';
+        return link.kind === 'dependency' ? '#3ce0e6' : link.kind === 'schema' ? '#72bb80' : '#5485a8';
+      }
+
+      function updateGraph() {
+        const data = buildParameterGraph(parameters, internals.checked, schemaSources);
+        selectedId = '';
+        neighbors = new Set();
+        graph.graphData(data);
+        graph.nodeColor(nodeColor).linkColor(linkColor);
+        if (fitTimer) clearTimeout(fitTimer);
+        fitTimer = setTimeout(() => graph.zoomToFit(800, 20), 2200);
+      }
+
+      function findNode() {
+        const query = search.value.trim().toLowerCase();
+        if (!query) return;
+        const match = parameters.find((parameter) => parameter.path.toLowerCase() === query)
+          ?? parameters.find((parameter) => parameter.path.toLowerCase().includes(query));
+        if (!match) {
+          path.textContent = 'No matching parameter path';
+          return;
+        }
+        if (match.internal && !internals.checked) {
+          internals.checked = true;
+          updateGraph();
+        }
+        const node = (graph.graphData().nodes as VisualNode[]).find((entry) => entry.id === `parameter:${match.path}`);
+        if (node) selectNode(node);
+      }
+
+      async function start() {
+        try {
+          const { default: ForceGraph3D } = await import('3d-force-graph');
+          mount.querySelector('.graph-loading')?.remove();
+          graph = new ForceGraph3D(mount, { controlType: 'orbit', rendererConfig: { antialias: true, alpha: false } })
+            .backgroundColor('#03111f')
+            .showNavInfo(false)
+            .nodeRelSize(3.5)
+            .nodeVal((node: VisualNode) => node.kind === 'root' ? 18 : node.kind === 'schema' ? 9 : node.kind === 'group' ? 5 : 2)
+            .nodeColor(nodeColor)
+            .nodeLabel((node: VisualNode) => escapeHtml(node.path ?? node.label))
+            .nodeOpacity(0.94)
+            .linkColor(linkColor)
+            .linkWidth((link: VisualLink) => link.kind === 'dependency' ? 1.5 : link.kind === 'schema' ? 0.65 : 0.45)
+            .linkOpacity(0.45)
+            .linkDirectionalArrowLength((link: VisualLink) => link.kind === 'dependency' ? 4 : 0)
+            .linkDirectionalParticles((link: VisualLink) => link.kind === 'dependency' ? 2 : 0)
+            .linkDirectionalParticleWidth(1.4)
+            .cooldownTicks(140)
+            .onNodeClick((node: VisualNode) => selectNode(node))
+            .width(mount.clientWidth)
+            .height(mount.clientHeight);
+          new ResizeObserver(() => graph.width(mount.clientWidth).height(mount.clientHeight)).observe(mount);
+          updateGraph();
+          internals.addEventListener('change', updateGraph);
+          findButton.addEventListener('click', findNode);
+          search.addEventListener('keydown', (event) => { if (event.key === 'Enter') findNode(); });
+          resetButton.addEventListener('click', () => { selectedId = ''; neighbors = new Set(); graph.nodeColor(nodeColor).linkColor(linkColor).zoomToFit(700, 55); });
+        } catch (error) {
+          mount.textContent = 'The 3D view could not start in this browser. The parameter reference remains available above.';
+          console.error('Parameter graph failed to initialize', error);
+        }
+      }
+      start();
+    </script>
+  </body>
+</html>

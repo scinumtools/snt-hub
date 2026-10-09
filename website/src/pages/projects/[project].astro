@@ -37,7 +37,7 @@ const readable = (name: string) => name.replaceAll('_', ' ').replace(/\b\w/g, (l
     <SiteHeader />
     <main>
       <section class="project-hero shell">
-        <a class="project-back" href={base + '/#registry'}>← All projects</a>
+        <a class="project-back" href={base + '/registry/'}>← All projects</a>
         <div class="eyebrow"><span class="eyebrow-line"></span> PROJECT / {project.id.toUpperCase()}</div>
         <h1>{project.name}<span>.</span></h1>
         <p>{project.summary}</p>

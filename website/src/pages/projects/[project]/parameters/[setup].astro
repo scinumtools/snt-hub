@@ -3,7 +3,7 @@ import '../../../../styles/global.css';
 import '../../../../styles/parameter-reference.css';
 import SiteHeader from '../../../../components/SiteHeader.astro';
 import SiteFooter from '../../../../components/SiteFooter.astro';
-import { field, parameterTreeHtml, parametersFromBriefpp, sourceLocationUrl, type BriefDocument, type Parameter } from '../../../../utils/briefpp';
+import { field, parameterTreeHtml, parametersFromBriefpp, schemaSourceUrls, sourceLocationUrl, type BriefDocument, type Parameter } from '../../../../utils/briefpp';
 
 export function getStaticPaths() {
   const reports = import.meta.glob('../../../../../../projects/*/docs/parameters/*.json', { eager: true, import: 'default' });
@@ -29,6 +29,8 @@ const groups = [...new Set(parameters.map((parameter) => parameter.group))].map(
 }));
 const tree = parameterTreeHtml(parameters);
 const detailsFields = (parameter: Parameter) => parameter.metadata.filter((item) => item.label !== 'Description');
+const schemaSources = schemaSourceUrls(report, project.id, setup ?? '');
+const schemaNames = (value: string) => value.split(',').map((name) => name.trim()).filter(Boolean);
 const provenanceUrl = (item: { label: string; value: string }) =>
   item.label.endsWith(' at') ? sourceLocationUrl(item.value, project.id, setup ?? '') : null;
 ---
@@ -51,7 +53,7 @@ const provenanceUrl = (item: { label: string; value: string }) =>
         <div class="eyebrow"><span class="eyebrow-line"></span> EVALUATED PARAMETER REFERENCE</div>
         <h1>{setup?.replaceAll('_', ' ')}<span>.</span></h1>
         <p>Browse the evaluated DIPL parameters for this pinned {project.name} example. Values come from the bundled setup; a run using overrides can differ.</p>
-        <div class="reference-facts"><span><strong>{visibleCount}</strong> model parameters</span><span><strong>{groups.length}</strong> top-level groups</span><span>Source <code>{project.source_revision.slice(0, 12)}</code></span></div>
+        <div class="reference-facts"><span><strong>{visibleCount}</strong> model parameters</span><span><strong>{groups.length}</strong> top-level groups</span><span>Source <code>{project.source_revision.slice(0, 12)}</code></span><a class="reference-graph-link" href={`${base}/projects/${project.id}/parameters/${setup}/graph/`}>Explore 3D graph ↗</a></div>
       </section>
       <section class="reference-main"><div class="shell reference-layout">
         <aside class="reference-sidebar" aria-label="Parameter navigation">
@@ -73,7 +75,7 @@ const provenanceUrl = (item: { label: string; value: string }) =>
                 {field(parameter.metadata, 'Scientific impact') && <p class="parameter-impact"><strong>Scientific impact</strong> {field(parameter.metadata, 'Scientific impact')}</p>}
                 {field(parameter.metadata, 'Validation condition') && <p class="parameter-condition"><strong>Validation</strong> <code>{field(parameter.metadata, 'Validation condition')}</code></p>}
                 <details class="parameter-details"><summary>Schema &amp; provenance <span aria-hidden="true">⌄</span></summary><div class="parameter-details-body">
-                  {detailsFields(parameter).length > 0 && <div><h4>Model metadata</h4><dl>{detailsFields(parameter).map((item) => <><dt>{item.label}</dt><dd>{item.value}</dd></>)}</dl></div>}
+                  {detailsFields(parameter).length > 0 && <div><h4>Model metadata</h4><dl>{detailsFields(parameter).map((item) => <><dt>{item.label}</dt><dd>{item.label === 'Applied schemas' || item.label === 'Supplied by schema' ? schemaNames(item.value).map((name, index) => <>{index > 0 && ', '}{schemaSources[name] ? <a class="parameter-source-link" href={schemaSources[name]} target="_blank" rel="noopener noreferrer">{name}<span aria-hidden="true"> ↗</span></a> : name}</>) : item.value}</dd></>)}</dl></div>}
                   {parameter.provenance.length > 0 && <div><h4>Source history</h4><dl>{parameter.provenance.map((item) => <><dt>{item.label}</dt><dd>{provenanceUrl(item) ? <a class="parameter-source-link" href={provenanceUrl(item)!} target="_blank" rel="noopener noreferrer"><code>{item.value}</code><span aria-hidden="true"> ↗</span></a> : <code>{item.value}</code>}</dd></>)}</dl></div>}
                   {parameter.notes.length > 0 && <div><h4>Notes</h4>{parameter.notes.map((note) => <p>{note}</p>)}</div>}
                 </div></details>
