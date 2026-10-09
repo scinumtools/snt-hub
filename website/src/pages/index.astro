@@ -76,8 +76,8 @@ MaxSteps  <span>128</span>
         <p>Choose a project from the registry, create an empty directory, and work locally with its pinned source and DIPL layer. The project page lists available examples, prerequisites, and supported commands.</p>
         <div class="hub-command-card">
           <div class="hub-command-head"><strong>One workspace, one project</strong><span>GENERAL SNT HUB WORKFLOW</span></div>
-          <div class="hub-command-lines"><div><span>01 / WORKSPACE</span><code>mkdir my-study &amp;&amp; cd my-study</code></div><div><span>02 / FETCH</span><code>snt hub fetch PROJECT</code></div><div><span>03 / DISCOVER</span><code>snt hub examples</code></div><div><span>04 / SETUP</span><code>snt hub setup EXAMPLE</code></div><div><span>05 / BUILD</span><code>snt hub build</code></div><div><span>06 / RUN</span><code>snt hub run --setup runs/EXAMPLE</code></div></div>
-          <p>Replace <code>PROJECT</code> and <code>EXAMPLE</code> with registry and example IDs. Build and run are available where the project declares them; a setup-specific build also needs <code>--setup runs/EXAMPLE</code>.</p>
+          <div class="hub-command-lines"><div><span>01 / WORKSPACE</span><code>mkdir my-study &amp;&amp; cd my-study</code></div><div><span>02 / FETCH</span><code>snt hub fetch PROJECT</code></div><div><span>03 / DISCOVER</span><code>snt hub examples</code></div><div><span>04 / SETUP</span><code>snt hub setup EXAMPLE</code></div><div><span>04B / CUSTOM</span><code>snt hub setup EXAMPLE --override-file tuning.dip</code></div><div><span>05 / BUILD</span><code>snt hub build</code></div><div><span>06 / RUN</span><code>snt hub run --setup runs/EXAMPLE</code></div></div>
+          <p>To customize step 04, create <code>tuning.dip</code> with an assignment such as <code>section.parameter = VALUE</code>, using a path and value from the selected project's parameter reference. Run either setup command. Replace <code>PROJECT</code> and <code>EXAMPLE</code> with registry and example IDs. Build and run are available where the project declares them; a setup-specific build also needs <code>--setup runs/EXAMPLE</code>.</p>
         </div>
       </section>
 
