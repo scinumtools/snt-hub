@@ -3,7 +3,7 @@ import '../../../../styles/global.css';
 import '../../../../styles/parameter-reference.css';
 import SiteHeader from '../../../../components/SiteHeader.astro';
 import SiteFooter from '../../../../components/SiteFooter.astro';
-import { field, parameterTreeHtml, parametersFromBriefpp, type BriefDocument, type Parameter } from '../../../../lib/briefpp';
+import { field, parameterTreeHtml, parametersFromBriefpp, type BriefDocument, type Parameter } from '../../../../utils/briefpp';
 
 export function getStaticPaths() {
   const reports = import.meta.glob('../../../../../../projects/*/docs/parameters/*.json', { eager: true, import: 'default' });
