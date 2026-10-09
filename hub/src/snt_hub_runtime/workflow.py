@@ -24,7 +24,7 @@ def workspace(bundle_path: Path, source_path: Path, workspace_path: Path) -> tup
     return bundle, root, source
 
 
-def complete_setup(bundle: ProjectBundle, setup_path: Path) -> tuple[Path, dict]:
+def prepared_setup(bundle: ProjectBundle, setup_path: Path) -> tuple[Path, dict]:
     setup = setup_path.resolve()
     if not setup.is_dir() or bundle.root not in setup.parents:
         raise HubSetupError("Setup must be a directory inside this workspace")
@@ -34,8 +34,15 @@ def complete_setup(bundle: ProjectBundle, setup_path: Path) -> tuple[Path, dict]
     lock = json.loads(lock_path.read_text())
     if (lock.get("project") != bundle.record["id"] or
             lock.get("source_revision") != bundle.record["source_revision"] or
-            lock.get("capability") != "complete"):
-        raise HubSetupError("Run/build requires a complete setup for this pinned source")
+            lock.get("capability") not in {"complete", "native-inputs-only"}):
+        raise HubSetupError("Prepared setup does not match this pinned source")
+    return setup, lock
+
+
+def complete_setup(bundle: ProjectBundle, setup_path: Path) -> tuple[Path, dict]:
+    setup, lock = prepared_setup(bundle, setup_path)
+    if lock["capability"] != "complete":
+        raise HubSetupError("Run requires a complete setup")
     return setup, lock
 
 

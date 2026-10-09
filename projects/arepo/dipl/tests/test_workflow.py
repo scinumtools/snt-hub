@@ -25,8 +25,13 @@ def workspace_fixture(tmp_path, monkeypatch):
     return root, setup
 
 
-def test_build_uses_prepared_config_and_workspace_output(tmp_path, monkeypatch):
+@pytest.mark.parametrize("capability", ["complete", "native-inputs-only"])
+def test_build_uses_prepared_config_and_workspace_output(tmp_path, monkeypatch, capability):
     root, setup = workspace_fixture(tmp_path, monkeypatch)
+    lock_path = setup / "setup-lock.json"
+    setup_lock = json.loads(lock_path.read_text())
+    setup_lock["capability"] = capability
+    lock_path.write_text(json.dumps(setup_lock))
     seen = []
 
     def fake_execute(command, cwd, log, *, env=None):
@@ -41,6 +46,8 @@ def test_build_uses_prepared_config_and_workspace_output(tmp_path, monkeypatch):
     assert seen[0][1] == root / "source"
     assert f"CONFIG={setup / 'Config.sh'}" in seen[0][0]
     lock = json.loads((output / "build-lock.json").read_text())
+    assert lock["executable"] == "Arepo"
+    assert lock["build_log"] == "build.log"
     assert lock["setup_lock_sha256"] and lock["executable_sha256"]
     with pytest.raises(HubSetupError, match="new directory"):
         workflow.build(root / "dipl", root / "source", root, setup, output, "local")

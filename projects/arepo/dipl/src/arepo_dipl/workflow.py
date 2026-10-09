@@ -8,7 +8,7 @@ import platform
 import subprocess
 
 from snt_hub_runtime.setup import HubSetupError, _source_dirty
-from snt_hub_runtime.workflow import complete_setup, digest, execute, verify_executable, workspace, write_lock
+from snt_hub_runtime.workflow import complete_setup, digest, execute, prepared_setup, verify_executable, workspace, write_lock
 
 
 def build(bundle_path: Path, source_path: Path, workspace_path: Path,
@@ -16,7 +16,7 @@ def build(bundle_path: Path, source_path: Path, workspace_path: Path,
     bundle, root, source = workspace(bundle_path, source_path, workspace_path)
     if setup_path is None:
         raise HubSetupError("Arepo build requires --setup-dir (its Config.sh is setup-specific)")
-    setup, _ = complete_setup(bundle, setup_path)
+    setup, _ = prepared_setup(bundle, setup_path)
     config = setup / "Config.sh"
     if not config.is_file():
         raise HubSetupError("Prepared Arepo setup has no Config.sh")
@@ -51,8 +51,8 @@ def build(bundle_path: Path, source_path: Path, workspace_path: Path,
         "source_dirty": _source_dirty(source),
         "setup": str(setup.relative_to(root)), "setup_lock_sha256": digest(setup / "setup-lock.json"),
         "profile": profile, "systype": systype, "command": command,
-        "executable": str(executable),
-        "executable_sha256": digest(executable), "build_log": str(output / "build.log"),
+        "executable": executable.relative_to(output).as_posix(),
+        "executable_sha256": digest(executable), "build_log": "build.log",
     })
     return output
 
