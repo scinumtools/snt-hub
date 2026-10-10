@@ -20,8 +20,6 @@ build : arepo_build
       grid_resolution = 256
       short_range_cutoff = 5.0
     softening_types = 2
-      export
-        enabled = true
   time
     tree_based_timesteps = true
   precision

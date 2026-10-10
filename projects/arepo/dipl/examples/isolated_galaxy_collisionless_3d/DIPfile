@@ -8,9 +8,6 @@ sources[]
   filepath = "output_schedule.dipt"
 
 code[]
-  file = "../../profiles/schemas/export.dip"
-
-code[]
   file = "../../profiles/cosmological_units.dip"
 
 code[]
@@ -66,6 +63,3 @@ code[]
 
 code[]
   file = "profile.dip"
-
-code[]
-  file = "../../profiles/native_controls.dip"

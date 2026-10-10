@@ -8,5 +8,3 @@ $schema cooling_settings
     !tags ["arepo:param"]
     ?requires "build.physics.cooling"
     ?category "radiative cooling"
-    export : arepo_export
-      requires_enabled = ["build.physics.cooling"]

@@ -50,8 +50,8 @@ The `arepo_*` names are derived DIPL units for values such as box sizes,
 softening lengths, and densities. An override of a base unit is applied before
 the derived units and dependent values are evaluated.
 
-Choosing the larger unit bases does not enable cosmological integration.
-[`native_controls.dip`](../profiles/native_controls.dip) sets
+Choosing the larger unit bases does not enable cosmological integration. The
+[adapter output policy](../src/arepo_dipl/output_policy.py) derives
 `ComovingIntegrationOn` from `simulation.time.coordinate`: `"scale_factor"`
 enables it, while `"linear"` disables it.
 
@@ -71,11 +71,11 @@ This yields `TimeBegin 0.0078125`. Overriding the redshift with `63` yields
 baryons. The [cosmology schema](../profiles/schemas/cosmology.dip) retains
 their descriptions and validation conditions.
 
-The [native controls](../profiles/native_controls.dip) are expressions too:
+The adapter also resolves native switches after evaluation:
 `simulation.time.coordinate = "scale_factor"` yields
 `ComovingIntegrationOn 1`; `build.physics.cooling = true` yields
-`CoolingOn 1`. These translations are DIPL values and therefore remain
-visible, with their provenance, in `environment.diph5`.
+`CoolingOn 1`. These derived mappings are stored in the DIPH5 output plan,
+with dependencies and rule labels, outside the scientific parameter tree.
 
 Expressions are evaluated as the project is parsed. Set independent inputs
 before their dependents in a profile; an override cannot introduce a forward

@@ -92,8 +92,6 @@ $schema gravity_hydro_softening
     ?requires "build.mesh.adaptive_hydro_softening"
     ?scientific_impact "Sets the smallest entry in the adaptive gas-softening table."
     ?category "gravity softening"
-    export : arepo_export
-      requires_enabled = ["build.mesh.adaptive_hydro_softening"]
 
   spacing float = 1
     !condition ({.} >= 1)
@@ -104,8 +102,6 @@ $schema gravity_hydro_softening
     ?recommended_range "At least 1; values define the geometric ratio between adjacent adaptive softening levels."
     ?scientific_impact "Sets the spacing of the logarithmic adaptive gas-softening table."
     ?category "gravity softening"
-    export : arepo_export
-      requires_enabled = ["build.mesh.adaptive_hydro_softening"]
 
 $schema gravity_softening_length
   ?descr "One gravitational softening length."

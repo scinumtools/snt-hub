@@ -33,8 +33,9 @@ make -C projects/arepo/source SYSTYPE=YourSystem \
   exactly. It also checks softening-family counts against Arepo's native
   default or explicit `NSOFTTYPES`.
 - [`test_rendering.py`](../tests/test_rendering.py) checks override loading,
-  persistence, tagged export behavior, validation errors, output schedules,
-  and native and table rendering after DIPH5 reload. Each full setup runs in
+  recorded output plans, profile replacements, derived native switches,
+  snapshot replay, validation errors, output schedules, and native and table
+  rendering after DIPH5 reload. Each full setup runs in
   a separate process because custom unit names are registered process-wide.
 - [`test_override_units.py`](../tests/test_override_units.py) checks overrides
   expressed in hours, metres, and centimetres, including changes to a code

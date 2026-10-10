@@ -19,8 +19,6 @@ build : arepo_build
       grid_resolution = 256
       short_range_cutoff = 5.0
     softening_types = 2
-      export
-        enabled = true
   time
     tree_based_timesteps = true
   precision
@@ -153,8 +151,6 @@ analysis : analysis_settings
     linking_neighbors = 20
     opening_angle = 0.7
 
-# This example exports the centre-of-mass shaping threshold.
-mesh.regularization.shaping_factor.export.enabled = true
 
 # Output times are imported from the example-local DIPL table.
 output_schedule table = {schedule_data}

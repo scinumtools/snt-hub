@@ -40,8 +40,6 @@ $schema wall_clock_resources
     !tags ["arepo:param"]
     ?performance_impact "A shorter interval improves log durability but increases filesystem activity."
     ?category "resource management"
-    export : arepo_export
-      requires_enabled = ["build.io.reduced_flush"]
 
 $schema execution_resources
   ?descr "Continuation-job submission settings."

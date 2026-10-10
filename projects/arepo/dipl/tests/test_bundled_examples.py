@@ -89,6 +89,9 @@ from scinumtools3.dip import Environment
 output = generate(Path(sys.argv[2]), sys.argv[1])
 env = Environment()
 env.load(output / "environment.diph5")
+assert env.output_plan is not None and env.output_plan.mappings
+assert not any(".export." in node.name or node.name.startswith("native_controls.")
+               for node in env.select("?"))
 print(env["build.gravity.softening_types"].value)
 """
     with tempfile.TemporaryDirectory() as directory:

@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: scinumtools/snt3
-          ref: 579e246b9ab5e9b8cdb803ae57f6ac030268c17a
+          ref: v0.9.3
           path: .ci/snt3
           submodules: recursive
       - uses: actions/setup-python@v5

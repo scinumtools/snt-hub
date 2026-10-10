@@ -2,7 +2,8 @@
 
 This directory is a semantic configuration layer for the 16 bundled Arepo
 examples. DIPL describes the simulation and compile settings, their units,
-validation rules, derived values, and provenance. The generator writes native
+validation rules, derived values, and provenance. SNT3 v0.9.3 or newer is
+required for the adapter's recorded output plans. The generator writes native
 `Config.sh` and `param.txt` files, output schedules, scientific text tables,
 and a reloadable `environment.diph5`. It does not modify the Arepo source tree
 and needs no local SciNumTools3 source checkout. The original Arepo code is
@@ -79,9 +80,9 @@ for cosmological integration; see [Units and expressions](docs/units-and-express
 - [Model, schemas, and overrides](docs/model-and-overrides.md): manifests,
   reusable contracts, source ordering, and setup-specific tuning.
 - [Units and expressions](docs/units-and-expressions.md): physical code bases,
-  automatic conversion, scale-factor expressions, and derived native controls.
-- [Native output, tables, and provenance](docs/native-outputs.md): tags, typed
-  export rules, schedules, datasets, and DIPH5.
+  automatic conversion, scale-factor expressions, and derived native mappings.
+- [Native output, tables, and provenance](docs/native-outputs.md): tags, recorded
+  output decisions, schedules, datasets, and DIPH5.
 - [Verification and maintainer workflow](docs/verification.md): wrapper options,
   regression evidence, and the scope of the checks.
 

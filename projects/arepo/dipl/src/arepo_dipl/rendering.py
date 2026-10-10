@@ -1,6 +1,5 @@
-"""Discover tagged values and apply their optional typed export settings."""
+"""Format Arepo native records from an adapter-owned, resolved output plan."""
 
-from dataclasses import dataclass, field
 from typing import Any
 
 
@@ -23,81 +22,22 @@ def format_value(value: Any) -> str:
     return str(value)
 
 
-@dataclass
-class ExportPolicy:
-    enabled: bool = True
-    omit_nonpositive: bool = False
-    requires_enabled: list[str] = field(default_factory=list)
-
-    @classmethod
-    def read(cls, env: Any, path: str) -> "ExportPolicy":
-        prefix = path + ".export."
-        fields = {}
-        for setting in env.select("?" + prefix):
-            name = setting.name.removeprefix(prefix)
-            value = setting.value
-            if name == "requires_enabled":
-                # SNT unwraps singleton arrays in the Python value accessor.
-                if list(setting.shape) == [1]:
-                    value = [value]
-                valid = len(setting.shape) == 1 and isinstance(value, list) and all(
-                    isinstance(item, str) and item for item in value)
-            elif name in ("enabled", "omit_nonpositive"):
-                valid = list(setting.shape) == [1] and isinstance(value, bool)
-            else:
-                raise GenerationError(f"Unknown export setting `{setting.name}`.")
-            if not valid:
-                raise GenerationError(f"Invalid type or value for export setting `{setting.name}`.")
-            fields[name] = value
-        return cls(**fields)
-
-    def active(self, env: Any) -> bool:
-        if not self.enabled:
-            return False
-        enabled = True
-        for path in self.requires_enabled:
-            value = value_at(env, path)
-            if not isinstance(value, bool):
-                raise GenerationError(f"Export dependency `{path}` must be a boolean feature.")
-            enabled = enabled and value
-        return enabled
-
-
-def render_native(env: Any, target: str) -> list[str]:
-    """Discover exports in stable path order and apply their declared policy.
-
-    `?requires` remains descriptive metadata: it is not an export predicate.
-    Tags only identify output targets. Policy is read from typed child nodes.
-    """
+def render_native(env: Any, outputs: Any, target: str) -> list[str]:
+    """Render only active mappings; snapshot replay uses the saved decisions."""
     comment = "#" if target == "config" else "%"
-    lines: list[str] = []
-    emitted: dict[str, str] = {}
-    for node in sorted(env.select("?", tags_all=[f"arepo:{target}"]), key=lambda item: item.name):
-        for tag in node.tags:
-            if tag.startswith("arepo:") and tag not in ("arepo:config", "arepo:param"):
-                raise GenerationError(f"Unknown export tag `{tag}` on `{node.name}`; use an export child for policy.")
-        policy = ExportPolicy.read(env, node.name)
-        if not policy.active(env):
-            continue
-        value = node.value
-        flag = target == "config" and isinstance(value, bool)
-        if flag and not value:
-            continue
-        if policy.omit_nonpositive and float(value) <= 0:
-            continue
-        names = node.metadata.native
-        if not names:
-            raise GenerationError(f"Exported node `{node.name}` has no `?native` metadata.")
-        for native in names:
-            if native in emitted:
-                raise GenerationError(
-                    f"Duplicate native name `{native}` from `{emitted[native]}` and `{node.name}`."
-                )
-            emitted[native] = node.name
+    lines = []
+    for item in outputs.select(target, True):
+        source = item.source_path
+        if source:
+            node = env[source]
             description = " ".join(node.metadata.description.splitlines())
-            lines.append(f"{comment} DIPL {node.name}" + (f": {description}" if description else "."))
-            if target == "config":
-                lines.append(native if flag else f"{native}={format_value(value)}")
-            else:
-                lines.append(f"{native:<42}{format_value(value)}")
+            label = f"DIPL {source}" + (f": {description}" if description else ".")
+        else:
+            label = f"Derived from {', '.join(item.dependencies)}."
+        lines.append(f"{comment} {label}")
+        if target == "config":
+            lines.append(item.key if isinstance(item.value, bool) else
+                         f"{item.key}={format_value(item.value)}")
+        else:
+            lines.append(f"{item.key:<42}{format_value(item.value)}")
     return lines

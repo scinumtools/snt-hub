@@ -12,6 +12,7 @@
     "adapter_package": "projects/arepo/dipl",
     "adapter_executable": "arepo-dipl",
     "adapter_protocol": 1,
+    "output_plan": true,
     "fetch_command": "snt hub fetch arepo",
     "setup_command": "snt hub setup mhd_shock_tube",
     "build": {
@@ -27,7 +28,7 @@
   },
   "support": "independent",
   "validation": "settings-parity",
-  "validation_qualifier": "Locally verified on 2026-10-09: 40 tests and 28 subtests passed against the pinned Arepo source, and mhd_shock_tube built and completed as a smoke run on macOS. Scientific-result validation and other platforms remain separate checks.",
+  "validation_qualifier": "Locally verified on 2026-10-10 with SNT3 0.9.3: 47 Arepo tests and 21 subtests passed against the pinned source, including recorded output plans. The mhd_shock_tube build and smoke run completed on macOS on 2026-10-09. Scientific-result validation and other platforms remain separate checks.",
   "source_url": "https://gitlab.mpcdf.mpg.de/vrs/arepo",
   "source_path": "projects/arepo/source",
   "source_revision": "351aa8111a32e2e7433866bf8367ab7eba155d39",
@@ -36,10 +37,10 @@
   "adapter_origin_url": "https://github.com/vrtulka23/arepo-snt/tree/7924a04/dip",
   "adapter_revision": null,
   "verification": {
-    "date": "2026-10-09",
-    "scinumtools3": "0.9.0",
-    "tests_passed": 40,
-    "subtests_passed": 28
+    "date": "2026-10-10",
+    "scinumtools3": "0.9.3",
+    "tests_passed": 47,
+    "subtests_passed": 21
   },
   "evidence": [
     {
@@ -52,5 +53,5 @@
     }
   ],
   "limitations": "This is an external native-file adapter, not direct SNT3 integration in Arepo. Active settings are compared for bundled examples; comments, ordering, and file bytes are outside that comparison. The local build/run hook completed one mhd_shock_tube smoke run on macOS; other examples, platforms, and physical simulation results are not validated. Upstream endorsement is not established.",
-  "reviewed_on": "2026-10-09"
+  "reviewed_on": "2026-10-10"
 }

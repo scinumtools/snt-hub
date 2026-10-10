@@ -4,22 +4,21 @@ from typing import Any
 
 from scinumtools3.dip import inspect_table
 
-from .rendering import ExportPolicy, GenerationError, value_at
+from .rendering import GenerationError, value_at
 
 
 def _array(value: Any) -> list:
     return value if isinstance(value, list) else [value]
 
 
-def render_tables(env: Any) -> dict[str, str]:
+def render_tables(env: Any, plan: Any = None) -> dict[str, str]:
+    if plan is None:
+        from .generator import _outputs
+        plan = _outputs(env)
     outputs: dict[str, str] = {}
-    for node in env.select(tags_all=["arepo:dataset"]):
-        if not node.name.endswith(".output_file"):
-            raise GenerationError(f"Dataset tag must be attached to an output_file node: `{node.name}`.")
-        dataset = node.name.removesuffix(".output_file")
-        if not ExportPolicy.read(env, dataset).active(env):
-            continue
-        filename = node.value
+    for mapping in plan.select("dataset", True):
+        dataset = mapping.key
+        filename = mapping.value
         if filename in outputs:
             raise GenerationError(f"Duplicate dataset output `{filename}`.")
         table = inspect_table(env, dataset + ".data")

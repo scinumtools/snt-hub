@@ -13,8 +13,6 @@ build : arepo_build
     multiple_node_softening = true
     individual_softening_type_mask = 32
     softening_types = 2
-      export
-        enabled = true
   time
     tree_based_timesteps = true
   precision
@@ -80,8 +78,6 @@ gravity
     minimum_comoving = 1 arepo_length
     spacing = 1.2
 
-# This example exports the centre-of-mass shaping threshold.
-mesh.regularization.shaping_factor.export.enabled = true
 
 # Output schedule from the upstream example create.py (%g precision).
 output_schedule table = {schedule_data}

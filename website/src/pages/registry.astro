@@ -31,12 +31,14 @@ const base = import.meta.env.BASE_URL;
         <div class="eyebrow"><span class="eyebrow-line"></span> FROM REGISTRY TO RUN DIRECTORY</div>
         <h2 id="hub-journey-title">Fetch locally.<br /><span>Set up an example.</span></h2>
         <p>Choose a project from the registry, create an empty directory, and work locally with its pinned source and DIPL layer. The project page lists available examples, prerequisites, and supported commands.</p>
-        <div class="hub-install-note"><span>BEFORE YOU START</span><p><strong>Supported SNT3 source: <a href="https://github.com/scinumtools/snt3/tree/579e246b9ab5e9b8cdb803ae57f6ac030268c17a">commit 579e246b ↗</a></strong> (reports version <code>0.9.2</code>). Get the <code>snt</code> command by building that revision with the <a href="https://scinumtools.github.io/snt3/installation.html#building-from-source">SNT3 installation guide ↗</a>, then check <code>snt --version</code>. The published <code>v0.9.2</code> tag predates the current Hub commands; PyPI and conda packages supply Python bindings without the CLI.</p></div>
+        <div class="hub-install-note"><span>BEFORE YOU START</span><p><strong>Use SNT3 <a href="https://github.com/scinumtools/snt3/releases/tag/v0.9.3">v0.9.3 ↗</a> for the <code>snt hub</code> workflow below.</strong> Install the <code>snt</code> executable using the <a href="https://scinumtools.github.io/snt3/installation.html#building-from-source">SNT3 source-build guide ↗</a>, then check <code>snt --version</code>. The PyPI and conda packages provide Python bindings rather than this executable. See the <a href="https://scinumtools.github.io/snt3/integrations/cli.html#cli-hub">CLI guide ↗</a> for command options; each project listing describes its own examples and build and run capabilities.</p></div>
         <div class="hub-command-card">
           <div class="hub-command-head"><strong>One workspace, one project</strong><span>GENERAL SNT HUB WORKFLOW</span></div>
-          <pre class="hub-command-lines"><code>mkdir my-study &amp;&amp; cd my-study  <span class="hub-command-comment"># Create a local workspace</span>
+          <pre class="hub-command-lines"><code>snt hub list  <span class="hub-command-comment"># Find a project ID in the live registry</span>
+mkdir my-study &amp;&amp; cd my-study  <span class="hub-command-comment"># Create a local workspace</span>
 snt hub fetch PROJECT  <span class="hub-command-comment"># Get the pinned source and DIPL layer</span>
 snt hub examples  <span class="hub-command-comment"># List available examples</span>
+snt hub info  <span class="hub-command-comment"># Inspect source and integration revisions</span>
 snt hub setup EXAMPLE  <span class="hub-command-comment"># Generate this example's inputs</span>
 snt hub build  <span class="hub-command-comment"># Build the code if supported</span>
 snt hub run --setup runs/EXAMPLE  <span class="hub-command-comment"># Run the prepared example if supported</span></code></pre>

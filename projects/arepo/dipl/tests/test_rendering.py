@@ -1,4 +1,4 @@
-"""Behavioral coverage for tag-driven exports and the catalog migration."""
+"""Behavioral coverage for recorded Arepo output plans and native parity."""
 
 import json
 import re
@@ -11,7 +11,8 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "src"))
 
-from scinumtools3.dip import DIP, Environment
+from scinumtools3.dip import DIP, Environment, resolve_output_plan, run_adapter, run_adapter_snapshot
+from arepo_dipl.generator import ArepoAdapter
 from arepo_dipl.rendering import GenerationError, render_native
 
 
@@ -20,13 +21,13 @@ ROOT = Path(__file__).parents[1]
 
 def parse(source):
     parser = DIP()
-    parser.add_file(ROOT / "profiles" / "schemas" / "export.dip")
     parser.add_string(source)
     return parser.parse()
 
 
-def entries(env, target):
-    return [line for line in render_native(env, target) if not line.startswith(("#", "%"))]
+def entries(env, target, setup="cosmological_star_formation"):
+    plan = resolve_output_plan(env, ArepoAdapter(setup))
+    return [line for line in render_native(env, plan, target) if not line.startswith(("#", "%"))]
 
 
 class RenderingTests(unittest.TestCase):
@@ -63,7 +64,7 @@ simulation.time.begin float = ( 1 / ( 1 + {?simulation.time.initial_redshift} ) 
                 with self.assertRaises(RuntimeError):
                     load_environment("host_test")
 
-    def test_discovery_schema_override_and_persistence(self):
+    def test_tag_discovery_and_plan_persistence(self):
         env = parse('''$schema controls
   enabled bool = false
     !tags ["arepo:config"]
@@ -71,106 +72,104 @@ simulation.time.begin float = ( 1 / ( 1 + {?simulation.time.initial_redshift} ) 
   speed float = 100 cm/s
     !tags ["arepo:param"]
     ?native "Speed"
-  disabled bool = false
-    !tags ["arepo:config"]
-    ?native "DISABLED"
   runtime_switch bool = false
     !tags ["arepo:param"]
     ?native "RuntimeSwitch"
 settings : controls
   enabled = true
   speed = 3 m/s
+output.schedule.enabled bool = false
 unexported int = 99
   ?native "NotExported"
 ''')
-        # A previously unknown schema needs no Python registration.
         self.assertEqual(entries(env, "config"), ["FEATURE", "SECOND_FEATURE"])
         self.assertEqual([line.split() for line in entries(env, "param")],
                          [["RuntimeSwitch", "0"], ["Speed", "300"]])
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
-            path = Path(directory) / "environment.diph5"
-            env.save(path)
+            first = Path(directory) / "first"
+            replay = Path(directory) / "replay"
+            run_adapter(env, ArepoAdapter(), first, "environment.diph5")
             loaded = Environment()
-            loaded.load(path)
-            for target in ("config", "param"):
-                self.assertEqual(render_native(env, target), render_native(loaded, target))
+            loaded.load(first / "environment.diph5")
+            self.assertIsNotNone(loaded.output_plan)
+            self.assertEqual([m.key for m in loaded.output_plan.select("param", True)],
+                             ["RuntimeSwitch", "Speed"])
+            run_adapter_snapshot(first / "environment.diph5", ArepoAdapter(), replay)
+            for filename in ("Config.sh", "param.txt"):
+                self.assertEqual((first / filename).read_bytes(), (replay / filename).read_bytes())
 
-    def test_feature_dependencies_and_positive_values(self):
-        env = parse('''feature bool = false
-second_feature bool = true
-zero int = 0
+    def test_rules_are_resolved_outside_the_parameter_tree(self):
+        env = parse('''build.gravity.direct_summation bool = false
+build.gravity.direct_summation.threshold int = 500
   !tags ["arepo:config"]
-  ?native "ZERO"
-  export : arepo_export
-    omit_nonpositive = true
-active int = 2
+  ?native "DIRECT_SUMMATION_THRESHOLD"
+build.boundaries.x_mode int = 0
   !tags ["arepo:config"]
-  ?native "ACTIVE"
-  export : arepo_export
-    omit_nonpositive = true
-gated int = 3
-  !tags ["arepo:param"]
-  ?native "Gated"
-  export : arepo_export
-    requires_enabled = ["feature", "second_feature"]
-chosen int = 4
-  !tags ["arepo:param"]
-  ?native "Chosen"
-  export : arepo_export
-    requires_enabled = ["second_feature"]
-other int = 5
-  !tags ["arepo:param"]
-  ?native "Other"
-  export : arepo_export
-    enabled = false
+  ?native "REFLECTIVE_X"
+build.analysis.fof bool = true
+build.analysis.fof.primary_link_type_mask int = 2
+  !tags ["arepo:config"]
+  ?native "FOF_PRIMARY_LINK_TYPES"
 ''')
-        self.assertEqual(entries(env, "config"), ["ACTIVE=2"])
-        self.assertEqual([line.split() for line in entries(env, "param")], [["Chosen", "4"]])
+        plan = resolve_output_plan(env, ArepoAdapter())
+        self.assertEqual(entries(env, "config"), ["FOF_PRIMARY_LINK_TYPES=2"])
+        self.assertFalse(next(m for m in plan.mappings if m.key == "REFLECTIVE_X").active)
+        self.assertEqual(env.select("?build.boundaries.x_mode.export"), [])
+        self.assertIn("build.analysis.fof", next(m for m in plan.mappings
+                      if m.key == "FOF_PRIMARY_LINK_TYPES").dependencies)
 
-    def test_export_errors_are_actionable(self):
-        cases = [
-            ('x int = 1\n  !tags ["arepo:param"]\n', "has no `?native`"),
-            ('x int = 1\n  !tags ["arepo:param", "arepo:gate:feature"]\n', "Unknown export tag"),
-            ('x int = 1\n  !tags ["arepo:param"]\n  export : arepo_export\n'
-             '    requires_enabled = ["missing"]\n', "Missing active DIPL node"),
-            ('feature int = 1\nx int = 1\n  !tags ["arepo:param"]\n'
-             '  export : arepo_export\n    requires_enabled = ["feature"]\n', "must be a boolean feature"),
-            ('x int = 1\n  !tags ["arepo:param"]\n  export\n    untis str = "cm"\n', "Unknown export setting"),
-            ('x int = 1\n  !tags ["arepo:param"]\n  export\n    enabled str = "yes"\n', "Invalid type"),
-            ('x int = 1\n  !tags ["arepo:param"]\n  ?native "Same"\n'
-             'y int = 2\n  !tags ["arepo:param"]\n  ?native "Same"\n', "Duplicate native name"),
-        ]
-        for source, message in cases:
-            with self.subTest(message=message), self.assertRaisesRegex(GenerationError, re.escape(message)):
-                entries(parse(source), "param")
-
-    def test_policy_and_feature_overrides_are_applied_at_export(self):
-        env = parse('''feature bool = false
-x float = 200 cm
+    def test_profile_replacements_and_derived_values(self):
+        env = parse('''mesh.regularization.shaping_factor float = 1
   !tags ["arepo:param"]
-  ?native "Length"
-  export : arepo_export
-    requires_enabled = ["feature"]
-    enabled = false
-feature = true
-x.export.enabled = true
-x = 2 m
-''')
-        self.assertEqual([line.split() for line in entries(env, "param")], [["Length", "200"]])
-
-    def test_derived_controls_follow_overrides(self):
-        parser = DIP()
-        parser.add_string('''simulation.time.coordinate str = "linear"
-simulation.domain.boundary str = "non_periodic"
-build.physics.cooling bool = false
+  ?native "CellShapingFactor"
+mesh.regularization.shaping_speed float = 0.5
+  !tags ["arepo:param"]
+  ?native "CellShapingSpeed"
+simulation.time.coordinate str = "scale_factor"
+simulation.domain.boundary str = "periodic"
+build.physics.cooling bool = true
 build.physics.star_formation bool = false
 ''')
-        parser.add_string('build.physics.cooling = true\nsimulation.time.coordinate = "scale_factor"\n')
-        parser.add_file(ROOT / "profiles" / "native_controls.dip")
-        self.assertEqual(dict(line.split() for line in entries(parser.parse(), "param")), {
-            "ComovingIntegrationOn": "1", "PeriodicBoundariesOn": "0",
-            "CoolingOn": "1", "StarformationOn": "0",
+        base = resolve_output_plan(env, ArepoAdapter("alfven_wave_1d"))
+        enabled = resolve_output_plan(env, ArepoAdapter("cosmological_gravity_only"))
+        disabled = resolve_output_plan(env, ArepoAdapter("polytrope_1d_spherical"))
+        self.assertFalse(next(m for m in base.mappings if m.key == "CellShapingFactor").active)
+        shaping = next(m for m in enabled.mappings if m.key == "CellShapingFactor")
+        self.assertTrue(shaping.active)
+        self.assertEqual(shaping.replacements, ["adapter:base"])
+        self.assertFalse(next(m for m in disabled.mappings if m.key == "CellShapingSpeed").active)
+        derived = {m.key: m for m in enabled.mappings if m.origin == "adapter:derived"}
+        self.assertEqual({key: item.value for key, item in derived.items()}, {
+            "ComovingIntegrationOn": True, "PeriodicBoundariesOn": True,
+            "CoolingOn": True, "StarformationOn": False,
         })
+        self.assertTrue(all(not item.source_path and item.dependencies for item in derived.values()))
+        self.assertEqual(env.select("?native_controls"), [])
+
+    def test_bad_native_declarations_are_rejected(self):
+        for source in ('''x int = 1
+  !tags ["arepo:param"]
+''', '''x int = 1
+  !tags ["arepo:param", "arepo:gate:feature"]
+'''):
+            with self.assertRaises(GenerationError):
+                resolve_output_plan(parse(source), ArepoAdapter())
+        invalid = parse('''build.analysis.fof int = 1
+build.analysis.fof.primary_link_type_mask int = 2
+  !tags ["arepo:config"]
+  ?native "FOF_PRIMARY_LINK_TYPES"
+''')
+        with self.assertRaisesRegex(GenerationError, "boolean feature"):
+            resolve_output_plan(invalid, ArepoAdapter())
+        duplicate = parse('''x int = 1
+  !tags ["arepo:param"]
+  ?native "Same"
+y int = 2
+  !tags ["arepo:param"]
+  ?native "Same"
+''')
+        with self.assertRaises(RuntimeError):
+            resolve_output_plan(duplicate, ArepoAdapter())
 
     def test_all_setups_roundtrip_native_outputs_and_tables(self):
         from arepo_dipl.generator import SETUPS

@@ -34,7 +34,6 @@ hydrodynamics
   target_neighbors = 32
 gravity
   constant_internal = 1
-mesh.regularization.shaping_speed.export.enabled = false
 polytrope
   core_radius float = 0.1 arepo_length
     ?native "CoreRadius"

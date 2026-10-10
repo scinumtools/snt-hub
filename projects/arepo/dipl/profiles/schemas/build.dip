@@ -14,24 +14,18 @@ $schema arepo_build
       ?descr "X-boundary mode; zero leaves no REFLECTIVE_X compile option."
       ?native "REFLECTIVE_X"
       !tags ["arepo:config"]
-      export : arepo_export
-        omit_nonpositive = true
 
     y_mode int = 0
       !options [0, 1, 2]
       ?descr "Y-boundary mode; zero leaves no REFLECTIVE_Y compile option."
       ?native "REFLECTIVE_Y"
       !tags ["arepo:config"]
-      export : arepo_export
-        omit_nonpositive = true
 
     z_mode int = 0
       !options [0, 1, 2]
       ?descr "Z-boundary mode; zero leaves no REFLECTIVE_Z compile option."
       ?native "REFLECTIVE_Z"
       !tags ["arepo:config"]
-      export : arepo_export
-        omit_nonpositive = true
 
   geometry
     one_dimensional bool = false
@@ -111,8 +105,6 @@ $schema arepo_build
       ?rationale "A value of zero delegates to Arepo's ideal-hydrodynamics default of 5/3."
       ?scientific_impact "Sets the equation-of-state adiabatic index for ideal hydrodynamics."
       ?category "equation of state"
-      export : arepo_export
-        omit_nonpositive = true
         
   gravity
     self_gravity bool = false
@@ -149,8 +141,6 @@ $schema arepo_build
         ?recommended_range "Positive; Arepo's documented default is 3000 active particles."
         ?performance_impact "Increasing the threshold selects direct summation for more active-particle sets."
         ?category "gravity algorithm"
-        export : arepo_export
-          requires_enabled = ["build.gravity.direct_summation"]
         
     multiple_node_softening bool = false
       ?descr "Retain component-specific softenings when using softened tree nodes."
@@ -169,8 +159,6 @@ $schema arepo_build
       ?scientific_impact "Assigns selected particle types a softening based on mass relative to type 1; primarily useful for zoom simulations."
       ?category "gravity softening"
       ?visibility "advanced"
-      export : arepo_export
-        omit_nonpositive = true
       
     particle_mesh bool = false
       ?descr "Enable periodic particle-mesh gravity in the TreePM solver."
@@ -184,8 +172,6 @@ $schema arepo_build
         ?performance_impact "Larger grids increase PM-force resolution, memory use, and FFT cost."
         ?scientific_impact "Enables TreePM, using PM for long-range and the tree for short-range forces."
         ?category "TreePM"
-        export : arepo_export
-          requires_enabled = ["build.gravity.particle_mesh"]
         
       short_range_cutoff float = 4.5
         !condition ({.} > 0)
@@ -195,8 +181,6 @@ $schema arepo_build
         ?rationale "4.5 mesh cells is Arepo's documented default."
         ?performance_impact "Larger cutoffs extend the tree calculation further from each particle."
         ?category "TreePM"
-        export : arepo_export
-          requires_enabled = ["build.gravity.particle_mesh"]
 
       high_resolution_type_mask int = 0
         ?descr "Particle-type mask defining the TreePM high-resolution region."
@@ -205,9 +189,6 @@ $schema arepo_build
         ?requires "build.gravity.particle_mesh.grid_resolution"
         ?scientific_impact "Adds a high-resolution Fourier mesh around the selected particle types for zoom simulations."
         ?category "TreePM zoom"
-        export : arepo_export
-          omit_nonpositive = true
-          requires_enabled = ["build.gravity.particle_mesh"]
 
       enlarge_high_resolution_region float = 0
         ?descr "Expansion factor for the TreePM high-resolution region."
@@ -216,9 +197,6 @@ $schema arepo_build
         ?requires "build.gravity.particle_mesh.high_resolution_type_mask"
         ?performance_impact "A larger buffer reduces expensive high-resolution mesh-geometry recalculations for expanding particle sets."
         ?category "TreePM zoom"
-        export : arepo_export
-          omit_nonpositive = true
-          requires_enabled = ["build.gravity.particle_mesh"]
 
       high_resolution_grid_boost int = 0
         ?descr "Resolution multiplier for a zoom TreePM grid."
@@ -227,9 +205,6 @@ $schema arepo_build
         ?requires "build.gravity.particle_mesh.high_resolution_type_mask"
         ?performance_impact "Changes high-resolution FFT mesh size in proportion to PMGRID."
         ?category "TreePM zoom"
-        export : arepo_export
-          omit_nonpositive = true
-          requires_enabled = ["build.gravity.particle_mesh"]
 
       zoom_optimized bool = false
         ?descr "Use the TreePM algorithm optimized for cosmological zoom simulations."
@@ -259,8 +234,6 @@ $schema arepo_build
       ?rationale "Defaults to Arepo's NTYPES (six in this source tree) when NSOFTTYPES is omitted; must match the configured SofteningComovingTypeN entries."
       ?scientific_impact "Defines the available gravity-softening families that particle types may share."
       ?category "gravity softening"
-      export : arepo_export
-        enabled = false
       
   time
     force_equal_timesteps bool = false
@@ -416,16 +389,12 @@ $schema arepo_build
         ?descr "Particle-type bit mask used as FoF primary linking tracers."
         ?native "FOF_PRIMARY_LINK_TYPES"
         !tags ["arepo:config"]
-        export : arepo_export
-          requires_enabled = ["build.analysis.fof"]
         
       secondary_link_type_mask int = 0
         !condition ({.} >= 0)
         ?descr "Particle-type bit mask attached to nearest FoF primary tracers."
         ?native "FOF_SECONDARY_LINK_TYPES"
         !tags ["arepo:config"]
-        export : arepo_export
-          requires_enabled = ["build.analysis.fof"]
         
     subfind bool = false
       ?descr "Compile the Subfind substructure finder; requires FoF."

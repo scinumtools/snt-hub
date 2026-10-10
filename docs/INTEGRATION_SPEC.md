@@ -36,7 +36,7 @@ projects/<id>/
 
 `source/` is the code owner's pinned checkout. Hub development must not edit it to make an adapter work. `dipl/` is the integration layer and may be edited in a fetched local workspace; setup locks then record the edited state.
 
-The project record identifies the canonical source URL and full revision, adapter package and executable, setup manifest, integration mode, maintainer support, validation level, evidence, limitations, and review date. Declare build and run capabilities only when the corresponding project hooks exist and have been exercised. The setup manifest maps each Hub example ID to its DIPL directory and exact upstream example path. A recipe is `complete` only if it prepares every required input or verified asset; otherwise mark it `native-inputs-only` and require the user's explicit `--inputs-only` choice.
+The project record identifies the canonical source URL and full revision, adapter package and executable, setup manifest, integration mode, maintainer support, validation level, evidence, limitations, and review date. Set `hub.output_plan` to `true` only when the adapter records and replays its resolved native mappings in DIPH5. Declare build and run capabilities only when the corresponding project hooks exist and have been exercised. The setup manifest maps each Hub example ID to its DIPL directory and exact upstream example path. A recipe is `complete` only if it prepares every required input or verified asset; otherwise mark it `native-inputs-only` and require the user's explicit `--inputs-only` choice.
 
 The public registry derives from these records. **Integration mode**, **maintainer support**, and **validation evidence** are separate dimensions. A matching parameter file is settings parity; it is not proof of a successful solver run or scientific validation. See the [status definitions](https://scinumtools.github.io/snt-hub/integration-levels/).
 
@@ -48,7 +48,7 @@ Organize public parameter paths by the concepts a researcher chooses or inspects
 
 The native file's section or command order belongs in the renderer. A DIPL tree may follow a native format where that makes the model clearer, but it should not be forced to mirror parser quirks. Record the mapping to native names in metadata or an adapter mapping so readers can move from a parameter to the generated file.
 
-Do not expose adapter bookkeeping as ordinary scientific parameters. Output names, omission rules, and conditional native switches belong in an adapter policy or a dedicated binding mechanism when SNT3 provides one. If current tooling requires internal nodes, isolate and label them, keep them out of public parameter references where possible, and document a migration path. Never mix a renderer flag with a physical value under an indistinguishable path.
+Do not expose adapter bookkeeping as ordinary scientific parameters. SNT3 v0.9.3 provides adapter-owned output plans: declare native mappings and resolved decisions in `describe_outputs`, then render from that plan in `plan_resolved`. Record stable IDs, native keys, dependencies, and profile replacements so a DIPH5 snapshot can replay the same decisions without the original profile. Keep omission rules and derived native switches in adapter policy, outside the DIPL parameter tree. Never mix a renderer flag with a physical value under an indistinguishable path.
 
 ## Define schemas before example values
 

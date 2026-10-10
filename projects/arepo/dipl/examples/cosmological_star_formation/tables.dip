@@ -16,7 +16,5 @@ datasets.uv_background
   output_file str = {?cooling.uv_background_file}
     !tags ["arepo:dataset"]
     ?see "data/TREECOOL_ep"
-  export : arepo_export
-    requires_enabled = ["build.physics.cooling"]
   data table = {dataset_uv_background}
 

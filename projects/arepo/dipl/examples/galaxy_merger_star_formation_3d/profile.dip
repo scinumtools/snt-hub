@@ -17,8 +17,6 @@ build : arepo_build
     multiple_node_softening = true
     individual_softening_type_mask = 32
     softening_types = 2
-      export
-        enabled = true
   time
     tree_based_timesteps = true
   precision

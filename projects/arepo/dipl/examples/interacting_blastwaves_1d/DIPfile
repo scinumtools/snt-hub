@@ -8,9 +8,6 @@ sources[]
   filepath = "tables/reference_001.dipt"
 
 code[]
-  file = "../../profiles/schemas/export.dip"
-
-code[]
   file = "../../profiles/standard_units.dip"
 
 code[]
@@ -66,9 +63,6 @@ code[]
 
 code[]
   file = "profile.dip"
-
-code[]
-  file = "../../profiles/native_controls.dip"
 
 # Dataset output paths use the effective settings.
 code[]

@@ -10,12 +10,12 @@ are relative to the manifest. The generator discovers manifests under
 [`generator.py`](../src/arepo_dipl/generator.py). There is no Python list of
 parameters or per-setup loader.
 
-The manifest loads the export contract, its chosen physical code-unit bases,
-and the shared derived `arepo_*` units first. It then loads shared schemas,
-reusable baselines, the setup profile, derived native controls, and any
-dataset imports. This order lets later expressions see the selected profile's
-effective values, including overrides. The unit-base file is selected by the
-manifest, not by the generator or a runtime mode switch; see
+The manifest loads its chosen physical code-unit bases and the shared derived
+`arepo_*` units first. It then loads shared schemas, reusable baselines, the
+setup profile, and any dataset imports. The adapter resolves native-output
+policy after DIPL evaluation, using the final values and overrides. The
+unit-base file is selected by the manifest, not by the generator or a runtime
+mode switch; see
 [Units and expressions](units-and-expressions.md).
 
 ## Shared schemas, concrete values
