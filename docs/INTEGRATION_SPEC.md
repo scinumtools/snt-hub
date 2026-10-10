@@ -2,6 +2,7 @@
 title: "SNT Hub project integration specification"
 subtitle: "Bundle contract and recommended DIPL organization"
 author: "Ondrej Pego Jaura"
+orcid: "0000-0002-5391-3714"
 date: "10 October 2026"
 lang: en
 ---
