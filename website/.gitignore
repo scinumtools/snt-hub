@@ -1,3 +1,6 @@
 node_modules/
 dist/
+!public/vendor/snt-web/dist/
+!public/vendor/snt-web/dist/dipl_web.mjs
+!public/vendor/snt-web/dist/dipl_web.wasm
 .astro/

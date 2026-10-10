@@ -7,4 +7,4 @@ SNT3 WebAssembly runtime vendored for the Hub's browser override preview.
 
 `index.mjs` and `dist/` were copied from the adjacent SNT3 WebAssembly build.
 Update all three runtime files together and run `node --test website/tests/browser-project.test.mjs`.
-The runtime is loaded only after a visitor opens the override editor.
+The runtime loads when a visitor opens an example's override page.
