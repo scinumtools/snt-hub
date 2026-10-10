@@ -37,6 +37,7 @@ def main() -> int:
     steps = (
         ("Bundle consistency", [sys.executable, "scripts/check_project_bundles.py"], ROOT),
         ("Python tests", [sys.executable, "-m", "pytest", "-q", *PYTHON_TESTS], ROOT),
+        ("Browser DIPL tests", ["node", "--test", "website/tests/browser-project.test.mjs"], ROOT),
         ("Website build", ["npm", "run", "build"], ROOT / "website"),
     )
     for label, command, cwd in steps:
