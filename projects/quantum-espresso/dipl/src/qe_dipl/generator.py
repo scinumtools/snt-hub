@@ -7,6 +7,7 @@ from typing import Any
 
 from scinumtools3.dip import Adapter, ExistingOutputPolicy, run_adapter
 from snt_hub_runtime.dipl import evaluate_project
+from snt_hub_runtime.output_plan import PlannedValues
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -182,8 +183,37 @@ def render_pw(env: Any) -> str:
 
 
 class PwAdapter(Adapter):
-    def plan(self, env: Any, context: Any) -> None:
-        context.add_text("pw.in", render_pw(env))
+    def describe_outputs(self, env: Any, outputs: Any) -> None:
+        def add(path: str, target: str, key: str) -> None:
+            if optional_value(env, path) is not None:
+                outputs.add_node(env, f"{target}:{key}", target, key, path,
+                                 rule="PWscf input field", origin="adapter:qe")
+
+        for section, fields in NAMELIST_FIELDS.items():
+            for field in fields:
+                add(f"{section.lower()}.{field}", f"namelist:{section}",
+                    "celldm(1)" if field == "celldm_1" else field)
+        for path, card in (("structure.cell_units", "CELL_PARAMETERS"),
+                           ("structure.position_units", "ATOMIC_POSITIONS"),
+                           ("sampling.mode", "K_POINTS"),
+                           ("occupations.bands", "OCCUPATIONS")):
+            add(path, f"card:{card}", path)
+        for collection, card, fields in (
+            ("structure.species", "ATOMIC_SPECIES", ("symbol", "mass", "pseudo_file")),
+            ("structure.atoms", "ATOMIC_POSITIONS", ("species", "x", "y", "z")),
+            ("structure.cell_vectors", "CELL_PARAMETERS", ("x", "y", "z")),
+            ("sampling.path_points", "K_POINTS", ("x", "y", "z", "segment_points")),
+            ("sampling.points", "K_POINTS", ("x", "y", "z", "weight")),
+        ):
+            for index, _ in enumerate(records(env, collection, fields)):
+                for field in fields:
+                    add(f"{collection}[{index}].{field}", f"card:{card}",
+                        f"{collection}[{index}].{field}")
+        for field in ("grid_x", "grid_y", "grid_z", "shift_x", "shift_y", "shift_z"):
+            add(f"sampling.{field}", "card:K_POINTS", field)
+
+    def plan_resolved(self, env: Any, outputs: Any, context: Any) -> None:
+        context.add_text("pw.in", render_pw(PlannedValues(outputs)))
 
 
 def generate(output: Path, setup: str = "si_scf", bundle_root: Path = ROOT,

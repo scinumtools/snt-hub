@@ -48,7 +48,20 @@ Organize public parameter paths by the concepts a researcher chooses or inspects
 
 The native file's section or command order belongs in the renderer. A DIPL tree may follow a native format where that makes the model clearer, but it should not be forced to mirror parser quirks. Record the mapping to native names in metadata or an adapter mapping so readers can move from a parameter to the generated file.
 
-Do not expose adapter bookkeeping as ordinary scientific parameters. SNT3 v0.9.3 provides adapter-owned output plans: declare native mappings and resolved decisions in `describe_outputs`, then render from that plan in `plan_resolved`. Record stable IDs, native keys, dependencies, and profile replacements so a DIPH5 snapshot can replay the same decisions without the original profile. Keep omission rules and derived native switches in adapter policy, outside the DIPL parameter tree. Never mix a renderer flag with a physical value under an indistinguishable path.
+## Separate parameters from output decisions
+
+The boundary is the evaluation of the DIPL project. **DIPL nodes describe the effective simulation settings** that a researcher can inspect, validate, or override. After evaluation, the **adapter-owned output plan records how those settings become native input**. `describe_outputs(env, outputs)` resolves mappings and decisions; `plan_resolved(env, outputs, context)` renders files from that resolved plan. The output plan is saved in DIPH5 so snapshot replay can use the recorded values and decisions without reevaluating the original DIPL profiles.
+
+| Put in | When | Example |
+|:--|:--|:--|
+| DIPL node | The value or choice has meaning to the user, affects the simulation, and should be inspectable or overridable. | A cutoff, grid dimension, or choice of sampling mode. |
+| DIPL expression | A meaningful setting is a short, deterministic consequence of other settings and is useful to inspect in its own right. | A cell midpoint derived from cell length. |
+| Output plan record | The information selects, names, omits, converts, or derives native output, but is not itself an independent user setting. | A native key and target; whether a command is emitted; a derived native-only switch. |
+| Renderer | The work is file formatting, ordering, staging, or substantial computation. | Namelist syntax, table layout, or copying a pinned input asset. |
+
+A semantic DIPL node need not correspond to one native assignment. One node may select a native card variant or affect several commands; several nodes may form one native record. Conversely, a native-only value can be recorded with `outputs.add_value(...)` without inventing a public DIPL node. Do not create nodes solely to carry export flags, native names, or intermediate formatting state. Do not hide a scientifically meaningful user choice inside adapter policy merely because it changes which native line is written.
+
+Give each output mapping a stable ID, target and native key. Record its source path or dependencies, resolved value, active decision, and any intentional profile replacement. Render from the saved plan rather than recomputing profile choices during replay. Keep renderer details out of parameter descriptions; document non-obvious conversions and test that overrides change both the plan and the native file as expected. A saved plan guarantees replay of its mappings and decisions; any external source templates or assets still needed by the renderer must be pinned and documented.
 
 ## Define schemas before example values
 
@@ -78,7 +91,7 @@ An example directory has one `DIPfile` as its entry point. Register reusable sch
 2. Reusable domain schemas, from broad structures to optional extensions.
 3. Shared profiles or defaults that are genuinely common to several examples.
 4. The example's settings and data sources.
-5. Any derived values or output mappings that depend on the effective settings.
+5. Any meaningful DIPL values derived from the effective settings. Declare native output mappings in the adapter after evaluation.
 
 For instance:
 
@@ -137,7 +150,7 @@ snt hub run --setup runs/EXAMPLE
 A project is ready for its declared registry state when its evidence matches its claims:
 
 1. The source submodule, project record, setup manifest, and local examples agree on project ID and pinned revision.
-2. Every published example parses with the supported SNT3 version. Public nodes have useful descriptions, units or unit conventions, constraints, native mappings where applicable, and source provenance.
+2. Every published example parses with the supported SNT3 version. Public nodes have useful descriptions, units or unit conventions, constraints, native mappings where applicable, and source provenance. If an output plan is claimed, its recorded mappings cover the settings used to render native inputs and replay produces the same files under the documented asset requirements.
 3. Generated native settings match pinned upstream examples under documented comparison rules. Explain intentional differences and preserve path-sensitive values.
 4. A complete recipe stages all required inputs, including checked assets or initial data, from a clean workspace. Tests cover a failed setup without a published partial directory and safe override behavior.
 5. Build and run claims have separate recorded checks, with machine, version, prerequisites, and observed result. Scientific-result validation needs its own reference and tolerance criteria.

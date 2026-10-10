@@ -12,6 +12,7 @@
     "adapter_package": "projects/wrf/dipl",
     "adapter_executable": "wrf-dipl",
     "adapter_protocol": 1,
+    "output_plan": true,
     "fetch_command": "snt hub fetch wrf",
     "setup_command": "snt hub setup hill_2d"
   },
@@ -27,7 +28,7 @@
   "adapter_revision": null,
   "verification": {
     "date": "2026-10-10",
-    "scinumtools3": "0.9.2",
+    "scinumtools3": "0.9.3",
     "tests_passed": 16
   },
   "evidence": [

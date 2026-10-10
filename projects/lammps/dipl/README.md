@@ -13,4 +13,6 @@ projects/lammps/dipl/.venv/bin/lammps-dipl setup --setup lj_melt --output ./runs
 
 `setup` refuses an existing output directory and records the pinned source, evaluated DIPL tree, and generated files in `setup-lock.json`. The input script creates atoms itself, so both recipes are `complete`. A bare DIPL override file can be passed with `--override-file PATH`; the accepted text and digest are recorded beside the generated input.
 
+With SNT3 0.9.3 or newer, `environment.diph5` also stores the resolved mapping from DIPL fields to LAMMPS commands, including decisions for optional dimension, potential-shift, and 2D-fix commands. `run_adapter_snapshot` can regenerate `in.lammps` from that saved plan without loading the original DIPL profiles.
+
 For an SNT Hub workspace, the adapter receives `--bundle <workspace>/dipl`, `--source <workspace>/source`, and, for build/run, `--workspace <workspace>`. The build profile configures LAMMPS CMake with MPI and OpenMP disabled and writes the `lmp` executable and build lock under `build/local/`; the run command accepts only complete setups and records its command, executable hash, logs, and exit status. The build needs CMake, a C++17 compiler, and a build tool. Tests cover command parity with the two pinned upstream examples and the local workspace contract.

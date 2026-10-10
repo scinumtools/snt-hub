@@ -61,7 +61,7 @@ const setupCommand = setups[defaultSetup]?.capability === 'native-inputs-only'
           </a>)}
         </div>
         <p class="parameter-source">These reports describe the bundled example values. A personal run with <code>--override-file</code> can have different values; inspect its <code>environment.diph5</code> or generate a report from that snapshot. {project.name} source revision: <code>{project.source_revision}</code>.</p>
-        {project.hub.output_plan && <p class="parameter-source">This adapter also records its resolved native mappings in each generated <code>environment.diph5</code>. The plan includes active and omitted keys, derived values, dependencies, and example-specific choices; it can be replayed without the original DIPL profile.</p>}
+        {project.hub.output_plan && <p class="parameter-source">This adapter records its resolved native mappings in each generated <code>environment.diph5</code>. The saved plan can be inspected and replayed without the original DIPL profile. Some projects still need their pinned source files for replay.</p>}
       </div></section>
     </main>
     <SiteFooter />

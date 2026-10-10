@@ -8,6 +8,7 @@ from typing import Any
 
 from scinumtools3.dip import Adapter, ExistingOutputPolicy, run_adapter
 from snt_hub_runtime.dipl import evaluate_project
+from snt_hub_runtime.output_plan import PlannedValues
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -132,11 +133,20 @@ class WrfAdapter(Adapter):
         self.case_dir = source_root / "test" / UPSTREAM_CASES[setup][0]
         self.assets = UPSTREAM_CASES[setup][1]
 
-    def plan(self, env: Any, context: Any) -> None:
+    def describe_outputs(self, env: Any, outputs: Any) -> None:
+        for section, keys in FIELDS.items():
+            if section == "ideal" and UPSTREAM_CASES[self.setup][2] is None:
+                continue
+            for key in keys:
+                path = f"{section}.{key}"
+                outputs.add_node(env, path, f"namelist:{section}", key, path,
+                                 rule="modeled WRF namelist field", origin="adapter:wrf")
+
+    def plan_resolved(self, env: Any, outputs: Any, context: Any) -> None:
         namelist = self.case_dir / "namelist.input"
         if not namelist.is_file() or any(not (self.case_dir / asset).is_file() for asset in self.assets):
             raise GenerationError(f"Pinned WRF example files are missing in {self.case_dir}")
-        context.add_text("namelist.input", render_namelist(env, namelist.read_text(), self.setup))
+        context.add_text("namelist.input", render_namelist(PlannedValues(outputs), namelist.read_text(), self.setup))
         for asset in self.assets:
             context.add_binary(asset, (self.case_dir / asset).read_bytes())
 

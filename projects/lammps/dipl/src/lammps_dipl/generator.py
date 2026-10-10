@@ -7,6 +7,7 @@ from typing import Any
 
 from scinumtools3.dip import Adapter, ExistingOutputPolicy, run_adapter
 from snt_hub_runtime.dipl import evaluate_project
+from snt_hub_runtime.output_plan import PlannedValues
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -51,9 +52,10 @@ def render_lammps(env: Any) -> str:
 
     f = lambda path: number(value(env, path))
     yesno = lambda flag: "yes" if flag else "no"
+    planned_active = lambda path, fallback: env.active(path) if isinstance(env, PlannedValues) else fallback
     lines = ["# Generated from SNT Hub DIPL; evaluated values are in environment.diph5.",
              "units lj"]
-    if dimension == 2:
+    if planned_active("geometry.dimension", dimension == 2):
         lines.append("dimension 2")
     lines.extend((
         "atom_style atomic",
@@ -68,7 +70,7 @@ def render_lammps(env: Any) -> str:
         "pair_coeff 1 1 " + " ".join(f(f"interactions.{field}")
                                         for field in ("epsilon", "sigma", "cutoff")),
     ))
-    if value(env, "interactions.shift_potential"):
+    if planned_active("interactions.shift_potential", value(env, "interactions.shift_potential")):
         lines.append("pair_modify shift yes")
     lines.extend((
         f"neighbor {f('interactions.neighbor_skin')} bin",
@@ -77,12 +79,12 @@ def render_lammps(env: Any) -> str:
         f"check {yesno(value(env, 'interactions.neighbor_check'))}",
         "fix 1 all nve",
     ))
-    if enforce_2d:
+    if planned_active("dynamics.enforce_2d", enforce_2d):
         lines.append("fix 2 all enforce2d")
     lines.extend((f"thermo {value(env, 'dynamics.thermo_interval')}",
                   f"run {value(env, 'dynamics.run_steps')}"))
     after = optional_value(env, "minimization.thermo_interval_after_run")
-    if after is not None:
+    if after is not None and planned_active("minimization.thermo_interval_after_run", True):
         lines.extend((
             f"neigh_modify every {value(env, 'interactions.neighbor_every')} "
             f"delay {value(env, 'interactions.neighbor_delay')} "
@@ -96,8 +98,23 @@ def render_lammps(env: Any) -> str:
 
 
 class LammpsAdapter(Adapter):
-    def plan(self, env: Any, context: Any) -> None:
-        context.add_text("in.lammps", render_lammps(env))
+    def describe_outputs(self, env: Any, outputs: Any) -> None:
+        optional_commands = {
+            "geometry.dimension": lambda: value(env, "geometry.dimension") == 2,
+            "interactions.shift_potential": lambda: bool(value(env, "interactions.shift_potential")),
+            "dynamics.enforce_2d": lambda: bool(value(env, "dynamics.enforce_2d")),
+        }
+        for node in env.select("?"):
+            for native in node.metadata.native:
+                target = f"command:{native}"
+                active = optional_commands[node.name]() if node.name in optional_commands else True
+                outputs.add_node(env, f"{target}:{node.name}", target, node.name, node.name,
+                                 active=active,
+                                 rule="optional command" if node.name in optional_commands else "LAMMPS command argument",
+                                 origin="adapter:lammps")
+
+    def plan_resolved(self, env: Any, outputs: Any, context: Any) -> None:
+        context.add_text("in.lammps", render_lammps(PlannedValues(outputs)))
 
 
 def generate(output: Path, setup: str = "lj_melt", bundle_root: Path = ROOT,
