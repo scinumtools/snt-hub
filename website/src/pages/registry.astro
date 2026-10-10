@@ -31,6 +31,7 @@ const base = import.meta.env.BASE_URL;
         <div class="eyebrow"><span class="eyebrow-line"></span> FROM REGISTRY TO RUN DIRECTORY</div>
         <h2 id="hub-journey-title">Fetch locally.<br /><span>Set up an example.</span></h2>
         <p>Choose a project from the registry, create an empty directory, and work locally with its pinned source and DIPL layer. The project page lists available examples, prerequisites, and supported commands.</p>
+        <div class="hub-install-note"><span>BEFORE YOU START</span><p><strong>Supported SNT3 source: <a href="https://github.com/scinumtools/snt3/tree/579e246b9ab5e9b8cdb803ae57f6ac030268c17a">commit 579e246b ↗</a></strong> (reports version <code>0.9.2</code>). Get the <code>snt</code> command by building that revision with the <a href="https://scinumtools.github.io/snt3/installation.html#building-from-source">SNT3 installation guide ↗</a>, then check <code>snt --version</code>. The published <code>v0.9.2</code> tag predates the current Hub commands; PyPI and conda packages supply Python bindings without the CLI.</p></div>
         <div class="hub-command-card">
           <div class="hub-command-head"><strong>One workspace, one project</strong><span>GENERAL SNT HUB WORKFLOW</span></div>
           <pre class="hub-command-lines"><code>mkdir my-study &amp;&amp; cd my-study  <span class="hub-command-comment"># Create a local workspace</span>
