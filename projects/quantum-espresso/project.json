@@ -3,6 +3,18 @@
   "id": "quantum-espresso",
   "name": "Quantum ESPRESSO",
   "summary": "An open-source suite for electronic-structure calculations; this Hub bundle models the pinned PWscf regression inputs.",
+  "presentation": {
+    "about": "Quantum ESPRESSO is a suite for electronic-structure calculations and materials modeling based on density-functional theory, plane waves, and pseudopotentials.",
+    "rationale": "Its PWscf inputs combine namelists with species, atomic positions, cell geometry, and k-point cards. The 27 bundled cases let reusable DIPL schemas describe those recurring structures across SCF, NSCF, and bands calculations.",
+    "official_page": "https://www.quantum-espresso.org/",
+    "official_label": "Explore Quantum ESPRESSO",
+    "visual": {
+      "path": "/projects/quantum-espresso/logo.png",
+      "alt": "Quantum ESPRESSO project logo",
+      "source_url": "https://gitlab.com/QEF/q-e/-/blob/770a0b2d12928a67048e2f3da8d10d057e52179e/Doc/quantum_espresso.png",
+      "credit": "Quantum ESPRESSO logo · pinned upstream source"
+    }
+  },
   "scope": "Reusable DIPL schemas and native pw.x generation for all 27 inputs in the pinned test-suite/pw_scf directory: SCF, NSCF, and bands cases.",
   "integration_mode": "External adapter",
   "hub": {

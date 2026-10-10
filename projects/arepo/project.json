@@ -3,6 +3,12 @@
   "id": "arepo",
   "name": "Arepo",
   "summary": "A massively parallel code for gravitational N-body and hydrodynamics simulations, including cosmological setups.",
+  "presentation": {
+    "about": "Arepo follows gas with an adaptive moving Voronoi mesh while also treating gravitationally interacting particles. It is used for problems with a wide range of spatial and time scales, including galaxy formation.",
+    "rationale": "Its examples combine compile-time choices, runtime parameters, units, and initial-condition assets. That makes Arepo a useful test of whether one DIPL contract can expose scientifically meaningful controls while an adapter still produces the files the solver expects.",
+    "official_page": "https://arepo-code.org/wp-content/userguide/userguide.html",
+    "official_label": "Explore the Arepo user guide"
+  },
   "scope": "DIPL models and native input generation for the 16 bundled examples in the pinned public Arepo source.",
   "integration_mode": "External adapter",
   "hub": {

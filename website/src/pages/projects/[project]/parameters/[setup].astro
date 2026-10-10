@@ -4,25 +4,21 @@ import '../../../../styles/parameter-reference.css';
 import SiteHeader from '../../../../components/SiteHeader.astro';
 import SiteFooter from '../../../../components/SiteFooter.astro';
 import { field, parameterTreeHtml, parametersFromBriefpp, schemaSourceUrls, sourceLocationUrl, type BriefDocument, type Parameter } from '../../../../utils/briefpp';
-import { browserProject } from '../../../../utils/dipl-project.mjs';
 
 export function getStaticPaths() {
   const reports = import.meta.glob('../../../../../../projects/*/docs/parameters/*.json', { eager: true, import: 'default' });
   const records = import.meta.glob('../../../../../../projects/*/project.json', { eager: true, import: 'default' });
-  const setupRecords = import.meta.glob('../../../../../../projects/*/setups.json', { eager: true, import: 'default' });
   return Object.entries(reports).map(([path, report]) => {
     const match = path.match(/\/projects\/([^/]+)\/docs\/parameters\/([^/]+)\.json$/);
     if (!match) throw new Error(`Unexpected parameter report path: ${path}`);
     const project = Object.values(records).find((record: any) => record.id === match[1]);
     if (!project) throw new Error(`Missing project record for ${match[1]}`);
-    const setups = Object.entries(setupRecords).find(([path]) => path.includes(`/projects/${match[1]}/`))?.[1] as any;
-    return { params: { project: match[1], setup: match[2] }, props: { project, report, recipe: setups?.setups?.[match[2]] } };
+    return { params: { project: match[1], setup: match[2] }, props: { project, report } };
   });
 }
 
-const { project, report, recipe } = Astro.props as { project: any; report: BriefDocument; recipe: any };
+const { project, report } = Astro.props as { project: any; report: BriefDocument };
 const { setup } = Astro.params;
-const browserAvailability = browserProject(project.id, setup ?? '');
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const parameters = parametersFromBriefpp(report);
 const visibleCount = parameters.filter((parameter) => !parameter.internal).length;
@@ -57,20 +53,7 @@ const provenanceUrl = (item: { label: string; value: string }) =>
         <div class="eyebrow"><span class="eyebrow-line"></span> EVALUATED PARAMETER REFERENCE</div>
         <h1>{setup?.replaceAll('_', ' ')}<span>.</span></h1>
         <p>Browse the evaluated DIPL parameters for this pinned {project.name} example. Values come from the bundled setup; a run using overrides can differ.</p>
-        <div class="reference-facts"><span><strong>{visibleCount}</strong> model parameters</span><span><strong>{groups.length}</strong> top-level groups</span><span>Source <code>{project.source_revision.slice(0, 12)}</code></span><a class="reference-graph-link" href={`${base}/projects/${project.id}/parameters/${setup}/graph/`}>Explore 3D graph ↗</a></div>
-      </section>
-      <section class="override-workbench shell" data-project={project.id} data-setup={setup} data-runtime-url={`${base}/vendor/snt-web/index.mjs`} data-project-url={`${base}/projects/${project.id}/parameters/${setup}/project.json`} data-inputs-only={String(recipe?.capability === 'native-inputs-only')} aria-labelledby="override-heading">
-        <div class="override-heading"><div><span class="eyebrow">INTERACTIVE DIPL</span><h2 id="override-heading">Try an override<span>.</span></h2><p>Check parameter changes locally in your browser with SNT3. Download the override to generate native inputs with <code>snt hub setup</code>.</p></div>{browserAvailability.supported && <button id="override-load" type="button">Load editor</button>}</div>
-        {!browserAvailability.supported && <p class="override-unavailable">{browserAvailability.reason} Use <code>snt hub setup</code> locally to evaluate overrides for this example.</p>}
-        <div id="override-editor" class="override-editor" hidden>
-          <div class="override-controls"><label for="override-path">Parameter</label><select id="override-path"><option value="">Choose a parameter</option>{parameters.filter((parameter) => !parameter.internal).map((parameter) => <option value={parameter.path}>{parameter.path}</option>)}</select><label for="override-value">New DIPL value</label><input id="override-value" type="text" placeholder="e.g. 10 m, 24, or &quot;scf&quot;" /><button id="override-add" type="button">Add assignment</button></div>
-          <label class="override-label" for="override-body">Override assignments</label><textarea id="override-body" rows="5" spellcheck="false" placeholder="parameter.path = value"></textarea>
-          <div class="override-actions"><button id="override-preview" type="button">Validate and preview</button><button id="override-download" type="button" disabled>Download override.dip</button></div>
-          <div id="override-status" class="override-status" role="status" aria-live="polite"></div>
-          <div id="override-results" class="override-results" hidden><h3>Evaluated changes</h3><ul id="override-changes"></ul></div>
-          <p class="override-local">To generate native inputs, install <a href="https://github.com/scinumtools/snt3">SNT3</a> and run these commands locally after downloading the override. The browser runtime validates DIPL but does not run the project adapter.</p>
-          <pre class="override-command"><code>{`snt hub fetch ${project.id}\nsnt hub setup ${setup} --override-file override.dip${recipe?.capability === 'native-inputs-only' ? ' --inputs-only' : ''}`}</code></pre>
-        </div>
+        <div class="reference-facts"><span><strong>{visibleCount}</strong> model parameters</span><span><strong>{groups.length}</strong> top-level groups</span><span>Source <code>{project.source_revision.slice(0, 12)}</code></span><a class="reference-graph-link" href={`${base}/projects/${project.id}/parameters/${setup}/graph/`}>Explore 3D graph ↗</a><a class="reference-override-link" href={`${base}/projects/${project.id}/parameters/${setup}/override/`}>Try an override ↗</a></div>
       </section>
       <section class="reference-main"><div class="shell reference-layout">
         <aside class="reference-sidebar" aria-label="Parameter navigation">
@@ -88,7 +71,7 @@ const provenanceUrl = (item: { label: string; value: string }) =>
               {group.entries.map((parameter) => <article class="parameter-entry" id={parameter.id} data-internal={String(parameter.internal)} data-search={`${parameter.path} ${parameter.value} ${parameter.description} ${parameter.metadata.map((item) => item.value).join(' ')}`.toLowerCase()} hidden={parameter.internal}>
                 <div class="parameter-entry-top"><div><span class="parameter-path">{parameter.path}</span><h3>{parameter.name.replaceAll('_', ' ')}</h3></div><div class="parameter-value"><span>EFFECTIVE VALUE</span><code>{parameter.value || '—'}</code></div></div>
                 {parameter.description && <p class="parameter-description">{parameter.description}</p>}
-                {browserAvailability.supported && !parameter.internal && <button class="parameter-try" type="button" data-path={parameter.path}>Try changing this parameter ↗</button>}
+                {!parameter.internal && <a class="parameter-try" href={`${base}/projects/${project.id}/parameters/${setup}/override/?path=${encodeURIComponent(parameter.path)}`}>Try changing this parameter ↗</a>}
                 <div class="parameter-meta"><span>Type <strong>{parameter.type || 'Unspecified'}</strong></span>{parameter.units && <span>Units <strong>{parameter.units}</strong></span>}{parameter.shape && <span>Shape <strong>{parameter.shape}</strong></span>}{parameter.internal && <span class="parameter-internal-tag">Adapter control</span>}</div>
                 {field(parameter.metadata, 'Scientific impact') && <p class="parameter-impact"><strong>Scientific impact</strong> {field(parameter.metadata, 'Scientific impact')}</p>}
                 {field(parameter.metadata, 'Validation condition') && <p class="parameter-condition"><strong>Validation</strong> <code>{field(parameter.metadata, 'Validation condition')}</code></p>}
@@ -106,133 +89,6 @@ const provenanceUrl = (item: { label: string; value: string }) =>
     </main>
     <SiteFooter />
     <script>
-      const workbench = document.querySelector<HTMLElement>('.override-workbench');
-      const loadButton = document.querySelector<HTMLButtonElement>('#override-load');
-      const editor = document.querySelector<HTMLElement>('#override-editor');
-      const pathSelect = document.querySelector<HTMLSelectElement>('#override-path');
-      const valueInput = document.querySelector<HTMLInputElement>('#override-value');
-      const addButton = document.querySelector<HTMLButtonElement>('#override-add');
-      const body = document.querySelector<HTMLTextAreaElement>('#override-body');
-      const previewButton = document.querySelector<HTMLButtonElement>('#override-preview');
-      const downloadButton = document.querySelector<HTMLButtonElement>('#override-download');
-      const status = document.querySelector<HTMLElement>('#override-status');
-      const results = document.querySelector<HTMLElement>('#override-results');
-      const changes = document.querySelector<HTMLElement>('#override-changes');
-      type WebModel = { paths(): string[]; describe(path: string): { valueText: string | null; units: string | null }; withOverride(body: string): WebModel; dispose(): void };
-      type WebDIPL = { parseProject(project: unknown): WebModel; validateProject(project: unknown, overrideBody?: string): { valid: boolean; diagnostic: { message: string; details: string; suggestion: string } | null } };
-      let runtime: WebDIPL | undefined;
-      let projectInput: unknown;
-      let baseline: WebModel | undefined;
-      let candidate: WebModel | undefined;
-      let validBody = '';
-      function message(value: string, error = false) {
-        if (!status) return;
-        status.textContent = value;
-        status.classList.toggle('error', error);
-      }
-      loadButton?.addEventListener('click', async () => {
-        if (!workbench || !editor) return;
-        loadButton.disabled = true;
-        message('Loading SNT3 browser runtime…');
-        try {
-          const response = await fetch(workbench.dataset.projectUrl!);
-          if (!response.ok) throw new Error('Could not load this setup for browser evaluation.');
-          const packaged = await response.json();
-          if (!packaged.supported) throw new Error(packaged.reason);
-          const module = await import(/* @vite-ignore */ workbench.dataset.runtimeUrl!);
-          runtime = await module.loadDIPL() as WebDIPL;
-          projectInput = packaged.project;
-          baseline = runtime!.parseProject(projectInput);
-          editor.hidden = false;
-          loadButton.hidden = true;
-          message(`${baseline.paths().length} evaluated parameters ready. Add an assignment to preview a change.`);
-          valueInput?.focus();
-        } catch (error) {
-          message(error instanceof Error ? error.message : 'This setup cannot be evaluated in the browser.', true);
-          loadButton.disabled = false;
-        }
-      });
-      document.querySelectorAll<HTMLButtonElement>('.parameter-try').forEach((button) => {
-        button.addEventListener('click', () => {
-          if (pathSelect) pathSelect.value = button.dataset.path ?? '';
-          workbench?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          if (loadButton && !loadButton.hidden && !loadButton.disabled) loadButton.click();
-          else valueInput?.focus();
-        });
-      });
-      addButton?.addEventListener('click', () => {
-        if (!body || !pathSelect || !valueInput || !pathSelect.value || !valueInput.value.trim()) {
-          message('Choose a parameter and enter a DIPL value.', true);
-          return;
-        }
-        body.value = [body.value.trim(), `${pathSelect.value} = ${valueInput.value.trim()}`].filter(Boolean).join('\n') + '\n';
-        valueInput.value = '';
-        downloadButton!.disabled = true;
-        results!.hidden = true;
-        message('Assignment added. Validate it to see the evaluated changes.');
-      });
-      body?.addEventListener('input', () => {
-        downloadButton!.disabled = true;
-        results!.hidden = true;
-      });
-      previewButton?.addEventListener('click', () => {
-        if (!runtime || !baseline || !body || !changes || !results) return;
-        const override = body.value.trim();
-        if (!override) {
-          message('Enter at least one override assignment.', true);
-          return;
-        }
-        const validation = runtime.validateProject(projectInput, override);
-        if (!validation.valid) {
-          const diagnostic = validation.diagnostic;
-          message([diagnostic?.message, diagnostic?.details, diagnostic?.suggestion].filter(Boolean).join(' '), true);
-          return;
-        }
-        candidate?.dispose();
-        candidate = baseline.withOverride(override);
-        changes.replaceChildren();
-        let count = 0;
-        for (const path of candidate.paths()) {
-          const before = baseline.describe(path);
-          const after = candidate.describe(path);
-          const oldValue = `${before.valueText ?? '—'}${before.units ? ` ${before.units}` : ''}`;
-          const newValue = `${after.valueText ?? '—'}${after.units ? ` ${after.units}` : ''}`;
-          if (oldValue === newValue) continue;
-          count++;
-          if (count > 30) continue;
-          const item = document.createElement('li');
-          const name = document.createElement('strong');
-          name.textContent = path;
-          const delta = document.createElement('span');
-          delta.textContent = `${oldValue} → ${newValue}`;
-          item.append(name, delta);
-          changes.append(item);
-        }
-        if (!count) {
-          const item = document.createElement('li');
-          item.textContent = 'The override is valid; no displayed parameter value changed.';
-          changes.append(item);
-        }
-        if (count > 30) {
-          const item = document.createElement('li');
-          item.textContent = `…and ${count - 30} more changed parameters.`;
-          changes.append(item);
-        }
-        results.hidden = false;
-        validBody = override + '\n';
-        downloadButton!.disabled = false;
-        message(`Valid DIPL override. ${count} evaluated parameter${count === 1 ? '' : 's'} changed.`);
-      });
-      downloadButton?.addEventListener('click', () => {
-        if (!validBody) return;
-        const url = URL.createObjectURL(new Blob([validBody], { type: 'text/plain' }));
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'override.dip';
-        link.click();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-      });
-      window.addEventListener('pagehide', () => { candidate?.dispose(); baseline?.dispose(); });
       const search = document.querySelector<HTMLInputElement>('#parameter-search');
       const internals = document.querySelector<HTMLInputElement>('#show-internals');
       const count = document.querySelector<HTMLElement>('#visible-count');

@@ -3,6 +3,18 @@
   "id": "lammps",
   "name": "LAMMPS",
   "summary": "A classical molecular dynamics code; this Hub bundle models two self-contained Lennard-Jones examples.",
+  "presentation": {
+    "about": "LAMMPS simulates collections of atoms and molecules using classical molecular dynamics. Its command-based input language supports a broad range of materials and soft-matter problems.",
+    "rationale": "The two Lennard-Jones examples give the Hub a compact, runnable case for translating a structured parameter contract into native commands. Their small scope keeps the relationship between a DIPL value and a generated command easy to inspect.",
+    "official_page": "https://www.lammps.org/",
+    "official_label": "Explore the LAMMPS project",
+    "visual": {
+      "path": "/projects/lammps/logo.svg",
+      "alt": "LAMMPS logo formed from colored atom-like spheres",
+      "source_url": "https://github.com/lammps/lammps/blob/8de817dd79bfe4525d5d39246a212d833e6dee07/doc/utils/sphinx-config/_static/lammps-logo-large.svg",
+      "credit": "LAMMPS logo · pinned upstream source"
+    }
+  },
   "scope": "DIPL input generation for the pinned examples/melt/in.melt and examples/min/in.min scripts.",
   "integration_mode": "External adapter",
   "hub": {

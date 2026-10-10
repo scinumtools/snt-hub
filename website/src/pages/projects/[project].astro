@@ -50,6 +50,29 @@ const setupCommand = setups[defaultSetup]?.capability === 'native-inputs-only'
         <div class="project-hero-links"><a href={`https://github.com/scinumtools/snt-hub/blob/main/projects/${project.id}/README.md`}>Project guide ↗</a><a href={project.adapter_url}>DIPL integration ↗</a><a href={project.source_url}>Original code ↗</a></div>
         <div class="project-workflow"><strong>Local workflow</strong><code>{project.hub.fetch_command}</code><code>{setupCommand}</code>{project.hub.build && <code>{project.hub.build.requires_setup ? `snt hub build --setup runs/${defaultSetup}` : 'snt hub build'}</code>}{project.hub.run && <code>{`snt hub run --setup runs/${defaultSetup}`}</code>}{!project.hub.build && <small>Native solver build and run are still under review for this project.</small>}</div>
       </section>
+      <section class="project-context"><div class="shell project-context-grid">
+        <div class="project-context-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> THE SCIENTIFIC CODE</div>
+          <h2>About {project.name}<span>.</span></h2>
+          <p>{project.presentation.about}</p>
+          <h3>Why it belongs in the Hub</h3>
+          <p>{project.presentation.rationale}</p>
+          <a class="project-official-link" href={project.presentation.official_page} target="_blank" rel="noopener noreferrer">{project.presentation.official_label} ↗</a>
+        </div>
+        <aside class="project-origin" aria-label={`${project.name} official project source`}>
+          {project.presentation.visual ? <>
+            <a class="project-origin-image" href={project.presentation.visual.source_url} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.name} image in the original source`}>
+              <img src={base + project.presentation.visual.path} alt={project.presentation.visual.alt} loading="lazy" />
+            </a>
+            <a class="project-origin-credit" href={project.presentation.visual.source_url} target="_blank" rel="noopener noreferrer">{project.presentation.visual.credit} ↗</a>
+          </> : <>
+            <span class="project-origin-label">OFFICIAL PROJECT ↗</span>
+            <a class="project-origin-name" href={project.presentation.official_page} target="_blank" rel="noopener noreferrer">{project.name}<span aria-hidden="true">↗</span></a>
+            <p>Read the project’s own introduction, methods, and user documentation.</p>
+            <a class="project-origin-credit" href={project.presentation.official_page} target="_blank" rel="noopener noreferrer">Visit the original project page ↗</a>
+          </>}
+        </aside>
+      </div></section>
       <section class="parameter-section"><div class="shell">
         <div class="parameter-heading"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> EVALUATED DIPL MODELS</div><h2>Parameter references<span>.</span></h2><p>Generated with SNT's Brief++ reporter from the DIPL projects in this pinned Hub bundle. Each report shows effective values, units, descriptions, source history, and schema details for one example.</p></div><div class="parameter-count"><strong>{String(reports.length).padStart(2, '0')}</strong><span>REPORTS</span></div></div>
         <div class="parameter-list">

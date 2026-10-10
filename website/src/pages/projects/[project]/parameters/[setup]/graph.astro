@@ -54,7 +54,7 @@ const graphData = JSON.stringify({ parameters, schemaSources }).replaceAll('<', 
       <section class="graph-intro shell">
         <a class="graph-back" href={referenceUrl}>← Parameter reference</a>
         <div class="eyebrow"><span class="eyebrow-line"></span> EXPLORE THE MODEL</div>
-        <div class="graph-heading"><div><h1>Parameter cloud<span>.</span></h1><p>{project.name} / {setup?.replaceAll('_', ' ')}. Rotate the model, hover for names, and select a node to inspect it.</p></div><div class="graph-stats"><span><strong>{visibleParameters.length}</strong> parameters</span><span><strong>{dependencyCount}</strong> recorded reads</span></div></div>
+        <div class="graph-heading"><div><h1>Parameter cloud<span>.</span></h1><p>{project.name} / {setup?.replaceAll('_', ' ')}. Rotate the model, hover for names, and select a node to inspect it.</p><a class="graph-override-link" href={`${base}/projects/${project.id}/parameters/${setup}/override/`}>Try an override ↗</a></div><div class="graph-stats"><span><strong>{visibleParameters.length}</strong> parameters</span><span><strong>{dependencyCount}</strong> recorded reads</span></div></div>
       </section>
       <section class="graph-workspace shell" aria-label="Interactive parameter graph">
         {dependencyCount === 0 && <p class="graph-zero-note">This setup has no recorded evaluation reads. The visible links show parameter paths and the schemas that supplied values.</p>}

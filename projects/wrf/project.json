@@ -3,6 +3,12 @@
   "id": "wrf",
   "name": "WRF",
   "summary": "The Weather Research and Forecasting model; this Hub bundle covers ten pinned idealized meteorology cases.",
+  "presentation": {
+    "about": "WRF is an atmospheric modeling system used for meteorological research and numerical weather prediction. Its applications span idealized studies as well as forecasts across many spatial scales.",
+    "rationale": "The idealized cases give the Hub a different kind of native input: Fortran namelists paired with case-specific source assets. They test how a focused DIPL contract can control selected settings while preserving the rest of a complex upstream example.",
+    "official_page": "https://www2.mmm.ucar.edu/wrf/site/index.html",
+    "official_label": "Explore the WRF model"
+  },
   "scope": "Selected DIPL controls and native-input staging for ten WRF v4.8.0 idealized examples, spanning 2D, 3D, and global configurations.",
   "integration_mode": "External adapter",
   "hub": {
