@@ -7,3 +7,6 @@
 [submodule "projects/lammps/source"]
 	path = projects/lammps/source
 	url = https://github.com/lammps/lammps.git
+[submodule "projects/wrf/source"]
+	path = projects/wrf/source
+	url = https://github.com/wrf-model/WRF.git

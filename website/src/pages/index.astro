@@ -65,22 +65,6 @@ MaxSteps  <span>128</span>
         <a class="button button-bright" href={base + '/registry/'}>View the registry <span aria-hidden="true">↗</span></a>
       </section>
 
-      <section class="hub-journey shell" aria-labelledby="hub-journey-title">
-        <div class="eyebrow"><span class="eyebrow-line"></span> FROM REGISTRY TO RUN DIRECTORY</div>
-        <h2 id="hub-journey-title">Fetch locally.<br /><span>Set up an example.</span></h2>
-        <p>Choose a project from the registry, create an empty directory, and work locally with its pinned source and DIPL layer. The project page lists available examples, prerequisites, and supported commands.</p>
-        <div class="hub-command-card">
-          <div class="hub-command-head"><strong>One workspace, one project</strong><span>GENERAL SNT HUB WORKFLOW</span></div>
-          <pre class="hub-command-lines"><code>mkdir my-study &amp;&amp; cd my-study  <span class="hub-command-comment"># Create a local workspace</span>
-snt hub fetch PROJECT  <span class="hub-command-comment"># Get the pinned source and DIPL layer</span>
-snt hub examples  <span class="hub-command-comment"># List available examples</span>
-snt hub setup EXAMPLE  <span class="hub-command-comment"># Generate this example's inputs</span>
-snt hub build  <span class="hub-command-comment"># Build the code if supported</span>
-snt hub run --setup runs/EXAMPLE  <span class="hub-command-comment"># Run the prepared example if supported</span></code></pre>
-          <p>Replace <code>PROJECT</code> and <code>EXAMPLE</code> with IDs from the registry. To change values, pass <code>--override-file tuning.dip</code> to the setup command; the parameter reference shows available paths. Build and run are available where the project declares them. A build tied to generated inputs needs <code>--setup runs/EXAMPLE</code>, and an inputs-only recipe needs <code>--inputs-only</code> at setup.</p>
-        </div>
-      </section>
-
       <section class="pathways shell" aria-labelledby="pathways-title">
         <div class="pathways-heading"><div class="eyebrow"><span class="eyebrow-line"></span> THE INTEGRATION CAN GROW</div><h2 id="pathways-title">Start with native files.<br /><span>Go further when ready.</span></h2><p>The adapter is an initial integration. A code's maintainers can later choose direct SNT3 access or generated static parameters while preserving a documented, inspectable model.</p></div>
         <div class="pathway-grid">

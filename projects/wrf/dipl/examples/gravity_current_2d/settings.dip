@@ -1,0 +1,31 @@
+# Pinned reference: WRF v4.8.0 test/em_grav2d_x/namelist.input.
+time_control : wrf_time_control
+  run_days = 0
+  run_hours = 0
+  run_minutes = 15
+  history_interval = 1
+
+domains : wrf_domains
+  time_step = 1
+  e_we = 513
+  e_sn = 3
+  e_vert = 65
+  dx = 100.0
+  dy = 100.0
+  ztop = 6409.0
+
+dynamics : wrf_dynamics
+  hybrid_opt = 0
+  damp_opt = 0
+  zdamp = 15000.0
+  dampcoef = 0.025
+  khdif = 75.0
+  kvdif = 75.0
+
+bdy_control : wrf_boundary
+  periodic_x = true
+  open_xs = false
+  open_xe = false
+
+ideal : wrf_ideal
+  ideal_case = 6

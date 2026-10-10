@@ -1,0 +1,100 @@
+# Public controls shared by the reviewed idealized WRF namelists.
+# All other WRF namelist entries remain pinned to the upstream example.
+$schema wrf_time_control
+  ?descr "Duration and history output for an idealized WRF simulation."
+  ?url "https://github.com/wrf-model/Users_Guide/blob/main/namelist_variables.rst"
+  run_days int
+    !condition ({.} >= 0)
+    ?descr "Whole days to integrate after initialization."
+    ?native "time_control.run_days"
+  run_hours int
+    !condition ({.} >= 0)
+    ?descr "Additional whole hours of model integration."
+    ?native "time_control.run_hours"
+  run_minutes int
+    !condition ({.} >= 0)
+    ?descr "Additional minutes of model integration."
+    ?native "time_control.run_minutes"
+  history_interval int
+    !condition ({.} > 0)
+    ?descr "Minutes between history output records."
+    ?native "time_control.history_interval"
+
+$schema wrf_domains
+  ?descr "Grid size, timestep, and model-top height."
+  ?url "https://github.com/wrf-model/Users_Guide/blob/main/namelist_variables.rst"
+  time_step int
+    !condition ({.} > 0)
+    ?descr "Model integration timestep in seconds."
+    ?native "domains.time_step"
+  e_we int
+    !condition ({.} > 1)
+    ?descr "Last west-east grid index, including boundary points."
+    ?native "domains.e_we"
+  e_sn int
+    !condition ({.} > 1)
+    ?descr "Last south-north grid index; three points denote a 2D x-oriented case."
+    ?native "domains.e_sn"
+  e_vert int
+    !condition ({.} > 1)
+    ?descr "Last vertical grid index."
+    ?native "domains.e_vert"
+  dx float
+    !condition ({.} > 0)
+    ?descr "West-east horizontal grid spacing in metres."
+    ?native "domains.dx"
+  dy float
+    !condition ({.} > 0)
+    ?descr "South-north horizontal grid spacing in metres."
+    ?native "domains.dy"
+  ztop float
+    !condition ({.} > 0)
+    ?descr "Height of the model top in metres."
+    ?native "domains.ztop"
+
+$schema wrf_dynamics
+  ?descr "Selected vertical coordinate, diffusion, and damping controls."
+  ?url "https://github.com/wrf-model/Users_Guide/blob/main/namelist_variables.rst"
+  hybrid_opt int
+    !options [0, 2]
+    ?descr "Vertical-coordinate option in these pinned examples."
+    ?native "dynamics.hybrid_opt"
+  damp_opt int
+    !options [0, 2, 3]
+    ?descr "Upper-level damping scheme selected by the example."
+    ?native "dynamics.damp_opt"
+  zdamp float
+    !condition ({.} > 0)
+    ?descr "Height in metres at which the upper damping layer begins."
+    ?native "dynamics.zdamp"
+  dampcoef float
+    !condition ({.} >= 0)
+    ?descr "Strength of the selected upper-level damping scheme."
+    ?native "dynamics.dampcoef"
+  khdif float
+    !condition ({.} >= 0)
+    ?descr "Horizontal diffusion coefficient used by this idealized setup."
+    ?native "dynamics.khdif"
+  kvdif float
+    !condition ({.} >= 0)
+    ?descr "Vertical diffusion coefficient used by this idealized setup."
+    ?native "dynamics.kvdif"
+
+$schema wrf_boundary
+  ?descr "West-east boundary choices for the two-dimensional idealized domain."
+  periodic_x bool
+    ?descr "Connect the west and east edges periodically."
+    ?native "bdy_control.periodic_x"
+  open_xs bool
+    ?descr "Use an open boundary on the west edge."
+    ?native "bdy_control.open_xs"
+  open_xe bool
+    ?descr "Use an open boundary on the east edge."
+    ?native "bdy_control.open_xe"
+
+$schema wrf_ideal
+  ?descr "Idealized initialization case selected by the pinned source."
+  ideal_case int
+    !options [1, 2, 3, 4, 5, 6, 7]
+    ?descr "WRF ideal.exe case identifier for the pinned example and its input profile."
+    ?native "ideal.ideal_case"

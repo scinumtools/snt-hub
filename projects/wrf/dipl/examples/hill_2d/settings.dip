@@ -1,0 +1,31 @@
+# Pinned reference: WRF v4.8.0 test/em_hill2d_x/namelist.input.
+time_control : wrf_time_control
+  run_days = 0
+  run_hours = 10
+  run_minutes = 0
+  history_interval = 60
+
+domains : wrf_domains
+  time_step = 20
+  e_we = 202
+  e_sn = 3
+  e_vert = 41
+  dx = 2000.0
+  dy = 2000.0
+  ztop = 30000.0
+
+dynamics : wrf_dynamics
+  hybrid_opt = 2
+  damp_opt = 3
+  zdamp = 20000.0
+  dampcoef = 0.1
+  khdif = 0.0
+  kvdif = 0.0
+
+bdy_control : wrf_boundary
+  periodic_x = false
+  open_xs = true
+  open_xe = true
+
+ideal : wrf_ideal
+  ideal_case = 1

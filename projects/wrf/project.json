@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "id": "wrf",
+  "name": "WRF",
+  "summary": "The Weather Research and Forecasting model; this Hub bundle covers ten pinned idealized meteorology cases.",
+  "scope": "Selected DIPL controls and native-input staging for ten WRF v4.8.0 idealized examples, spanning 2D, 3D, and global configurations.",
+  "integration_mode": "External adapter",
+  "hub": {
+    "status": "adapter-ready",
+    "setup_manifest": "projects/wrf/setups.json",
+    "runtime_package": "hub",
+    "adapter_package": "projects/wrf/dipl",
+    "adapter_executable": "wrf-dipl",
+    "adapter_protocol": 1,
+    "fetch_command": "snt hub fetch wrf",
+    "setup_command": "snt hub setup hill_2d"
+  },
+  "support": "independent",
+  "validation": "settings-parity",
+  "validation_qualifier": "Generated namelists and staged source assets match ten pinned WRF v4.8.0 idealized examples. Build, execution, and scientific outputs have not been checked; every recipe is native-inputs-only.",
+  "source_url": "https://github.com/wrf-model/WRF",
+  "source_path": "projects/wrf/source",
+  "source_revision": "06d4240ae989cc3e50af412bb472df3d9048783c",
+  "adapter_url": "https://github.com/scinumtools/snt-hub/tree/main/projects/wrf/dipl",
+  "adapter_path": "projects/wrf/dipl",
+  "adapter_origin_url": null,
+  "adapter_revision": null,
+  "verification": {
+    "date": "2026-10-10",
+    "scinumtools3": "0.9.2",
+    "tests_passed": 16
+  },
+  "evidence": [
+    {
+      "label": "Pinned WRF v4.8.0 idealized examples",
+      "url": "https://github.com/wrf-model/WRF/tree/v4.8.0/test"
+    },
+    {
+      "label": "Namelist and source-asset parity tests",
+      "url": "https://github.com/scinumtools/snt-hub/blob/main/projects/wrf/dipl/tests/test_wrf_examples.py"
+    }
+  ],
+  "limitations": "This independent adapter models selected controls in ten idealized WRF cases; LES, SCM, fire, real-data, and ESMF coupling families are outside its current scope. Unmodeled namelist entries are retained from the pinned source. Staged inputs are not a complete WRF runtime directory; build, ideal.exe, wrf.exe, external data assets, and scientific results remain unverified. No upstream maintainer endorsement is implied.",
+  "reviewed_on": "2026-10-10"
+}

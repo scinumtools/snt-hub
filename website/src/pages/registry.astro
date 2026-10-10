@@ -27,6 +27,21 @@ const base = import.meta.env.BASE_URL;
         <h1 id="registry-title">Explore integrations<span>.</span></h1>
         <p>Find a scientific code, inspect its DIPL parameter model, and see the evidence behind its integration, support, and validation labels.</p>
       </section>
+      <section class="hub-journey shell" aria-labelledby="hub-journey-title">
+        <div class="eyebrow"><span class="eyebrow-line"></span> FROM REGISTRY TO RUN DIRECTORY</div>
+        <h2 id="hub-journey-title">Fetch locally.<br /><span>Set up an example.</span></h2>
+        <p>Choose a project from the registry, create an empty directory, and work locally with its pinned source and DIPL layer. The project page lists available examples, prerequisites, and supported commands.</p>
+        <div class="hub-command-card">
+          <div class="hub-command-head"><strong>One workspace, one project</strong><span>GENERAL SNT HUB WORKFLOW</span></div>
+          <pre class="hub-command-lines"><code>mkdir my-study &amp;&amp; cd my-study  <span class="hub-command-comment"># Create a local workspace</span>
+snt hub fetch PROJECT  <span class="hub-command-comment"># Get the pinned source and DIPL layer</span>
+snt hub examples  <span class="hub-command-comment"># List available examples</span>
+snt hub setup EXAMPLE  <span class="hub-command-comment"># Generate this example's inputs</span>
+snt hub build  <span class="hub-command-comment"># Build the code if supported</span>
+snt hub run --setup runs/EXAMPLE  <span class="hub-command-comment"># Run the prepared example if supported</span></code></pre>
+          <p>Replace <code>PROJECT</code> and <code>EXAMPLE</code> with IDs from the registry. To change values, pass <code>--override-file tuning.dip</code> to the setup command; the parameter reference shows available paths. Build and run are available where the project declares them. A build tied to generated inputs needs <code>--setup runs/EXAMPLE</code>, and an inputs-only recipe needs <code>--inputs-only</code> at setup.</p>
+        </div>
+      </section>
       <section class="registry-section" id="projects" aria-labelledby="projects-title"><div class="shell">
         <div class="registry-heading"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> PARTICIPATING CODES</div><h2 id="projects-title">Projects in the Hub<span class="heading-dot">.</span></h2><p>Each listing links to its examples, parameter references, and original source.</p></div><div class="registry-total"><strong>{String(projects.length).padStart(2, '0')}</strong><span>{projects.length === 1 ? 'PROJECT' : 'PROJECTS'} LISTED</span></div></div>
         <div class="project-grid">
@@ -37,7 +52,7 @@ const base = import.meta.env.BASE_URL;
             <p class="validation-note">{project.validation_qualifier}</p>
             <div class="project-scope"><span>INTEGRATION SCOPE</span><p>{project.scope}</p></div>
             <details class="evidence"><summary>Evidence &amp; limitations <span aria-hidden="true">↗</span></summary><div class="evidence-body"><p>{project.validation_qualifier}</p><p>{project.limitations}</p><ul>{project.evidence.map((item) => <li><a href={item.url}>{item.label} ↗</a></li>)}</ul></div></details>
-            <div class="project-links"><a class="project-main-link" href={`${base}/projects/${project.id}/`}>Project &amp; parameters <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.adapter_url}>DIPL integration <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.source_url}>Original code <span aria-hidden="true">↗</span></a></div>
+            <div class="project-links"><a class="project-main-link" href={`${base}/projects/${project.id}/`}>Project &amp; parameters <span aria-hidden="true">↗</span></a><a class="project-main-link" href={`https://github.com/scinumtools/snt-hub/blob/main/projects/${project.id}/README.md`}>Project guide <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.adapter_url}>DIPL integration <span aria-hidden="true">↗</span></a><a class="project-main-link" href={project.source_url}>Original code <span aria-hidden="true">↗</span></a></div>
           </article>)}
           <div class="invite-card"><span class="invite-mark" aria-hidden="true">✳</span><p class="invite-overline">YOUR CODE COULD BE NEXT</p><h3>Build the next<br />bridge.</h3><p>Help describe an established code’s inputs or review an adapter for your project.</p><a href="https://github.com/scinumtools/snt-hub/blob/main/docs/ADDING_PROJECT.md">Add a project <span aria-hidden="true">↗</span></a></div>
         </div>

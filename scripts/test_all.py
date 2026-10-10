@@ -9,18 +9,13 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PYTHON_SOURCES = (
-    ROOT / "hub" / "src",
-    ROOT / "projects" / "arepo" / "dipl" / "src",
-    ROOT / "projects" / "quantum-espresso" / "dipl" / "src",
-    ROOT / "projects" / "lammps" / "dipl" / "src",
-)
-PYTHON_TESTS = (
-    "hub/tests",
-    "projects/arepo/dipl/tests",
-    "projects/quantum-espresso/dipl/tests",
-    "projects/lammps/dipl/tests",
-)
+PROJECT_DIPL_DIRS = tuple(sorted(
+    project / "dipl" for project in (ROOT / "projects").iterdir()
+    if project.is_dir() and (project / "project.json").is_file()
+))
+PYTHON_SOURCES = (ROOT / "hub" / "src", *(directory / "src" for directory in PROJECT_DIPL_DIRS))
+PYTHON_TESTS = ("hub/tests", *(str((directory / "tests").relative_to(ROOT))
+                                for directory in PROJECT_DIPL_DIRS))
 
 
 def main() -> int:

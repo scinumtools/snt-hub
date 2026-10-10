@@ -42,7 +42,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install ./.ci/snt3
-          python -m pip install -e ./hub -e './projects/arepo/dipl[test]' -e './projects/quantum-espresso/dipl[test]' -e './projects/lammps/dipl[test]'
+          python -m pip install -e ./hub -e './projects/arepo/dipl[test]' -e './projects/quantum-espresso/dipl[test]' -e './projects/lammps/dipl[test]' -e './projects/wrf/dipl[test]'
       - name: Install website packages
         run: npm ci
         working-directory: website

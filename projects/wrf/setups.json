@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "setups": {
+    "hill_2d": {
+      "capability": "native-inputs-only",
+      "source_example": "test/em_hill2d_x/namelist.input",
+      "description": "Two-dimensional flow over a hill; stages the pinned namelist and input sounding."
+    },
+    "gravity_current_2d": {
+      "capability": "native-inputs-only",
+      "source_example": "test/em_grav2d_x/namelist.input",
+      "description": "Two-dimensional gravity current; stages the pinned namelist and input sounding."
+    },
+    "baroclinic_wave": {
+      "capability": "native-inputs-only",
+      "source_example": "test/em_b_wave/namelist.input",
+      "description": "Three-dimensional baroclinic wave; stages the pinned namelist and jet profile."
+    },
+    "convective_radiative": {
+      "capability": "native-inputs-only",
+      "source_example": "test/em_convrad/namelist.input",
+      "description": "Convective-radiative equilibrium; stages the pinned namelist and sounding, but not radiation assets."
+    },
+    "held_suarez": {
+      "capability": "native-inputs-only",
+      "source_example": "test/em_heldsuarez/namelist.input",
+      "description": "Global Held-Suarez idealization; stages the pinned namelist."
+    },
+    "quarter_supercell": {
+      "capability": "native-inputs-only",
+      "source_example": "test/em_quarter_ss/namelist.input",
+      "description": "Quarter-circle shear supercell; stages the pinned namelist and sounding."
+    },
+    "sea_breeze_2d": {
+      "capability": "native-inputs-only",
+      "source_example": "test/em_seabreeze2d_x/namelist.input",
+      "description": "Two-dimensional sea breeze; stages the pinned namelist and sounding."
+    },
+    "squall_line_x": {
+      "capability": "native-inputs-only",
+      "source_example": "test/em_squall2d_x/namelist.input",
+      "description": "Two-dimensional x-oriented squall line; stages the pinned namelist and sounding."
+    },
+    "squall_line_y": {
+      "capability": "native-inputs-only",
+      "source_example": "test/em_squall2d_y/namelist.input",
+      "description": "Two-dimensional y-oriented squall line; stages the pinned namelist and sounding."
+    },
+    "tropical_cyclone": {
+      "capability": "native-inputs-only",
+      "source_example": "test/em_tropical_cyclone/namelist.input",
+      "description": "Idealized tropical cyclone; stages the pinned namelist and sounding."
+    }
+  }
+}
