@@ -27,12 +27,12 @@ snt hub run --setup runs/mhd_shock_tube
 
 The `mhd_shock_tube` recipe prepares native files and `IC.hdf5`. Its build uses that setup's `Config.sh` and writes under `build/mhd_shock_tube/local/`; its local run starts the compiled executable directly as a one-process MPI singleton. A macOS/Homebrew build and smoke run completed on 2026-10-09 with MPI, GSL, HDF5, GMP, and hwloc installed. On installations whose libraries are outside the upstream Makefile's paths, set semicolon-separated `NAME=value` Make overrides in `SNT_HUB_AREPO_MAKE_VARS` (for example `GSL_INCL=-I/custom/include;GSL_LIB=-L/custom/lib -lgsl -lgslcblas`). The other 15 examples are currently marked `native-inputs-only` until their pinned IC creators and external data requirements are reviewed. The [DIPL guide](dipl/README.md) documents the adapter package and direct command for development. Settings parity and one successful smoke run do not establish physical simulation validation.
 
-Regenerate the checked-in parameter references after changing a DIPL setup:
+Regenerate the checked-in parameter references and schema hierarchy after changing a DIPL setup:
 
 ```sh
-python3 scripts/generate_parameter_reports.py
+python3 scripts/generate_project_docs.py --project arepo --snt ../scinumtools3/build/bin/snt
 ```
 
-Run this from the Hub repository root with an `snt` build that includes report support. Pass one or more setup IDs to regenerate selected reports. The reports describe the bundled example values; a per-run override produces a different evaluated environment.
+Run this from the Hub repository root. The command updates only outputs affected by changed DIPL inputs or project metadata; use `--force` to regenerate all Arepo outputs or `--check` to report stale checked-in documents. The reports describe bundled example values; a per-run override produces a different evaluated environment.
 
 On 2026-10-09, the migrated suite passed locally against the pinned submodule with SciNumTools3 0.9.0: 38 tests and 28 subtests. The package and reusable hub runtime now provide the generation path previously handled by a shell script.

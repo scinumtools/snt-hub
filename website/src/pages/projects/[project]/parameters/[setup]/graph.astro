@@ -31,7 +31,6 @@ const parameters: GraphParameter[] = parametersFromBriefpp(report).map((paramete
   path: parameter.path,
   value: parameter.value,
   description: parameter.description,
-  internal: parameter.internal,
   schema: field(parameter.metadata, 'Supplied by schema'),
   reads: [...(field(parameter.metadata, 'Reads during evaluation').matchAll(/\?([^,\s]+)/g))].map((match) => match[1]),
 }));
@@ -40,8 +39,8 @@ const schemaStructure: GraphSchemaStructure = {
   definitions: hierarchy.definitions.map((definition) => ({ id: definition.id, description: definition.metadata.description, refs: schemaReferences(definition.members) })),
   applications: hierarchy.applications.map((application) => ({ path: application.path, schemaIds: application.schema_ids })),
 };
-const publicGraph = buildParameterGraph(parameters, false, schemaSources);
-const visibleParameters = parameters.filter((parameter) => !parameter.internal);
+const publicGraph = buildParameterGraph(parameters, schemaSources);
+const visibleParameters = parameters;
 const dependencyCount = publicGraph.links.filter((link) => link.kind === 'dependency').length;
 const graphData = JSON.stringify({ parameters, schemaSources, schemaStructure }).replaceAll('<', '\\u003c');
 ---
@@ -73,7 +72,6 @@ const graphData = JSON.stringify({ parameters, schemaSources, schemaStructure })
           <button id="graph-find" type="button">Focus</button>
           <button id="graph-reset" type="button">Fit graph</button>
           <label class="graph-toggle"><input id="graph-schema-structure" type="checkbox" /> Schema structure</label><span id="graph-schema-count" class="graph-schema-count" aria-live="polite"></span>
-          <label class="graph-toggle"><input id="graph-internals" type="checkbox" /> Adapter controls</label>
         </div>
         <div class="graph-stage">
           <div id="parameter-graph" class="graph-canvas" data-reference-url={referenceUrl} aria-label="3D parameter network. Drag to rotate and scroll to zoom."><div class="graph-loading">Loading 3D graph…</div></div>
@@ -103,7 +101,6 @@ const graphData = JSON.stringify({ parameters, schemaSources, schemaStructure })
       const search = document.querySelector<HTMLInputElement>('#graph-search')!;
       const findButton = document.querySelector<HTMLButtonElement>('#graph-find')!;
       const resetButton = document.querySelector<HTMLButtonElement>('#graph-reset')!;
-      const internals = document.querySelector<HTMLInputElement>('#graph-internals')!;
       const schemaToggle = document.querySelector<HTMLInputElement>('#graph-schema-structure')!;
       const schemaCount = document.querySelector<HTMLElement>('#graph-schema-count')!;
       const title = document.querySelector<HTMLElement>('#graph-selected-title')!;
@@ -177,7 +174,7 @@ const graphData = JSON.stringify({ parameters, schemaSources, schemaStructure })
       }
 
       function updateGraph() {
-        const data = buildParameterGraph(parameters, internals.checked, schemaSources, schemaStructure, schemaToggle.checked);
+        const data = buildParameterGraph(parameters, schemaSources, schemaStructure, schemaToggle.checked);
         const structureLinks = data.links.filter((link) => link.kind === 'schema-reference' || link.kind === 'schema-application').length;
         schemaCount.textContent = schemaToggle.checked ? `${structureLinks} structure links` : '';
         selectedId = '';
@@ -196,10 +193,6 @@ const graphData = JSON.stringify({ parameters, schemaSources, schemaStructure })
         if (!match) {
           path.textContent = 'No matching parameter path';
           return;
-        }
-        if (match.internal && !internals.checked) {
-          internals.checked = true;
-          updateGraph();
         }
         const node = (graph.graphData().nodes as VisualNode[]).find((entry) => entry.id === `parameter:${match.path}`);
         if (node) selectNode(node);
@@ -229,7 +222,6 @@ const graphData = JSON.stringify({ parameters, schemaSources, schemaStructure })
             .height(mount.clientHeight);
           new ResizeObserver(() => graph.width(mount.clientWidth).height(mount.clientHeight)).observe(mount);
           updateGraph();
-          internals.addEventListener('change', updateGraph);
           schemaToggle.addEventListener('change', updateGraph);
           findButton.addEventListener('click', findNode);
           search.addEventListener('keydown', (event) => { if (event.key === 'Enter') findNode(); });

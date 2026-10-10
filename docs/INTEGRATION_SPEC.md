@@ -154,7 +154,7 @@ A project is ready for its declared registry state when its evidence matches its
 3. Generated native settings match pinned upstream examples under documented comparison rules. Explain intentional differences and preserve path-sensitive values.
 4. A complete recipe stages all required inputs, including checked assets or initial data, from a clean workspace. Tests cover a failed setup without a published partial directory and safe override behavior.
 5. Build and run claims have separate recorded checks, with machine, version, prerequisites, and observed result. Scientific-result validation needs its own reference and tolerance criteria.
-6. `python3 scripts/test_all.py` passes, parameter reports are regenerated, and the registry page links to the project guide, source, adapter, and parameter reference.
+6. `python3 scripts/test_all.py` passes, `python3 scripts/generate_project_docs.py --project <id> --snt <path-to-snt>` refreshes its parameter and schema exports, and the registry page links to the project guide, source, adapter, and parameter reference.
 
 Independent adapters may be published with limited evidence when their scope and limitations are explicit. A project advances its support or validation label only after the corresponding review or check has occurred.
 

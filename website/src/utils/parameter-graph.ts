@@ -3,7 +3,6 @@ export type GraphParameter = {
   path: string;
   value: string;
   description: string;
-  internal: boolean;
   schema: string;
   reads: string[];
 };
@@ -31,8 +30,8 @@ export type GraphSchemaStructure = {
   applications: { path: string; schemaIds: string[] }[];
 };
 
-export function buildParameterGraph(parameters: GraphParameter[], includeInternals = false, schemaSources: Record<string, string> = {}, schemaStructure?: GraphSchemaStructure, showSchemaStructure = false) {
-  const entries = parameters.filter((parameter) => includeInternals || !parameter.internal);
+export function buildParameterGraph(parameters: GraphParameter[], schemaSources: Record<string, string> = {}, schemaStructure?: GraphSchemaStructure, showSchemaStructure = false) {
+  const entries = parameters;
   const parameterPaths = new Set(entries.map((parameter) => parameter.path));
   const nodes = new Map<string, GraphNode>();
   const links: GraphLink[] = [];

@@ -1,14 +1,17 @@
-"""The schema export cache must follow shared DIPL inputs and the SNT binary."""
+"""The project document cache follows shared DIPL inputs and the SNT binary."""
 
 import json
 import subprocess
+from pathlib import Path
 
-from scripts import generate_schema_hierarchies as generator
+from scripts import generate_project_docs as generator
 
 
 def test_schema_exports_rebuild_only_for_changed_inputs(tmp_path, monkeypatch):
     monkeypatch.setattr(generator, "ROOT", tmp_path)
     project = tmp_path / "projects" / "sample"
+    project.mkdir(parents=True)
+    (project / "project.json").write_text(json.dumps({"name": "Sample", "reviewed_on": "2026-01-01"}))
     shared = project / "dipl" / "profiles" / "shared.dip"
     shared.parent.mkdir(parents=True)
     shared.write_text("value = 1\n")
@@ -22,29 +25,34 @@ def test_schema_exports_rebuild_only_for_changed_inputs(tmp_path, monkeypatch):
 
     executable = tmp_path / "snt"
     executable.write_bytes(b"snt version one")
-    monkeypatch.setattr(generator, "snt_executable", lambda _: executable)
+    monkeypatch.setattr(generator, "executable_path", lambda _: executable)
     calls = []
 
     def export(command, **_kwargs):
-        calls.append(command[command.index("--project") + 1])
+        calls.append(command[1])
+        if command[1] == "report":
+            report_path = command[command.index("--output") + 1]
+            Path(report_path).write_text(json.dumps({"schema": "briefpp/1"}))
+            return subprocess.CompletedProcess(command, 0)
         return subprocess.CompletedProcess(command, 0, json.dumps({
             "schema": "snt-schema-hierarchy/1", "definitions_available": True,
         }))
 
     monkeypatch.setattr(generator.subprocess, "run", export)
     names = ["one", "two"]
-    assert generator.generate("sample", names, "snt") == (2, 0)
-    assert generator.generate("sample", names, "snt") == (0, 2)
-    assert len(calls) == 2
+    assert generator.generate(project, names, "snt", False, False) == (2, 0, [])
+    assert generator.generate(project, names, "snt", False, False) == (0, 2, [])
+    assert len(calls) == 4
 
     shared.write_text("value = 3\n")
-    assert generator.generate("sample", names, "snt") == (1, 1)
-    assert calls[-1].endswith("/one/DIPfile")
+    assert generator.generate(project, names, "snt", False, False) == (0, 2, [])
+    assert calls.count("report") == 3
+    assert calls.count("dip") == 3
 
     output = project / "docs" / "schemas" / "two.json"
     output.write_text("corrupted\n")
-    assert generator.generate("sample", names, "snt") == (1, 1)
-    assert calls[-1].endswith("/two/DIPfile")
+    assert generator.generate(project, names, "snt", False, False) == (1, 1, [])
+    assert output.read_text().startswith('{"schema":"snt-schema-hierarchy/1"')
 
     executable.write_bytes(b"snt version two")
-    assert generator.generate("sample", names, "snt") == (2, 0)
+    assert generator.generate(project, names, "snt", False, False) == (0, 2, [])
