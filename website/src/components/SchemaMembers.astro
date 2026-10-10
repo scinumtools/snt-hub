@@ -1,0 +1,14 @@
+---
+import type { SchemaMember } from '../utils/schema-hierarchy';
+const { members, schemaIds } = Astro.props as { members: SchemaMember[]; schemaIds: string[] };
+---
+<ul class="schema-member-list">
+  {members.map((member) => <li>
+    <div class="schema-member-row"><code>{member.name}</code><span>{member.kind}{member.type ? ` · ${member.type}` : ''}{member.units ? ` · ${member.units}` : ''}</span></div>
+    {member.metadata.description && <p>{member.metadata.description}</p>}
+    {member.schema_refs.length > 0 && <div class="schema-member-refs">Uses {member.schema_refs.map((name, index) => <>{index > 0 && ', '}{schemaIds.includes(name) ? <a href={`#schema-${encodeURIComponent(name)}`}>{name}</a> : <code>{name}</code>}</>)}</div>}
+    {member.options.length > 0 && <small>Options: {member.options.join(', ')}</small>}
+    {member.condition && <small>Condition: <code>{member.condition}</code></small>}
+    {member.members.length > 0 && <Astro.self members={member.members} schemaIds={schemaIds} />}
+  </li>)}
+</ul>

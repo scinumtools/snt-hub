@@ -46,7 +46,7 @@ const referenceUrl = `${base}/projects/${project.id}/parameters/${setup}/`;
         <div class="eyebrow"><span class="eyebrow-line"></span> INTERACTIVE DIPL</div>
         <h1>Try an override<span>.</span></h1>
         <p>{project.name} / {setup?.replaceAll('_', ' ')}. Choose a parameter, enter a DIPL value, and preview the evaluated change in your browser.</p>
-        <div class="reference-facts"><a class="reference-graph-link" href={referenceUrl}>Browse parameters ↗</a><a class="reference-override-link" href={`${base}/projects/${project.id}/parameters/${setup}/graph/`}>Explore 3D graph ↗</a></div>
+        <div class="reference-facts"><a class="reference-graph-link" href={referenceUrl}>Browse parameters ↗</a><a class="reference-override-link" href={`${base}/projects/${project.id}/parameters/${setup}/schemas/`}>Browse schemas ↗</a><a class="reference-override-link" href={`${base}/projects/${project.id}/parameters/${setup}/graph/`}>Explore 3D graph ↗</a></div>
       </section>
       <section class="override-workbench shell" data-project={project.id} data-setup={setup} data-runtime-url={`${base}/vendor/snt-web/index.mjs`} data-project-url={`${base}/projects/${project.id}/parameters/${setup}/project.json`} data-inputs-only={String(recipe?.capability === 'native-inputs-only')} aria-labelledby="override-heading">
         <div class="override-heading"><div><span class="eyebrow">BROWSER WORKSPACE</span><h2 id="override-heading">Edit and preview<span>.</span></h2><p>Check parameter changes locally in your browser with SNT3. Download the override to generate native inputs with <code>snt hub setup</code>.</p></div>{browserAvailability.supported && <button id="override-load" type="button" hidden>Retry loading</button>}</div>
@@ -54,6 +54,7 @@ const referenceUrl = `${base}/projects/${project.id}/parameters/${setup}/`;
         {!browserAvailability.supported && <p class="override-unavailable">{browserAvailability.reason} Use <code>snt hub setup</code> locally to evaluate overrides for this example.</p>}
         <div id="override-editor" class="override-editor" hidden>
           <div class="override-controls"><label for="override-path">Parameter</label><select id="override-path"><option value="">Choose a parameter</option>{parameters.filter((parameter) => !parameter.internal).map((parameter) => <option value={parameter.path}>{parameter.path}</option>)}</select><label for="override-value">New DIPL value</label><input id="override-value" type="text" placeholder="e.g. 10 m, 24, or &quot;scf&quot;" /><button id="override-add" type="button">Add assignment</button></div>
+          <div id="override-inspect" class="override-inspect" hidden aria-live="polite"><strong id="override-inspect-path"></strong><p id="override-inspect-description"></p><dl><div><dt>Current value</dt><dd id="override-inspect-value"></dd></div><div><dt>Datatype</dt><dd id="override-inspect-type"></dd></div><div><dt>Units</dt><dd id="override-inspect-units"></dd></div><div><dt>Allowed options</dt><dd id="override-inspect-options"></dd></div><div><dt>Condition</dt><dd id="override-inspect-condition"></dd></div></dl></div>
           <label class="override-label" for="override-body">Override assignments</label><textarea id="override-body" rows="5" spellcheck="false" placeholder="parameter.path = value"></textarea>
           <div class="override-actions"><button id="override-preview" type="button">Validate and preview</button><button id="override-download" type="button" disabled>Download override.dip</button></div>
           <div id="override-status" class="override-status" role="status" aria-live="polite"></div>
@@ -70,6 +71,7 @@ const referenceUrl = `${base}/projects/${project.id}/parameters/${setup}/`;
       const editor = document.querySelector<HTMLElement>('#override-editor');
       const loading = document.querySelector<HTMLElement>('#override-loading');
       const pathSelect = document.querySelector<HTMLSelectElement>('#override-path');
+      const inspect = document.querySelector<HTMLElement>('#override-inspect');
       const valueInput = document.querySelector<HTMLInputElement>('#override-value');
       const addButton = document.querySelector<HTMLButtonElement>('#override-add');
       const body = document.querySelector<HTMLTextAreaElement>('#override-body');
@@ -78,7 +80,8 @@ const referenceUrl = `${base}/projects/${project.id}/parameters/${setup}/`;
       const status = document.querySelector<HTMLElement>('#override-status');
       const results = document.querySelector<HTMLElement>('#override-results');
       const changes = document.querySelector<HTMLElement>('#override-changes');
-      type WebModel = { paths(): string[]; describe(path: string): { valueText: string | null; units: string | null }; withOverride(body: string): WebModel; dispose(): void };
+      type WebDescription = { valueText: string | null; declaredType: string; units: string | null; options: string[]; condition: string | null; metadata: { description: string } };
+      type WebModel = { paths(): string[]; describe(path: string): WebDescription; withOverride(body: string): WebModel; dispose(): void };
       type WebDIPL = { parseProject(project: unknown): WebModel; validateProject(project: unknown, overrideBody?: string): { valid: boolean; diagnostic: { message: string; details: string; suggestion: string } | null } };
       let runtime: WebDIPL | undefined;
       let projectInput: unknown;
@@ -90,6 +93,23 @@ const referenceUrl = `${base}/projects/${project.id}/parameters/${setup}/`;
         status.textContent = value;
         status.classList.toggle('error', error);
       }
+      function updateSelection() {
+        if (!inspect || !pathSelect || !baseline || !pathSelect.value) {
+          if (inspect) inspect.hidden = true;
+          return;
+        }
+        const detail = baseline.describe(pathSelect.value);
+        const put = (id: string, value: string) => { document.getElementById(id)!.textContent = value; };
+        put('override-inspect-path', pathSelect.value);
+        put('override-inspect-description', detail.metadata.description || 'No description is supplied for this parameter.');
+        put('override-inspect-value', detail.valueText ?? '—');
+        put('override-inspect-type', detail.declaredType || 'Unspecified');
+        put('override-inspect-units', detail.units || 'Dimensionless');
+        put('override-inspect-options', detail.options.length ? detail.options.join(', ') : 'No fixed options');
+        put('override-inspect-condition', detail.condition || 'No declared condition');
+        inspect.hidden = false;
+      }
+      pathSelect?.addEventListener('change', updateSelection);
       loadButton?.addEventListener('click', async () => {
         if (!workbench || !editor) return;
         loadButton.disabled = true;
@@ -106,6 +126,7 @@ const referenceUrl = `${base}/projects/${project.id}/parameters/${setup}/`;
           baseline = runtime!.parseProject(projectInput);
           editor.hidden = false;
           if (loading) loading.hidden = true;
+          updateSelection();
           message(`${baseline.paths().length} evaluated parameters ready. Add an assignment to preview a change.`);
           valueInput?.focus();
         } catch (error) {

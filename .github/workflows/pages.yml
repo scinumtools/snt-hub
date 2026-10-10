@@ -9,6 +9,7 @@ on:
       - "projects/**/project.json"
       - "projects/**/setups.json"
       - "projects/**/docs/parameters/**"
+      - "projects/**/docs/schemas/**"
       - "projects/**/dipl/examples/**"
       - "scripts/check_project_bundles.py"
       - ".github/workflows/pages.yml"

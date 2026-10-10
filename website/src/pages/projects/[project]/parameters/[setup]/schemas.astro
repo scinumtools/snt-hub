@@ -1,0 +1,93 @@
+---
+import '../../../../../styles/global.css';
+import '../../../../../styles/schema-hierarchy.css';
+import SiteHeader from '../../../../../components/SiteHeader.astro';
+import SiteFooter from '../../../../../components/SiteFooter.astro';
+import SchemaMembers from '../../../../../components/SchemaMembers.astro';
+import { parametersFromBriefpp, schemaSourceUrls, type BriefDocument } from '../../../../../utils/briefpp';
+import { memberCount, memberSearch, type SchemaHierarchy } from '../../../../../utils/schema-hierarchy';
+
+export function getStaticPaths() {
+  const hierarchies = import.meta.glob('../../../../../../../projects/*/docs/schemas/*.json', { eager: true, import: 'default' });
+  const reports = import.meta.glob('../../../../../../../projects/*/docs/parameters/*.json', { eager: true, import: 'default' });
+  const records = import.meta.glob('../../../../../../../projects/*/project.json', { eager: true, import: 'default' });
+  return Object.entries(hierarchies).map(([path, hierarchy]) => {
+    const match = path.match(/\/projects\/([^/]+)\/docs\/schemas\/([^/]+)\.json$/);
+    if (!match) throw new Error(`Unexpected schema hierarchy path: ${path}`);
+    const project = Object.values(records).find((record: any) => record.id === match[1]);
+    const report = Object.entries(reports).find(([path]) => path.includes(`/projects/${match[1]}/docs/parameters/${match[2]}.json`))?.[1];
+    if (!project || !report) throw new Error(`Missing project or parameter report for ${match[1]}/${match[2]}`);
+    return { params: { project: match[1], setup: match[2] }, props: { project, report, hierarchy } };
+  });
+}
+
+const { project, report, hierarchy } = Astro.props as { project: any; report: BriefDocument; hierarchy: SchemaHierarchy };
+const { setup } = Astro.params;
+if (hierarchy.schema !== 'snt-schema-hierarchy/1' || !hierarchy.definitions_available) throw new Error(`Unsupported schema hierarchy for ${project.id}/${setup}`);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const referenceUrl = `${base}/projects/${project.id}/parameters/${setup}/`;
+const sourceUrls = schemaSourceUrls(report, project.id, setup ?? '');
+const parameterIds = new Map(parametersFromBriefpp(report).map((parameter) => [parameter.path, parameter.id]));
+const schemaIds = hierarchy.definitions.map((definition) => definition.id);
+const cards = hierarchy.definitions.map((definition) => ({
+  ...definition,
+  applications: hierarchy.applications.filter((application) => application.schema_ids.includes(definition.id)),
+  values: hierarchy.values.filter((value) => value.contributing_schema_id === definition.id),
+  sourceUrl: sourceUrls[definition.id],
+  search: [definition.name, definition.metadata.description, memberSearch(definition.members)].join(' ').toLowerCase(),
+}));
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#061d38" />
+    <meta name="description" content={`Browse reusable DIPL schemas and their application sites for the ${project.name} ${setup} example.`} />
+    <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
+    <title>{project.name} · {setup?.replaceAll('_', ' ')} schema hierarchy — SNT Hub</title>
+  </head>
+  <body class="schema-page">
+    <SiteHeader />
+    <main>
+      <section class="schema-intro shell">
+        <a class="schema-back" href={referenceUrl}>← Parameter reference</a>
+        <div class="eyebrow"><span class="eyebrow-line"></span> SNT SCHEMA HIERARCHY</div>
+        <h1>Reusable structure<span>.</span></h1>
+        <p>{project.name} / {setup?.replaceAll('_', ' ')}. See what each DIPL schema declares, where it is applied, and which evaluated values it supplies.</p>
+        <div class="schema-stats"><span><strong>{cards.length}</strong> definitions</span><span><strong>{hierarchy.applications.length}</strong> application sites</span><span><strong>{hierarchy.values.length}</strong> value associations</span><a href={referenceUrl}>Browse parameters ↗</a><a href={`${base}/projects/${project.id}/parameters/${setup}/graph/`}>Explore 3D graph ↗</a></div>
+      </section>
+      <section class="schema-main"><div class="shell schema-layout">
+        <aside class="schema-sidebar"><label for="schema-search">Find a schema or member</label><input id="schema-search" type="search" placeholder="Search schemas…" autocomplete="off" /><span id="schema-count">{cards.length} definitions</span><nav aria-label="Schema definitions">{cards.map((card) => <a class="schema-nav-link" href={`#schema-${encodeURIComponent(card.id)}`} data-schema={card.id}>{card.name}<small>{card.values.length} values</small></a>)}</nav></aside>
+        <div class="schema-content">
+          <div class="schema-explainer"><strong>Definitions, applications, and values</strong><p>A definition is reusable structure. An application records where an example uses it. A contributing schema identifies the definition that supplied an evaluated value. These are distinct relationships reported by SNT3.</p></div>
+          {cards.map((card) => <article class="schema-card" id={`schema-${card.id}`} data-search={card.search}>
+            <div class="schema-card-head"><div><span>SCHEMA DEFINITION</span><h2>{card.name}</h2></div><div class="schema-card-count"><strong>{memberCount(card.members)}</strong><small>members</small></div></div>
+            {card.metadata.description && <p class="schema-description">{card.metadata.description}</p>}
+            {card.sourceUrl && <a class="schema-source" href={card.sourceUrl} target="_blank" rel="noopener noreferrer">Open DIPL definition ↗</a>}
+            {card.members.length > 0 ? <SchemaMembers members={card.members} schemaIds={schemaIds} /> : <p class="schema-empty">No members declared directly in this schema.</p>}
+            <div class="schema-card-foot"><details><summary>Applied at {card.applications.length} site{card.applications.length === 1 ? '' : 's'} <span aria-hidden="true">⌄</span></summary>{card.applications.length > 0 ? <ul>{card.applications.map((application) => <li><code>{application.path}</code><small>{application.inherited_from_collection ? 'Inherited by collection item' : application.kind}</small></li>)}</ul> : <p>This definition is not applied in this setup.</p>}</details><details><summary>Supplies {card.values.length} value{card.values.length === 1 ? '' : 's'} <span aria-hidden="true">⌄</span></summary>{card.values.length > 0 ? <ul>{card.values.map((value) => <li>{parameterIds.has(value.path) ? <a href={`${referenceUrl}#${encodeURIComponent(parameterIds.get(value.path)!)}`}>{value.path} ↗</a> : <code>{value.path}</code>}</li>)}</ul> : <p>No evaluated value is supplied by this definition in this setup.</p>}</details></div>
+          </article>)}
+          <p class="schema-note">Generated by <code>snt dip schemas --project DIPfile --format json</code> from the pinned DIPL setup. This view reflects the bundled example; applying overrides can change evaluated associations.</p>
+        </div>
+      </div></section>
+    </main>
+    <SiteFooter />
+    <script>
+      const search = document.querySelector<HTMLInputElement>('#schema-search');
+      const cards = [...document.querySelectorAll<HTMLElement>('.schema-card')];
+      const links = [...document.querySelectorAll<HTMLElement>('.schema-nav-link')];
+      const count = document.querySelector<HTMLElement>('#schema-count');
+      search?.addEventListener('input', () => {
+        const query = search.value.trim().toLowerCase();
+        let visible = 0;
+        cards.forEach((card, index) => {
+          card.hidden = !card.dataset.search?.includes(query);
+          links[index].hidden = card.hidden;
+          if (!card.hidden) visible++;
+        });
+        if (count) count.textContent = `${visible} definitions`;
+      });
+    </script>
+  </body>
+</html>

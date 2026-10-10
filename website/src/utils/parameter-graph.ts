@@ -23,10 +23,15 @@ export type GraphNode = {
 export type GraphLink = {
   source: string;
   target: string;
-  kind: 'hierarchy' | 'schema' | 'dependency';
+  kind: 'hierarchy' | 'schema' | 'dependency' | 'schema-reference' | 'schema-application';
 };
 
-export function buildParameterGraph(parameters: GraphParameter[], includeInternals = false, schemaSources: Record<string, string> = {}) {
+export type GraphSchemaStructure = {
+  definitions: { id: string; description: string; refs: string[] }[];
+  applications: { path: string; schemaIds: string[] }[];
+};
+
+export function buildParameterGraph(parameters: GraphParameter[], includeInternals = false, schemaSources: Record<string, string> = {}, schemaStructure?: GraphSchemaStructure, showSchemaStructure = false) {
   const entries = parameters.filter((parameter) => includeInternals || !parameter.internal);
   const parameterPaths = new Set(entries.map((parameter) => parameter.path));
   const nodes = new Map<string, GraphNode>();
@@ -66,6 +71,41 @@ export function buildParameterGraph(parameters: GraphParameter[], includeInterna
       if (!nodes.has(schemaId)) nodes.set(schemaId, { id: schemaId, label: parameter.schema, kind: 'schema', count: 0, sourceUrl: schemaSources[parameter.schema] });
       nodes.get(schemaId)!.count = (nodes.get(schemaId)!.count ?? 0) + 1;
       addLink(schemaId, node.id, 'schema');
+    }
+  }
+
+  if (showSchemaStructure && schemaStructure) {
+    const definitions = new Map(schemaStructure.definitions.map((definition) => [definition.id, definition]));
+    const active = new Set([...nodes.values()].filter((node) => node.kind === 'schema').map((node) => node.label));
+    for (const application of schemaStructure.applications) {
+      if (nodes.has(`group:${application.path}`) || nodes.has(`parameter:${application.path}`)) {
+        for (const name of application.schemaIds) active.add(name);
+      }
+    }
+    // Include nested definitions reached from schemas that supply visible values.
+    const queue = [...active];
+    while (queue.length) {
+      for (const ref of definitions.get(queue.shift()!)?.refs ?? []) {
+        if (!definitions.has(ref) || active.has(ref)) continue;
+        active.add(ref);
+        queue.push(ref);
+      }
+    }
+    for (const name of active) {
+      const definition = definitions.get(name);
+      const id = `schema:${name}`;
+      if (!nodes.has(id)) nodes.set(id, { id, label: name, kind: 'schema', count: 0, sourceUrl: schemaSources[name] });
+      if (definition) nodes.get(id)!.description = definition.description;
+      for (const ref of definition?.refs ?? []) {
+        if (active.has(ref)) addLink(id, `schema:${ref}`, 'schema-reference');
+      }
+    }
+    for (const application of schemaStructure.applications) {
+      const target = nodes.has(`group:${application.path}`) ? `group:${application.path}` : `parameter:${application.path}`;
+      if (!nodes.has(target)) continue;
+      for (const name of application.schemaIds) {
+        if (active.has(name)) addLink(`schema:${name}`, target, 'schema-application');
+      }
     }
   }
 

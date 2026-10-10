@@ -18,6 +18,10 @@ test('browser project packages evaluate and accept representative overrides', as
     assert.equal(packaged.supported, true);
     assert.equal(web.validateProject(packaged.project, override).valid, true);
     const original = web.parseProject(packaged.project);
+    const description = original.describe(path);
+    assert.ok(description.declaredType, `${project}/${setup}: missing datatype for override editor`);
+    assert.ok(Array.isArray(description.options), `${project}/${setup}: missing allowed options for override editor`);
+    assert.ok('condition' in description, `${project}/${setup}: missing condition for override editor`);
     const changed = original.withOverride(override);
     assert.equal(changed.describe(path).valueText, expected);
     changed.dispose();

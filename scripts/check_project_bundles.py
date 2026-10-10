@@ -52,15 +52,28 @@ def check_project(project: Path) -> list[str]:
           command_parts[3] in setups, "hub.setup_command must name a bundled setup")
     example_root = project / "dipl" / "examples"
     report_root = project / "docs" / "parameters"
+    schema_root = project / "docs" / "schemas"
     example_names = {path.name for path in example_root.iterdir() if path.is_dir()} if example_root.is_dir() else set()
     reports = list(report_root.glob("*.json"))
     report_names = {path.stem for path in reports}
+    hierarchies = list(schema_root.glob("*.json"))
+    hierarchy_names = {path.stem for path in hierarchies}
     check(set(setups) == example_names, "setup IDs differ from DIPL example directories")
     check(set(setups) == report_names, "setup IDs differ from published parameter reports")
+    check(set(setups) == hierarchy_names, "setup IDs differ from published schema hierarchies")
     for path in reports:
         try:
             report = json.loads(path.read_text())
             check(report.get("schema") == "briefpp/1", f"{path.name} has an unsupported report schema")
+        except json.JSONDecodeError:
+            check(False, f"{path.name} is not valid JSON")
+    for path in hierarchies:
+        try:
+            hierarchy = json.loads(path.read_text())
+            check(hierarchy.get("schema") == "snt-schema-hierarchy/1",
+                  f"{path.name} has an unsupported schema hierarchy contract")
+            check(hierarchy.get("definitions_available") is True,
+                  f"{path.name} has no live schema definitions")
         except json.JSONDecodeError:
             check(False, f"{path.name} is not valid JSON")
     for setup_name, recipe in setups.items():
@@ -79,7 +92,7 @@ def main() -> int:
     if issues:
         print("\n".join(issues), file=sys.stderr)
         return 1
-    print(f"Checked {len(projects)} project bundles and their setup reports.")
+    print(f"Checked {len(projects)} project bundles, parameter reports, and schema hierarchies.")
     return 0
 
 
