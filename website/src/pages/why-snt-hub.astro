@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import '../styles/why-snt-hub.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const base = import.meta.env.BASE_URL;
+const home = base.endsWith('/') ? base : base + '/';
+
+const reasons = [
+  { problem: 'Physical meaning stays implicit', response: 'Declare types, units, constraints, and explanatory metadata alongside the values.' },
+  { problem: 'Bad settings fail at run time', response: 'Check declared rules before spending time on a simulation.' },
+  { problem: 'Studies need custom file edits', response: 'Inspect and override structured values, then generate native inputs through an adapter.' },
+  { problem: 'Codes speak different input languages', response: 'Build tooling against a common parameter interface while each solver keeps its own format.' },
+  { problem: 'Agents must guess what inputs mean', response: 'Offer a machine-readable contract that tools and AI agents can inspect instead of inferring everything from prose.' },
+];
+
+const steps = [
+  { number: '01', title: 'Inspect', description: 'Find available parameters, types, units, and documented relationships.' },
+  { number: '02', title: 'Vary', description: 'Use a workflow or script to supply structured overrides for each run.' },
+  { number: '03', title: 'Check', description: 'Evaluate declared constraints and adapter checks before launching the solver.' },
+  { number: '04', title: 'Prepare', description: 'Generate the native inputs expected by the existing code.' },
+  { number: '05', title: 'Record', description: 'Keep the evaluated parameter snapshot with each run for inspection and comparison.' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#061d38" />
+    <meta name="description" content="Why use SNT Hub? Make scientific parameters inspectable, validated, reproducible, and usable across workflows while keeping native simulation inputs." />
+    <link rel="icon" type="image/svg+xml" href={home + 'favicon.svg'} />
+    <title>Why use SNT Hub? — SNT Hub</title>
+  </head>
+  <body>
+    <SiteHeader />
+    <main>
+      <section class="why-hero shell" aria-labelledby="why-title">
+        <img class="why-landscape" src={home + 'initiative-mountains.webp'} alt="" aria-hidden="true" fetchpriority="high" />
+        <div class="eyebrow"><span class="eyebrow-line"></span> WHY SNT HUB</div>
+        <h1 id="why-title">Your code knows<br />how to <span>compute.</span></h1>
+        <p class="why-hero-lead">SNT Hub makes its parameters understandable and manageable by other software.</p>
+        <p class="why-hero-detail">A native input file tells a simulation code what to execute. A DIPL model can also describe, validate, inspect, and manipulate the scientific meaning of its parameters.</p>
+        <div class="hero-actions">
+          <a class="button button-bright" href="#why-reasons">Explore the reasons <span aria-hidden="true">↓</span></a>
+          <a class="quiet-link" href={home + 'registry/'}>Browse integrations <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+
+      <section class="why-orientation" aria-label="Relationship to native input files">
+        <div class="shell why-orientation-inner"><strong>Keep the native format.</strong><p>SNT Hub adds an optional parameter layer around it. A project adapter translates evaluated values into the files the existing solver already understands.</p></div>
+      </section>
+
+      <section class="why-reasons shell" id="why-reasons" aria-labelledby="why-reasons-title">
+        <div class="why-section-heading"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> THE PRACTICAL CASE</div><h2 id="why-reasons-title">What changes when<br /><span>inputs have structure?</span></h2></div><p>Native files remain the final input. The added model gives people and tools a common place to understand and check the values that produce those files.</p></div>
+        <div class="why-reason-list" role="list">
+          {reasons.map((reason, index) => <article class="why-reason" role="listitem"><span class="why-reason-number">{String(index + 1).padStart(2, '0')}</span><h3>{reason.problem}</h3><p>{reason.response}</p></article>)}
+        </div>
+        <p class="why-reasons-note">The machine-readable interface is useful for AI agents, but its immediate value is the same for human-built tools: explicit inputs that can be inspected and checked.</p>
+      </section>
+
+      <section class="why-scenario" aria-labelledby="why-scenario-title"><div class="shell why-scenario-inner">
+        <div class="why-scenario-intro"><div class="eyebrow"><span class="eyebrow-line"></span> A REALISTIC WORKFLOW</div><h2 id="why-scenario-title">Imagine preparing<br /><span>500 simulations.</span></h2><p>A researcher varies density, temperature, and magnetic field across hundreds of runs. Native files alone can support this, but a growing script must edit them, check values, track variations, and preserve provenance.</p><p>With a sufficiently complete DIPL integration, the same workflow can use a structured interface:</p><p>Python scripts and workflow managers can already do this. The aim is to make the parameter contract reusable across codes, so each team need not rebuild it from scratch.</p><small>SNT Hub does not replace the workflow that schedules or runs the sweep. It supplies inspectable, validated inputs and native file generation for each run.</small></div>
+        <ol class="why-scenario-steps">{steps.map((step) => <li><span>{step.number}</span><div><strong>{step.title}</strong><p>{step.description}</p></div></li>)}</ol>
+      </div></section>
+
+      <section class="why-value shell" aria-labelledby="why-value-title">
+        <div class="why-section-heading"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> WHERE IT PAYS OFF</div><h2 id="why-value-title">Three levels<br /><span>of value.</span></h2></div><p>The extra layer becomes most useful when many runs, people, tools, or scientific codes have to work together.</p></div>
+        <div class="why-value-grid">
+          <article><span>01 / CONVENIENCE</span><h3>Easier inputs</h3><p>Inspect and generate configurations through a structured interface.</p></article>
+          <article><span>02 / RELIABILITY</span><h3>Clearer contracts</h3><p>Use declared rules and recorded values to support validation and reproducibility.</p></article>
+          <article><span>03 / INTEROPERABILITY</span><h3>Reusable tooling</h3><p>Connect different scientific codes to consistent workflows and automation.</p></article>
+        </div>
+        <div class="why-fit"><strong>When is it worth adopting?</strong><p>If you edit a few familiar input files by hand, your current workflow may be enough. The case grows stronger for developers, research software engineers, and computational researchers building reliable tooling around hundreds or thousands of simulations.</p></div>
+      </section>
+
+      <section class="why-boundary" aria-labelledby="why-boundary-title"><div class="shell why-boundary-inner"><div><div class="eyebrow"><span class="eyebrow-line"></span> A SCIENTIFIC BOUNDARY</div><h2 id="why-boundary-title">Meaning must be<br /><span>declared and tested.</span></h2></div><p>A datatype and unit do not, by themselves, capture a parameter's scientific meaning. Physical constraints, dependencies, and model validity domains must be represented explicitly or checked by the adapter. A Hub listing should show what has actually been modeled and validated.</p></div></section>
+
+      <section class="why-cta shell" aria-labelledby="why-cta-title"><div><div class="eyebrow"><span class="eyebrow-line"></span> START WITH A PROJECT</div><h2 id="why-cta-title">See what the layer<br /><span>can describe.</span></h2><p>Explore participating codes, their parameter references, and the evidence behind each integration.</p></div><div class="why-cta-links"><a class="button button-bright" href={home + 'registry/'}>Explore the registry <span aria-hidden="true">↗</span></a><a class="quiet-link" href={home + 'integration-levels/'}>Understand integration levels <span aria-hidden="true">↗</span></a></div></section>
+    </main>
+    <SiteFooter />
+  </body>
+</html>
