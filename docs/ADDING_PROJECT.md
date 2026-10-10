@@ -10,7 +10,7 @@ In `projects/<id>/README.md`, state the supported code revision, which inputs ar
 
 ## 2. Add project-local records
 
-Create `projects/<id>/project.json` using [Arepo's record](../projects/arepo/project.json) as a field example. Include the canonical `source_url`, full `source_revision`, source and adapter paths, current `integration_mode`, support and validation states, evidence links, limitations, and a review date. The registry builds directly from these records. Keep these three ideas separate:
+Create `projects/<id>/project.json`. Include the canonical `source_url`, full `source_revision`, source and adapter paths, current `integration_mode`, support and validation states, evidence links, limitations, and a review date. The registry builds directly from these records. Keep these three ideas separate:
 
 The [public status guide](https://scinumtools.github.io/snt-hub/integration-levels/) defines the labels and evidence expected for each state.
 
@@ -27,7 +27,7 @@ Create `projects/<id>/setups.json` with `schema_version: 1` and a `setups` objec
 - `complete`: the recipe creates every required example input, including an IC file when the code needs one, and tests check the result.
 - `native-inputs-only`: the adapter generates parameter files, but the IC or another prerequisite is supplied separately. `snt hub setup` requires `--inputs-only` for this state.
 
-Do not infer a source-example name from the DIPL directory name. Arepo's `mhd_shock_tube` maps to the source's `mhd_shocktube_1d`; [its setup manifest](../projects/arepo/setups.json) makes that mapping explicit.
+Do not infer a source-example name from the DIPL directory name. Record the exact upstream example path in `setups.json`, since the Hub setup ID and upstream name may differ.
 
 ## 3. Implement the project adapter
 
@@ -42,11 +42,11 @@ Expose these executable arguments so the SNT3 `hub` module can call any project 
                            [--inputs-only] [--override-file <path>]
 ```
 
-The package should also offer a direct generation command for local development. Use the shared [`adapter_main()`](../hub/src/snt_hub_runtime/cli.py) for the standard command arguments and [`evaluate_project()`](../hub/src/snt_hub_runtime/dipl.py) to parse a DIPfile with an optional override. The [Arepo implementation](../projects/arepo/dipl/src/arepo_dipl/hub.py) shows how to call `ProjectBundle.load()` and `prepare_setup()` with render and input-preparation callbacks. Use `new_build_output()` from the shared workflow module before creating a build directory. Do not put project scripts or parameter names in the generic runtime.
+The package should also offer a direct generation command for local development. Use the shared [`adapter_main()`](../hub/src/snt_hub_runtime/cli.py) for the standard command arguments and [`evaluate_project()`](../hub/src/snt_hub_runtime/dipl.py) to parse a DIPfile with an optional override. Call `ProjectBundle.load()` and `prepare_setup()` with render and input-preparation callbacks. Use `new_build_output()` from the shared workflow module before creating a build directory. Do not put project scripts or parameter names in the generic runtime.
 
 Also test the adapter with the planned local workspace layout: copy `project.json`, `setups.json`, and `dipl/` to a new workspace root, place the pinned source checkout at `source/`, and invoke the same adapter command with `--bundle <workspace>/dipl --source <workspace>/source`. Keep the checked-in `hub.setup_manifest` path unchanged; the shared loader accepts it in both layouts. The setup lock should record the pinned source commit even for `--inputs-only`, plus the actual DIPL digest and source dirty state. A `.snthub/lock.json` written by the future `fetch` command may supply the Hub commit and fetched DIPL baseline.
 
-An IC creator may use a pinned upstream example script, a declared supplied asset, or another documented generator. Other codes may need a pseudopotential or similar prerequisite instead of a separate IC file; the [Quantum ESPRESSO draft](../projects/quantum-espresso/README.md) stages a checksummed pseudopotential from its pinned source. Review asset licences, dependencies, and any network access before marking a recipe `complete`. Prepare inputs in the staged output directory and check that their files match evaluated paths, formats, and key physical settings. If setup values are hard-coded in a creator, define a reviewed `ic_safe_overrides` list and reject other override targets until the creator can receive those values.
+An IC creator may use a pinned upstream example script, a declared supplied asset, or another documented generator. Some codes need a pseudopotential or similar prerequisite instead of a separate IC file; stage required assets with recorded checksums. Review asset licences, dependencies, and any network access before marking a recipe `complete`. Prepare inputs in the staged output directory and check that their files match evaluated paths, formats, and key physical settings. If setup values are hard-coded in a creator, define a reviewed `ic_safe_overrides` list and reject other override targets until the creator can receive those values.
 
 Support per-run override files without mutating the fetched project bundle. Pass the override through SNT3's `add_override_file()` before parsing and include the same override when validating IC output. Pass its path as `override_file` to `prepare_setup()`; the shared runtime checks that it stays unchanged and records its contents and digest with the generated setup. An override file registered this way contains bare assignments; a `$override` directive is used for an inline region in ordinary DIPL source.
 
