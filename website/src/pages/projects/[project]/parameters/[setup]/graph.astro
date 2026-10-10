@@ -72,7 +72,7 @@ const graphData = JSON.stringify({ parameters, schemaSources, schemaStructure })
           <datalist id="graph-parameter-options">{parameters.map((parameter) => <option value={parameter.path} />)}</datalist>
           <button id="graph-find" type="button">Focus</button>
           <button id="graph-reset" type="button">Fit graph</button>
-          <label class="graph-toggle"><input id="graph-schema-structure" type="checkbox" /> Schema structure</label>
+          <label class="graph-toggle"><input id="graph-schema-structure" type="checkbox" /> Schema structure</label><span id="graph-schema-count" class="graph-schema-count" aria-live="polite"></span>
           <label class="graph-toggle"><input id="graph-internals" type="checkbox" /> Adapter controls</label>
         </div>
         <div class="graph-stage">
@@ -105,6 +105,7 @@ const graphData = JSON.stringify({ parameters, schemaSources, schemaStructure })
       const resetButton = document.querySelector<HTMLButtonElement>('#graph-reset')!;
       const internals = document.querySelector<HTMLInputElement>('#graph-internals')!;
       const schemaToggle = document.querySelector<HTMLInputElement>('#graph-schema-structure')!;
+      const schemaCount = document.querySelector<HTMLElement>('#graph-schema-count')!;
       const title = document.querySelector<HTMLElement>('#graph-selected-title')!;
       const path = document.querySelector<HTMLElement>('#graph-selected-path')!;
       const description = document.querySelector<HTMLElement>('#graph-selected-description')!;
@@ -157,6 +158,7 @@ const graphData = JSON.stringify({ parameters, schemaSources, schemaStructure })
       function nodeColor(node: VisualNode) {
         if (selectedId && !neighbors.has(node.id)) return '#24415a';
         if (node.id === selectedId) return '#ffd08d';
+        if (schemaToggle.checked) return node.kind === 'schema' ? '#ffe08c' : '#355a72';
         if (node.kind === 'root') return '#3ce0e6';
         if (node.kind === 'schema') return '#96e7a6';
         if (node.kind === 'group') return '#69a8d2';
@@ -165,15 +167,23 @@ const graphData = JSON.stringify({ parameters, schemaSources, schemaStructure })
 
       function linkColor(link: VisualLink) {
         if (selectedId && idOf(link.source) !== selectedId && idOf(link.target) !== selectedId) return '#24415a';
+        if (schemaToggle.checked) return link.kind === 'schema-reference' ? '#ffd275' : link.kind === 'schema-application' ? '#bafa86' : '#25465d';
         return link.kind === 'dependency' ? '#3ce0e6' : link.kind === 'schema' ? '#72bb80' : link.kind === 'schema-reference' ? '#edbf79' : link.kind === 'schema-application' ? '#a5c879' : '#5485a8';
+      }
+
+      function linkWidth(link: VisualLink) {
+        if (schemaToggle.checked) return link.kind === 'schema-reference' || link.kind === 'schema-application' ? 2.6 : 0.3;
+        return link.kind === 'dependency' ? 1.5 : link.kind === 'schema' ? 0.65 : 0.45;
       }
 
       function updateGraph() {
         const data = buildParameterGraph(parameters, internals.checked, schemaSources, schemaStructure, schemaToggle.checked);
+        const structureLinks = data.links.filter((link) => link.kind === 'schema-reference' || link.kind === 'schema-application').length;
+        schemaCount.textContent = schemaToggle.checked ? `${structureLinks} structure links` : '';
         selectedId = '';
         neighbors = new Set();
         graph.graphData(data);
-        graph.nodeColor(nodeColor).linkColor(linkColor);
+        graph.nodeColor(nodeColor).linkColor(linkColor).linkWidth(linkWidth);
         if (fitTimer) clearTimeout(fitTimer);
         fitTimer = setTimeout(() => graph.zoomToFit(800, 20), 2200);
       }
@@ -208,7 +218,7 @@ const graphData = JSON.stringify({ parameters, schemaSources, schemaStructure })
             .nodeLabel((node: VisualNode) => escapeHtml(node.path ?? node.label))
             .nodeOpacity(0.94)
             .linkColor(linkColor)
-            .linkWidth((link: VisualLink) => link.kind === 'dependency' ? 1.5 : link.kind === 'schema-reference' ? 1.1 : link.kind === 'schema' ? 0.65 : 0.45)
+            .linkWidth(linkWidth)
             .linkOpacity(0.45)
             .linkDirectionalArrowLength((link: VisualLink) => link.kind === 'dependency' ? 4 : 0)
             .linkDirectionalParticles((link: VisualLink) => link.kind === 'dependency' ? 2 : 0)

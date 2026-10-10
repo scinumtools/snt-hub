@@ -15,6 +15,9 @@
 .graph-line.schema-ref{background:#edbf79}
 .graph-line.schema-application{background:#a5c879}
 .graph-toggle+.graph-toggle{margin-left:0}
+.graph-schema-count{color:#ffe08c;font-size:11px;font-weight:750;white-space:nowrap}
+.graph-schema-count:empty{display:none}
+.graph-schema-count+.graph-toggle{margin-left:0}
 .graph-stats{flex-wrap:wrap}
 .graph-context{max-width:1000px;margin:18px 0 0;color:#abc8d8;font-size:12px;line-height:1.7}
 @media(max-width:850px){.graph-heading{display:block}.graph-stats{margin-top:21px}.graph-inspector{width:240px}}

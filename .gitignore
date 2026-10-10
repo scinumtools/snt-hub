@@ -221,3 +221,4 @@ __marimo__/
 
 # other
 PROPOSAL/*
+projects/*/docs/schemas/.generation-state
