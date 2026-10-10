@@ -1,3 +1,5 @@
+import hubVersion from '../../../../VERSION?raw';
+
 const records = import.meta.glob('../../../../projects/*/project.json', { eager: true, import: 'default' });
 const setupRecords = import.meta.glob('../../../../projects/*/setups.json', { eager: true, import: 'default' });
 
@@ -15,6 +17,7 @@ export const GET = () => {
   });
   return new Response(JSON.stringify({
     schema_version: 1,
+    hub_version: hubVersion.trim(),
     hub_repository: 'https://github.com/scinumtools/snt-hub.git',
     hub_revision: process.env.GITHUB_SHA ?? 'unreleased',
     projects,

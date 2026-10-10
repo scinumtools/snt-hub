@@ -1,6 +1,6 @@
 # Add a code to SNT Hub
 
-SNT Hub keeps each scientific code's original source, DIPL layer, registry record, and example recipes together under `projects/<id>/`. The [shared runtime](../hub/README.md) handles setup staging, source revision checks, and locks. A new project supplies its own parameter model and renderer.
+SNT Hub keeps each scientific code's original source, DIPL layer, registry record, and example recipes together under `projects/<id>/`. The [integration specification](INTEGRATION_SPEC.md) states the bundle contract and recommended node and schema organization. The [shared runtime](../hub/README.md) handles setup staging, source revision checks, and locks. A new project supplies its own parameter model and renderer.
 
 ## 1. Define the scope and pin the original code
 

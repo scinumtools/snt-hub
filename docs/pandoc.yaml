@@ -1,0 +1,25 @@
+from: markdown
+pdf-engine: xelatex
+toc: true
+number-sections: true
+
+input-files:
+  - docs/INTEGRATION_SPEC.md
+
+filters:
+  - docs/pandoc-version.lua
+
+output-file: website/public/integration-spec.pdf
+
+include-in-header:
+  - docs/pandoc-header.tex
+
+variables:
+  geometry:
+    - a4paper
+    - margin=23mm
+  fontsize: 10pt
+  colorlinks: true
+  linkcolor: blue
+  urlcolor: blue
+

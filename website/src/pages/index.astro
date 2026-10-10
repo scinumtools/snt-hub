@@ -27,7 +27,7 @@ const base = import.meta.env.BASE_URL;
         <div class="hero-copy">
           <div class="eyebrow"><span class="eyebrow-line"></span> AN OPEN SCIENTIFIC SOFTWARE INITIATIVE</div>
           <h1 id="hero-title">One parameter layer.<br /><span>Many scientific codes.</span></h1>
-          <p class="hero-lead">A common way to describe, validate, inspect, and share simulation inputs. Start with an adapter for native files; move to direct SNT3 integration when a code is ready.</p>
+          <p class="hero-lead">SNT Hub brings scientific codes and reusable DIPL parameter models together. Explore a code's inputs, prepare a local example, and see what its integration has actually been tested to do.</p>
           <div class="hero-actions">
             <a class="button button-bright" href={base + '/registry/'}>Explore the registry <span aria-hidden="true">↗</span></a>
             <a class="quiet-link" href="#how-it-works">See how it works <span aria-hidden="true">↓</span></a>
@@ -52,21 +52,17 @@ MaxSteps  <span>128</span>
       <div class="ticker" aria-label="Initiative principles"><div class="ticker-inner"><span>SEMANTIC INPUTS</span><b>✳</b><span>PHYSICAL UNITS</span><b>✳</b><span>VALIDATION</span><b>✳</b><span>NATIVE OUTPUTS</span><b>✳</b><span>REPRODUCIBILITY</span></div></div>
 
       <section class="how shell" id="how-it-works" aria-labelledby="how-title">
-        <div class="section-title"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> THE PRACTICAL IDEA</div><h2 id="how-title">A better interface<br />to existing codes.</h2></div><p>Start with the code you trust. Add a readable parameter model and an adapter that generates the files it already accepts.</p></div>
+        <div class="section-title"><div><div class="eyebrow dark"><span class="eyebrow-line"></span> HOW IT WORKS</div><h2 id="how-title">A clearer path<br />to simulation inputs.</h2></div><p>Each Hub project pairs a pinned scientific code with a DIPL model of selected inputs and a documented way to prepare them.</p></div>
         <div class="steps">
           <div class="step"><div class="step-number">01 / MODEL</div><div class="step-symbol">&#123; &#125;</div><h3>Describe the science</h3><p>DIPL keeps values, units, types, relationships, and constraints together in a portable definition.</p></div>
           <div class="step"><div class="step-number">02 / CHECK</div><div class="step-symbol">✓</div><h3>Make inputs inspectable</h3><p>SNT evaluates the model and catches declared errors before the settings reach a solver.</p></div>
-          <div class="step"><div class="step-number">03 / FIRST STAGE</div><div class="step-symbol">↗</div><h3>Keep the native workflow</h3><p>A code-specific adapter writes familiar inputs first. The solver and its ownership stay with the code.</p></div>
+          <div class="step"><div class="step-number">03 / PREPARE</div><div class="step-symbol">↗</div><h3>Generate native inputs</h3><p>A code-specific adapter prepares files for the existing solver, while the evaluated model remains available to inspect.</p></div>
         </div>
       </section>
 
-      <section class="pathways shell" aria-labelledby="pathways-title">
-        <div class="pathways-heading"><div class="eyebrow"><span class="eyebrow-line"></span> BEYOND THE FIRST ADAPTER</div><h2 id="pathways-title">More ways to integrate<br /><span>when a code is ready.</span></h2><p>The native-file adapter is a practical starting point. A project may later replace it with direct SNT3 access or generated static parameters, after its maintainers review the fit.</p></div>
-        <div class="pathway-grid">
-          <div><span>PATH 01 / DIRECT USE</span><h3>Use evaluated parameters</h3><p>Connect a code to SNT3 through its C++ or Python APIs, or evaluate the experimental C binding where appropriate.</p><div class="pathway-links"><a href="https://scinumtools.github.io/snt3/modules/dip/basic-usage.html">C++ guide ↗</a><a href="https://scinumtools.github.io/snt3/integrations/python.html">Python guide ↗</a></div></div>
-          <div><span>PATH 02 / STATIC EXPORT</span><h3>Generate native parameters</h3><p>Export validated environments to C++, C, Fortran, Rust, Julia, JSON, or YAML for applications that should not parse DIPL at run time.</p><a href="https://scinumtools.github.io/snt3/modules/dip/generation.html">See static generation ↗</a></div>
-        </div>
-        <div class="viewer-note"><div><strong>Inspect the model at any stage.</strong><p>The optional, read-only Parameter Viewer shows evaluated values, units, provenance, and dependencies from a live DIPL project or DIPH5 snapshot.</p></div><a href="https://scinumtools.github.io/snt3/integrations/viewer.html">Explore the viewer ↗</a></div>
+      <section class="registry-teaser shell" id="registry" aria-labelledby="registry-title">
+        <div><div class="eyebrow"><span class="eyebrow-line"></span> CHOOSE A PROJECT</div><h2 id="registry-title">Explore integrations<span>.</span></h2><p>Browse {projects.length} {projects.length === 1 ? 'project' : 'projects'} with example inputs and parameter references. Each listing separates how SNT connects, who supports the work, and what has been validated.</p></div>
+        <a class="button button-bright" href={base + '/registry/'}>View the registry <span aria-hidden="true">↗</span></a>
       </section>
 
       <section class="hub-journey shell" aria-labelledby="hub-journey-title">
@@ -79,11 +75,19 @@ MaxSteps  <span>128</span>
 snt hub fetch PROJECT  <span class="hub-command-comment"># Get the pinned source and DIPL layer</span>
 snt hub examples  <span class="hub-command-comment"># List available examples</span>
 snt hub setup EXAMPLE  <span class="hub-command-comment"># Generate this example's inputs</span>
-snt hub setup EXAMPLE --override-file tuning.dip  <span class="hub-command-comment"># Optional alternative: apply custom values</span>
 snt hub build  <span class="hub-command-comment"># Build the code if supported</span>
 snt hub run --setup runs/EXAMPLE  <span class="hub-command-comment"># Run the prepared example if supported</span></code></pre>
-          <p>To customize step 04, create <code>tuning.dip</code> with an assignment such as <code>section.parameter = VALUE</code>, using a path and value from the selected project's parameter reference. Run either setup command. Replace <code>PROJECT</code> and <code>EXAMPLE</code> with registry and example IDs. Build and run are available where the project declares them; a setup-specific build also needs <code>--setup runs/EXAMPLE</code>.</p>
+          <p>Replace <code>PROJECT</code> and <code>EXAMPLE</code> with IDs from the registry. To change values, pass <code>--override-file tuning.dip</code> to the setup command; the parameter reference shows available paths. Build and run are available where the project declares them. A build tied to generated inputs needs <code>--setup runs/EXAMPLE</code>, and an inputs-only recipe needs <code>--inputs-only</code> at setup.</p>
         </div>
+      </section>
+
+      <section class="pathways shell" aria-labelledby="pathways-title">
+        <div class="pathways-heading"><div class="eyebrow"><span class="eyebrow-line"></span> THE INTEGRATION CAN GROW</div><h2 id="pathways-title">Start with native files.<br /><span>Go further when ready.</span></h2><p>The adapter is an initial integration. A code's maintainers can later choose direct SNT3 access or generated static parameters while preserving a documented, inspectable model.</p></div>
+        <div class="pathway-grid">
+          <div><span>PATH 01 / DIRECT USE</span><h3>Use evaluated parameters</h3><p>Connect a code to SNT3 through its C++ or Python APIs, or evaluate the experimental C binding where appropriate.</p><div class="pathway-links"><a href="https://scinumtools.github.io/snt3/modules/dip/basic-usage.html">C++ guide ↗</a><a href="https://scinumtools.github.io/snt3/integrations/python.html">Python guide ↗</a></div></div>
+          <div><span>PATH 02 / STATIC EXPORT</span><h3>Generate native parameters</h3><p>Export validated environments to C++, C, Fortran, Rust, Julia, JSON, or YAML for applications that should not parse DIPL at run time.</p><a href="https://scinumtools.github.io/snt3/modules/dip/generation.html">See static generation ↗</a></div>
+        </div>
+        <div class="viewer-note"><div><strong>Inspect the model at any stage.</strong><p>The optional, read-only Parameter Viewer shows evaluated values, units, provenance, and dependencies from a live DIPL project or DIPH5 snapshot.</p></div><a href="https://scinumtools.github.io/snt3/integrations/viewer.html">Explore the viewer ↗</a></div>
       </section>
 
       <section class="resources shell" id="resources" aria-labelledby="resources-title">
@@ -97,24 +101,18 @@ snt hub run --setup runs/EXAMPLE  <span class="hub-command-comment"># Run the pr
           <a class="resource-card" href="https://scinumtools.github.io/snt3/dipl/index.html"><span class="resource-index">03 / LANGUAGE</span><strong>DIPL specification</strong><p>Learn the syntax for typed, unit-aware scientific inputs.</p><span class="resource-arrow" aria-hidden="true">↗</span></a>
           <a class="resource-card" href="https://scinumtools.github.io/snt3/"><span class="resource-index">04 / GUIDES</span><strong>SNT3 documentation</strong><p>Follow tutorials and API guides for using the toolkit.</p><span class="resource-arrow" aria-hidden="true">↗</span></a>
         </div>
+        <div class="spec-download"><div><span>FOR PROJECT CONTRIBUTORS</span><strong>Hub integration specification</strong><p>Bundle requirements and recommended DIPL node, schema, and example organization.</p></div><div><a href={base + '/integration-spec.pdf'}>Download PDF ↗</a><a href="https://github.com/scinumtools/snt-hub/blob/main/docs/INTEGRATION_SPEC.md">Read Markdown ↗</a></div></div>
       </section>
 
       <section class="launch-section shell" aria-labelledby="launch-title">
         <div class="launch-date"><span>STARTED</span><strong>10<span>/</span>26</strong><small>OCTOBER 2026</small></div>
         <div class="launch-copy">
           <div class="eyebrow"><span class="eyebrow-line"></span> AN OPEN BEGINNING</div>
-          <h2 id="launch-title">The first chapter<br /><span>is underway.</span></h2>
-          <p>SNT Hub and this website are in their first stage. The current registry is a starting collection of integrations and examples, with more codes, reviews, and evidence to come. Researchers and code maintainers can help shape what grows here.</p>
+          <h2 id="launch-title">Help grow<br /><span>the next chapter.</span></h2>
+          <p>SNT Hub began in October 2026. The registry is a starting collection, and its coverage and evidence will grow through new models, code-owner reviews, and reproducible checks. Researchers and maintainers can contribute a project or help assess an existing one.</p>
           <div class="launch-links"><a href="https://github.com/scinumtools/snt-hub/blob/main/docs/ADDING_PROJECT.md">Add a project <span aria-hidden="true">↗</span></a><a href="https://github.com/scinumtools/snt-hub/issues">Start a discussion <span aria-hidden="true">↗</span></a></div>
         </div>
       </section>
-
-      <section class="registry-teaser shell" id="registry" aria-labelledby="registry-title">
-        <div><div class="eyebrow"><span class="eyebrow-line"></span> THE REGISTRY</div><h2 id="registry-title">Explore integrations<span>.</span></h2><p>Browse {projects.length} {projects.length === 1 ? 'project' : 'projects'}, their parameter references, support status, and validation evidence in the growing registry.</p></div>
-        <a class="button button-bright" href={base + '/registry/'}>View the registry <span aria-hidden="true">↗</span></a>
-      </section>
-
-      <section class="closing shell"><div class="closing-star" aria-hidden="true">✳</div><div><div class="eyebrow"><span class="eyebrow-line"></span> JOIN THE INITIATIVE</div><h2>Better inputs.<br /><span>Stronger science.</span></h2><p>Share a code, review a model, or contribute evidence. The registry grows with every well-described integration.</p><a class="button button-bright" href="https://github.com/scinumtools/snt-hub/issues">Get involved <span aria-hidden="true">↗</span></a></div></section>
     </main>
     <SiteFooter />
   </body>

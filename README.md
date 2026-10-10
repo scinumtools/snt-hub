@@ -59,3 +59,11 @@ Each integration in this Hub repository has a pinned original-code submodule, a 
 Project-specific integration guides under `projects/<id>/README.md` describe scope and evidence. Shared workspace checks live in the reusable [hub runtime](hub/README.md); each project supplies its own renderer and reviewed example and solver recipes.
 
 To integrate another code, follow the [new-project guide](docs/ADDING_PROJECT.md).
+
+The [Hub integration specification](docs/INTEGRATION_SPEC.md) defines the project bundle contract and recommended DIPL node and schema organization. Its [Pandoc defaults](docs/pandoc.yaml) and logo assets live in `docs/`. Compile it from the repository root with `pandoc --defaults docs/pandoc.yaml` (Pandoc and XeLaTeX required), or run `scripts/build_integration_spec.sh`. A [ready PDF](https://scinumtools.github.io/snt-hub/integration-spec.pdf) is published on the website.
+
+## Hub version
+
+The root [VERSION](VERSION) file is the single Hub release setting, starting at **v0.1.0**. The website footer, public catalogue, and PDF specification read it during their builds. The [changelog](CHANGELOG.md) records releases. Increment the major number for incompatible Hub contracts, the minor number for compatible capabilities or new integration collections, and the patch number for compatible corrections. When releasing, update `VERSION` and the changelog, regenerate the PDF, build the site, and tag the commit `vX.Y.Z`.
+
+The Hub release version is distinct from each project's pinned upstream commit, the Hub Git revision used for reproducible fetches, and JSON `schema_version` fields.
