@@ -8,26 +8,26 @@ control : qe_control, qe_control_tprnfor
 
 system : qe_system, qe_system_celldm_1, qe_system_input_dft, qe_system_nbnd
   ibrav = 1
-  celldm_1 = 8.0
+  celldm_1 = 8.0 AU_{a_0}
   nat = 10
   ntyp = 2
   nbnd = 11
-  ecutwfc = 60.0
+  ecutwfc = 60.0 AU_0.5*E_h
   input_dft = "pbe"
 
 electrons : qe_electrons_conv_thr, qe_electrons_diagonalization
   diagonalization = "rmm-davidson"
-  conv_thr = 1e-12
+  conv_thr = 1e-12 AU_0.5*E_h
 
 structure : qe_structure
   position_units = "bohr"
   species[]
     symbol = "H"
-    mass = 1.007825035
+    mass = 1.007825035 u
     pseudo_file = "H.pbe-hgh.UPF"
   species[]
     symbol = "C"
-    mass = 12.0
+    mass = 12.0 u
     pseudo_file = "C.pbe-hgh.UPF"
   atoms[]
     species = "H"

@@ -6,8 +6,8 @@ $schema qe_species
   symbol str
     ?descr "Species label used by atom records."
 
-  mass float
-    !condition ({.} > 0)
+  mass float u
+    !condition ({.} > 0 u)
     ?descr "Atomic mass in atomic mass units."
 
   pseudo_file str

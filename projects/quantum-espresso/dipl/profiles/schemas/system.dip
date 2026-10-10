@@ -17,15 +17,15 @@ $schema qe_system
     ?descr "Number of species records in ATOMIC_SPECIES."
     ?native "ntyp"
 
-  ecutwfc float
-    !condition ({.} > 0)
-    ?descr "Wavefunction kinetic-energy cutoff, in Ry."
+  ecutwfc float AU_0.5*E_h
+    !condition ({.} > 0 AU_0.5*E_h)
+    ?descr "Wavefunction kinetic-energy cutoff. QE expresses this energy in Ry; the DIPL unit is half a Hartree (1 Ry)."
     ?native "ecutwfc"
 
 $schema qe_system_celldm_1
-  celldm_1 float
-    !condition ({.} > 0)
-    ?descr "Lattice parameter celldm(1), in bohr."
+  celldm_1 float AU_{a_0}
+    !condition ({.} > 0 AU_{a_0})
+    ?descr "Lattice parameter celldm(1), in Bohr radii."
     ?native "celldm(1)"
 
 $schema qe_system_nbnd

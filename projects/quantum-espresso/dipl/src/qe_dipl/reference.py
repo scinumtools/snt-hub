@@ -194,7 +194,13 @@ def render_settings(parsed: dict[str, Any], source_name: str) -> str:
         ]
         lines.append(f"\n{section} : {', '.join(names)}")
         for key, item in fields.items():
-            lines.append(f"  {'celldm_1' if key == 'celldm(1)' else key} = {_dipl(item)}")
+            unit = {
+                "celldm(1)": " AU_{a_0}",
+                "ecutwfc": " AU_0.5*E_h",
+                "diago_thr_init": " AU_0.5*E_h",
+                "conv_thr": " AU_0.5*E_h",
+            }.get(key, "")
+            lines.append(f"  {'celldm_1' if key == 'celldm(1)' else key} = {_dipl(item)}{unit}")
         if section == "control":
             lines.extend(('  pseudo_dir = "./pseudo/"', '  outdir = "./tmp/"'))
 
@@ -203,7 +209,7 @@ def render_settings(parsed: dict[str, Any], source_name: str) -> str:
     lines.append(f"  position_units = {_dipl(parsed['position_units'])}")
     for symbol, mass, pseudo in parsed["species"]:
         lines.extend(("  species[]", f"    symbol = {_dipl(symbol)}",
-                      f"    mass = {_dipl(mass)}", f"    pseudo_file = {_dipl(pseudo)}"))
+                      f"    mass = {_dipl(mass)} u", f"    pseudo_file = {_dipl(pseudo)}"))
     for symbol, x, y, z in parsed["positions"]:
         lines.extend(("  atoms[]", f"    species = {_dipl(symbol)}",
                       f"    x = {_dipl(x)}", f"    y = {_dipl(y)}", f"    z = {_dipl(z)}"))

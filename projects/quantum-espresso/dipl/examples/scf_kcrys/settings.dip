@@ -8,16 +8,16 @@ control : qe_control, qe_control_tstress
 
 system : qe_system, qe_system_celldm_1
   ibrav = 2
-  celldm_1 = 10.2
+  celldm_1 = 10.2 AU_{a_0}
   nat = 2
   ntyp = 1
-  ecutwfc = 12.0
+  ecutwfc = 12.0 AU_0.5*E_h
 
 structure : qe_structure
   position_units = "alat"
   species[]
     symbol = "Si"
-    mass = 28.086
+    mass = 28.086 u
     pseudo_file = "Si.pz-vbc.UPF"
   atoms[]
     species = "Si"

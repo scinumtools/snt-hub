@@ -1,8 +1,8 @@
 # Optional ELECTRONS controls observed in the pinned PWscf regression set.
 $schema qe_electrons_diago_thr_init
-  diago_thr_init float
-    !condition ({.} > 0)
-    ?descr "Initial diagonalization threshold."
+  diago_thr_init float AU_0.5*E_h
+    !condition ({.} > 0 AU_0.5*E_h)
+    ?descr "Initial diagonalization energy threshold, in QE's native Ry convention."
     ?native "diago_thr_init"
 
 $schema qe_electrons_diagonalization
@@ -11,9 +11,9 @@ $schema qe_electrons_diagonalization
     ?native "diagonalization"
 
 $schema qe_electrons_conv_thr
-  conv_thr float
-    !condition ({.} > 0)
-    ?descr "Self-consistency convergence threshold, in Ry."
+  conv_thr float AU_0.5*E_h
+    !condition ({.} > 0 AU_0.5*E_h)
+    ?descr "Self-consistency convergence energy threshold, in QE's native Ry convention."
     ?native "conv_thr"
 
 $schema qe_electrons_diago_david_ndim

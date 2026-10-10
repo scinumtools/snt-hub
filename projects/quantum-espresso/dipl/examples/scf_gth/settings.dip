@@ -11,25 +11,25 @@ system : qe_system, qe_system_vdw_corr
   ibrav = 0
   nat = 28
   ntyp = 3
-  ecutwfc = 40.0
+  ecutwfc = 40.0 AU_0.5*E_h
   vdw_corr = "dft-d2"
 
 electrons : qe_electrons_conv_thr
-  conv_thr = 1e-08
+  conv_thr = 1e-08 AU_0.5*E_h
 
 structure : qe_structure, qe_structure_cell
   position_units = "angstrom"
   species[]
     symbol = "C"
-    mass = 12.011
+    mass = 12.011 u
     pseudo_file = "C-q4.gth"
   species[]
     symbol = "O"
-    mass = 15.999
+    mass = 15.999 u
     pseudo_file = "O-q6.gth"
   species[]
     symbol = "H"
-    mass = 1.008
+    mass = 1.008 u
     pseudo_file = "H-q1.gth"
   atoms[]
     species = "H"
