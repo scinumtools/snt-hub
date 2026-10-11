@@ -184,10 +184,16 @@ def render_pw(env: Any) -> str:
 
 class PwAdapter(Adapter):
     def describe_outputs(self, env: Any, outputs: Any) -> None:
+        tagged = {node.name: node for node in env.select("?", tags_all=["qe:param"])}
+        mapped: set[str] = set()
+
         def add(path: str, target: str, key: str) -> None:
-            if optional_value(env, path) is not None:
-                outputs.add_node(env, f"{target}:{key}", target, key, path,
-                                 rule="PWscf input field", origin="adapter:qe")
+            node = tagged.get(path)
+            if node is None:
+                return
+            outputs.add_node(env, f"{target}:{key}", target, key, path,
+                             rule="PWscf input field", origin="adapter:qe")
+            mapped.add(path)
 
         for section, fields in NAMELIST_FIELDS.items():
             for field in fields:
@@ -211,6 +217,10 @@ class PwAdapter(Adapter):
                         f"{collection}[{index}].{field}")
         for field in ("grid_x", "grid_y", "grid_z", "shift_x", "shift_y", "shift_z"):
             add(f"sampling.{field}", "card:K_POINTS", field)
+
+        unmapped = sorted(set(tagged) - mapped)
+        if unmapped:
+            raise GenerationError(f"Tagged QE parameters have no output mapping: {unmapped}")
 
     def plan_resolved(self, env: Any, outputs: Any, context: Any) -> None:
         context.add_text("pw.in", render_pw(PlannedValues(outputs)))

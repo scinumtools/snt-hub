@@ -5,56 +5,67 @@ $schema qe_system
 
   ibrav int
     ?descr "Bravais lattice index. The adapter renders the 0, 1, and 2 values present in the pinned inputs."
+    !tags ["qe:param"]
     ?native "ibrav"
 
   nat int
     !condition ({.} > 0)
     ?descr "Number of atom records in ATOMIC_POSITIONS."
+    !tags ["qe:param"]
     ?native "nat"
 
   ntyp int
     !condition ({.} > 0)
     ?descr "Number of species records in ATOMIC_SPECIES."
+    !tags ["qe:param"]
     ?native "ntyp"
 
   ecutwfc float AU_0.5*E_h
     !condition ({.} > 0 AU_0.5*E_h)
     ?descr "Wavefunction kinetic-energy cutoff. QE expresses this energy in Ry; the DIPL unit is half a Hartree (1 Ry)."
+    !tags ["qe:param"]
     ?native "ecutwfc"
 
 $schema qe_system_celldm_1
   celldm_1 float AU_{a_0}
     !condition ({.} > 0 AU_{a_0})
     ?descr "Lattice parameter celldm(1), in Bohr radii."
+    !tags ["qe:param"]
     ?native "celldm(1)"
 
 $schema qe_system_nbnd
   nbnd int
     !condition ({.} > 0)
     ?descr "Number of electronic bands."
+    !tags ["qe:param"]
     ?native "nbnd"
 
 $schema qe_system_use_all_frac
   use_all_frac bool
     ?descr "Use all fractional translations in symmetry operations."
+    !tags ["qe:param"]
     ?native "use_all_frac"
 
 $schema qe_system_input_dft
   input_dft str
     ?descr "Exchange-correlation functional selection."
+    !tags ["qe:param"]
     ?native "input_dft"
 
 $schema qe_system_vdw_corr
   vdw_corr str
     ?descr "Dispersion correction."
+    !tags ["qe:param"]
     ?native "vdw_corr"
 
 $schema qe_system_force_symmorphic
   force_symmorphic bool
     ?descr "Restrict symmetry to symmorphic operations."
+    !tags ["qe:param"]
     ?native "force_symmorphic"
 
 $schema qe_system_occupations
   occupations str
     ?descr "Occupation mode; from_input requires the OCCUPATIONS card."
+    !tags ["qe:param"]
     ?native "occupations"

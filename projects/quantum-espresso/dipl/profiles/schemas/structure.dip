@@ -4,13 +4,16 @@ $schema qe_species
   ?url "https://www.quantum-espresso.org/Doc/INPUT_PW.html"
 
   symbol str
+    !tags ["qe:param"]
     ?descr "Species label used by atom records."
 
   mass float u
+    !tags ["qe:param"]
     !condition ({.} > 0 u)
     ?descr "Atomic mass in atomic mass units."
 
   pseudo_file str
+    !tags ["qe:param"]
     ?descr "Pseudopotential filename relative to CONTROL.pseudo_dir."
 
 $schema qe_atom
@@ -18,15 +21,19 @@ $schema qe_atom
   ?url "https://www.quantum-espresso.org/Doc/INPUT_PW.html"
 
   species str
+    !tags ["qe:param"]
     ?descr "Label of a declared atomic species."
 
   x float
+    !tags ["qe:param"]
     ?descr "First coordinate in the selected position units."
 
   y float
+    !tags ["qe:param"]
     ?descr "Second coordinate in the selected position units."
 
   z float
+    !tags ["qe:param"]
     ?descr "Third coordinate in the selected position units."
 
 $schema qe_structure
@@ -34,6 +41,7 @@ $schema qe_structure
   ?url "https://www.quantum-espresso.org/Doc/INPUT_PW.html"
 
   position_units str
+    !tags ["qe:param"]
     !options ["alat", "bohr", "angstrom", "crystal"]
     ?descr "Coordinate mode for ATOMIC_POSITIONS. The adapter renders the modes present in the pinned inputs."
 
@@ -44,14 +52,18 @@ $schema qe_cell_vector
   ?descr "One cell vector in the selected cell units."
 
   x float
+    !tags ["qe:param"]
     ?descr "First Cartesian component of this CELL_PARAMETERS vector in the selected cell units."
   y float
+    !tags ["qe:param"]
     ?descr "Second Cartesian component of this CELL_PARAMETERS vector in the selected cell units."
   z float
+    !tags ["qe:param"]
     ?descr "Third Cartesian component of this CELL_PARAMETERS vector in the selected cell units."
 
 $schema qe_structure_cell
   cell_units str
+    !tags ["qe:param"]
     !options ["bohr", "angstrom", "alat"]
     ?descr "Unit mode for CELL_PARAMETERS."
 

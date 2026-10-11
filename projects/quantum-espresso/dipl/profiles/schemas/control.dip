@@ -6,27 +6,33 @@ $schema qe_control
   calculation str
     !options ["scf", "nscf", "bands", "relax", "vc-relax"]
     ?descr "Type of PWscf calculation. The adapter renders the scf, nscf, and bands modes present in the pinned inputs."
+    !tags ["qe:param"]
     ?native "calculation"
 
   pseudo_dir str
     ?descr "Directory containing files named by ATOMIC_SPECIES."
+    !tags ["qe:param"]
     ?native "pseudo_dir"
 
   outdir str
     ?descr "Directory for QE temporary data."
+    !tags ["qe:param"]
     ?native "outdir"
 
 $schema qe_control_tstress
   tstress bool
     ?descr "Calculate the stress tensor."
+    !tags ["qe:param"]
     ?native "tstress"
 
 $schema qe_control_tprnfor
   tprnfor bool
     ?descr "Calculate and print atomic forces."
+    !tags ["qe:param"]
     ?native "tprnfor"
 
 $schema qe_control_disk_io
   disk_io str
     ?descr "Temporary-data I/O policy."
+    !tags ["qe:param"]
     ?native "disk_io"

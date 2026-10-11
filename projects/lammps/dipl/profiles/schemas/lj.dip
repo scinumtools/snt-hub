@@ -5,36 +5,46 @@ $schema lj_geometry
   dimension int = 3
     !options [2, 3]
     ?descr "Spatial dimension; the melt uses the 3D default and the minimization example uses 2D."
+    !tags ["lammps:param"]
     ?native "dimension"
   lattice_style str
     !options ["fcc", "sq2"]
     ?descr "Lattice geometry used to create the initial atoms."
+    !tags ["lammps:param"]
     ?native "lattice"
   lattice_density float
     !condition ({.} > 0)
     ?descr "Reduced number density passed to the lattice command."
+    !tags ["lammps:param"]
     ?native "lattice"
   xlo float = 0
     ?descr "Lower x coordinate of the simulation box in lattice units."
+    !tags ["lammps:param"]
     ?native "region box"
   xhi float
     ?descr "Upper x coordinate of the simulation box in lattice units."
+    !tags ["lammps:param"]
     ?native "region box"
   ylo float = 0
     ?descr "Lower y coordinate of the simulation box in lattice units."
+    !tags ["lammps:param"]
     ?native "region box"
   yhi float
     ?descr "Upper y coordinate of the simulation box in lattice units."
+    !tags ["lammps:param"]
     ?native "region box"
   zlo float
     ?descr "Lower z coordinate; 2D LAMMPS still needs a finite z extent."
+    !tags ["lammps:param"]
     ?native "region box"
   zhi float
     ?descr "Upper z coordinate; 2D LAMMPS still needs a finite z extent."
+    !tags ["lammps:param"]
     ?native "region box"
   atom_mass float = 1
     !condition ({.} > 0)
     ?descr "Mass of the sole atom type in reduced LJ units."
+    !tags ["lammps:param"]
     ?native "mass"
 
 $schema lj_interactions
@@ -43,32 +53,40 @@ $schema lj_interactions
   epsilon float = 1
     !condition ({.} > 0)
     ?descr "LJ energy scale epsilon in reduced units."
+    !tags ["lammps:param"]
     ?native "pair_coeff"
   sigma float = 1
     !condition ({.} > 0)
     ?descr "LJ length scale sigma in reduced units."
+    !tags ["lammps:param"]
     ?native "pair_coeff"
   cutoff float = 2.5
     !condition ({.} > 0)
     ?descr "Distance cutoff for the LJ pair style and pair coefficient."
+    !tags ["lammps:param"]
     ?native "pair_style lj/cut"
   shift_potential bool = false
     ?descr "Shift the pair potential to zero at the cutoff."
+    !tags ["lammps:param"]
     ?native "pair_modify shift"
   neighbor_skin float = 0.3
     !condition ({.} > 0)
     ?descr "Extra neighbor-list skin distance in LJ length units."
+    !tags ["lammps:param"]
     ?native "neighbor"
   neighbor_every int
     !condition ({.} > 0)
     ?descr "Neighbor-list rebuild check interval in timesteps."
+    !tags ["lammps:param"]
     ?native "neigh_modify every"
   neighbor_delay int = 0
     !condition ({.} >= 0)
     ?descr "Minimum delay before a neighbor-list rebuild."
+    !tags ["lammps:param"]
     ?native "neigh_modify delay"
   neighbor_check bool
     ?descr "Whether to check atom motion before rebuilding the neighbor list."
+    !tags ["lammps:param"]
     ?native "neigh_modify check"
 
 $schema lj_dynamics
@@ -77,21 +95,26 @@ $schema lj_dynamics
   initial_temperature float
     !condition ({.} >= 0)
     ?descr "Initial temperature used to draw atom velocities in LJ units."
+    !tags ["lammps:param"]
     ?native "velocity create"
   velocity_seed int
     !condition ({.} > 0)
     ?descr "Random seed for reproducible initial velocities."
+    !tags ["lammps:param"]
     ?native "velocity create"
   enforce_2d bool = false
     ?descr "Constrain force and velocity components outside the 2D plane."
+    !tags ["lammps:param"]
     ?native "fix enforce2d"
   thermo_interval int
     !condition ({.} > 0)
     ?descr "Thermodynamic output interval during the dynamics run."
+    !tags ["lammps:param"]
     ?native "thermo"
   run_steps int
     !condition ({.} >= 0)
     ?descr "Number of integration timesteps before any minimization phase."
+    !tags ["lammps:param"]
     ?native "run"
 
 $schema lj_minimization
@@ -100,20 +123,25 @@ $schema lj_minimization
   thermo_interval_after_run int
     !condition ({.} > 0)
     ?descr "Thermodynamic output interval during minimization."
+    !tags ["lammps:param"]
     ?native "thermo"
   energy_tolerance float
     !condition ({.} >= 0)
     ?descr "Energy convergence tolerance for minimization."
+    !tags ["lammps:param"]
     ?native "minimize"
   force_tolerance float
     !condition ({.} >= 0)
     ?descr "Force convergence tolerance for minimization."
+    !tags ["lammps:param"]
     ?native "minimize"
   max_iterations int
     !condition ({.} > 0)
     ?descr "Maximum optimizer iterations."
+    !tags ["lammps:param"]
     ?native "minimize"
   max_evaluations int
     !condition ({.} > 0)
     ?descr "Maximum force/energy evaluations."
+    !tags ["lammps:param"]
     ?native "minimize"

@@ -6,18 +6,22 @@ $schema wrf_time_control
   run_days int day
     !condition ({.} >= 0 day)
     ?descr "Whole days to integrate after initialization."
+    !tags ["wrf:param"]
     ?native "time_control.run_days"
   run_hours int h
     !condition ({.} >= 0 h)
     ?descr "Additional whole hours of model integration."
+    !tags ["wrf:param"]
     ?native "time_control.run_hours"
   run_minutes int min
     !condition ({.} >= 0 min)
     ?descr "Additional minutes of model integration."
+    !tags ["wrf:param"]
     ?native "time_control.run_minutes"
   history_interval int min
     !condition ({.} > 0 min)
     ?descr "Minutes between history output records."
+    !tags ["wrf:param"]
     ?native "time_control.history_interval"
 
 $schema wrf_domains
@@ -26,30 +30,37 @@ $schema wrf_domains
   time_step int s
     !condition ({.} > 0 s)
     ?descr "Model integration timestep in seconds."
+    !tags ["wrf:param"]
     ?native "domains.time_step"
   e_we int
     !condition ({.} > 1)
     ?descr "Last west-east grid index, including boundary points."
+    !tags ["wrf:param"]
     ?native "domains.e_we"
   e_sn int
     !condition ({.} > 1)
     ?descr "Last south-north grid index; three points denote a 2D x-oriented case."
+    !tags ["wrf:param"]
     ?native "domains.e_sn"
   e_vert int
     !condition ({.} > 1)
     ?descr "Last vertical grid index."
+    !tags ["wrf:param"]
     ?native "domains.e_vert"
   dx float m
     !condition ({.} > 0 m)
     ?descr "West-east horizontal grid spacing in metres."
+    !tags ["wrf:param"]
     ?native "domains.dx"
   dy float m
     !condition ({.} > 0 m)
     ?descr "South-north horizontal grid spacing in metres."
+    !tags ["wrf:param"]
     ?native "domains.dy"
   ztop float m
     !condition ({.} > 0 m)
     ?descr "Height of the model top in metres."
+    !tags ["wrf:param"]
     ?native "domains.ztop"
 
 $schema wrf_dynamics
@@ -58,38 +69,47 @@ $schema wrf_dynamics
   hybrid_opt int
     !options [0, 2]
     ?descr "Vertical-coordinate option in these pinned examples."
+    !tags ["wrf:param"]
     ?native "dynamics.hybrid_opt"
   damp_opt int
     !options [0, 2, 3]
     ?descr "Upper-level damping scheme selected by the example."
+    !tags ["wrf:param"]
     ?native "dynamics.damp_opt"
   zdamp float m
     !condition ({.} > 0 m)
     ?descr "Height in metres at which the upper damping layer begins."
+    !tags ["wrf:param"]
     ?native "dynamics.zdamp"
   dampcoef float 1/s
     !condition ({.} >= 0 1/s)
     ?descr "Upper-level damping rate."
+    !tags ["wrf:param"]
     ?native "dynamics.dampcoef"
   khdif float m2/s
     !condition ({.} >= 0 m2/s)
     ?descr "Horizontal diffusion coefficient."
+    !tags ["wrf:param"]
     ?native "dynamics.khdif"
   kvdif float m2/s
     !condition ({.} >= 0 m2/s)
     ?descr "Vertical diffusion coefficient."
+    !tags ["wrf:param"]
     ?native "dynamics.kvdif"
 
 $schema wrf_boundary
   ?descr "West-east boundary choices for the two-dimensional idealized domain."
   periodic_x bool
     ?descr "Connect the west and east edges periodically."
+    !tags ["wrf:param"]
     ?native "bdy_control.periodic_x"
   open_xs bool
     ?descr "Use an open boundary on the west edge."
+    !tags ["wrf:param"]
     ?native "bdy_control.open_xs"
   open_xe bool
     ?descr "Use an open boundary on the east edge."
+    !tags ["wrf:param"]
     ?native "bdy_control.open_xe"
 
 $schema wrf_ideal
@@ -97,4 +117,5 @@ $schema wrf_ideal
   ideal_case int
     !options [1, 2, 3, 4, 5, 6, 7]
     ?descr "WRF ideal.exe case identifier for the pinned example and its input profile."
+    !tags ["wrf:param"]
     ?native "ideal.ideal_case"

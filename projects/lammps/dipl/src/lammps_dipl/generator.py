@@ -104,7 +104,9 @@ class LammpsAdapter(Adapter):
             "interactions.shift_potential": lambda: bool(value(env, "interactions.shift_potential")),
             "dynamics.enforce_2d": lambda: bool(value(env, "dynamics.enforce_2d")),
         }
-        for node in env.select("?"):
+        for node in env.select("?", tags_all=["lammps:param"]):
+            if not node.metadata.native:
+                raise GenerationError(f"Tagged parameter `{node.name}` has no ?native mapping")
             for native in node.metadata.native:
                 target = f"command:{native}"
                 active = optional_commands[node.name]() if node.name in optional_commands else True

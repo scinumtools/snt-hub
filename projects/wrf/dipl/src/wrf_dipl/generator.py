@@ -26,13 +26,8 @@ UPSTREAM_CASES = {
 }
 X_2D_CASES = {"hill_2d", "gravity_current_2d", "sea_breeze_2d", "squall_line_x"}
 Y_2D_CASES = {"squall_line_y"}
-FIELDS = {
-    "time_control": ("run_days", "run_hours", "run_minutes", "history_interval"),
-    "domains": ("time_step", "e_we", "e_sn", "e_vert", "dx", "dy", "ztop"),
-    "dynamics": ("hybrid_opt", "damp_opt", "zdamp", "dampcoef", "khdif", "kvdif"),
-    "bdy_control": ("periodic_x", "open_xs", "open_xe"),
-    "ideal": ("ideal_case",),
-}
+PARAMETER_TAG = "wrf:param"
+NATIVE_SECTIONS = {"time_control", "domains", "dynamics", "bdy_control", "ideal"}
 SECTION = re.compile(r"^\s*&([a-z_]+)\s*$", re.I)
 ASSIGNMENT = re.compile(r"^(\s*)([a-z_]+)(\s*=\s*)([^!,\n]+)(,?)(.*)$", re.I)
 
@@ -72,7 +67,35 @@ def _format_value(value: Any) -> str:
     raise GenerationError(f"Unsupported WRF namelist value: {value!r}")
 
 
-def render_namelist(env: Any, original: str, setup: str) -> str:
+def _native_fields(env: Any, setup: str) -> dict[str, tuple[str, ...]]:
+    """Discover WRF namelist fields from tagged DIPL nodes and their native paths."""
+    fields: dict[str, list[str]] = {}
+    seen: set[str] = set()
+    for node in env.select("?", tags_all=[PARAMETER_TAG]):
+        native = list(node.metadata.native)
+        if len(native) != 1:
+            raise GenerationError(f"Tagged parameter `{node.name}` needs one ?native path")
+        section, separator, key = native[0].partition(".")
+        if not separator or section not in NATIVE_SECTIONS or not key:
+            raise GenerationError(f"Unsupported WRF native path `{native[0]}` on `{node.name}`")
+        if node.name != native[0]:
+            raise GenerationError(f"WRF DIPL path `{node.name}` must match ?native `{native[0]}`")
+        if native[0] in seen:
+            raise GenerationError(f"Repeated WRF native path `{native[0]}`")
+        seen.add(native[0])
+        fields.setdefault(section, []).append(key)
+
+    required = {"time_control", "domains", "dynamics", "bdy_control"}
+    if UPSTREAM_CASES[setup][2] is not None:
+        required.add("ideal")
+    missing = sorted(required - fields.keys())
+    if missing:
+        raise GenerationError(f"WRF DIPL contract is missing tagged sections: {missing}")
+    return {section: tuple(keys) for section, keys in fields.items()}
+
+
+def render_namelist(env: Any, original: str, setup: str,
+                    fields: dict[str, tuple[str, ...]] | None = None) -> str:
     """Preserve all pinned entries; replace only modeled values that changed."""
     if setup not in UPSTREAM_CASES:
         raise GenerationError(f"Unknown WRF setup: {setup}")
@@ -96,8 +119,8 @@ def render_namelist(env: Any, original: str, setup: str) -> str:
     if ideal_case is not None and _value(env, "ideal.ideal_case") != ideal_case:
         raise GenerationError("The ideal case must match the pinned WRF initializer and sounding")
 
-    fields = {section: keys for section, keys in FIELDS.items()
-              if section != "ideal" or ideal_case is not None}
+    if fields is None:
+        fields = _native_fields(env, setup)
 
     section = None
     seen: set[tuple[str, str]] = set()
@@ -134,9 +157,8 @@ class WrfAdapter(Adapter):
         self.assets = UPSTREAM_CASES[setup][1]
 
     def describe_outputs(self, env: Any, outputs: Any) -> None:
-        for section, keys in FIELDS.items():
-            if section == "ideal" and UPSTREAM_CASES[self.setup][2] is None:
-                continue
+        fields = _native_fields(env, self.setup)
+        for section, keys in fields.items():
             for key in keys:
                 path = f"{section}.{key}"
                 outputs.add_node(env, path, f"namelist:{section}", key, path,
@@ -146,7 +168,9 @@ class WrfAdapter(Adapter):
         namelist = self.case_dir / "namelist.input"
         if not namelist.is_file() or any(not (self.case_dir / asset).is_file() for asset in self.assets):
             raise GenerationError(f"Pinned WRF example files are missing in {self.case_dir}")
-        context.add_text("namelist.input", render_namelist(PlannedValues(outputs), namelist.read_text(), self.setup))
+        fields = _native_fields(env, self.setup)
+        context.add_text("namelist.input", render_namelist(
+            PlannedValues(outputs), namelist.read_text(), self.setup, fields))
         for asset in self.assets:
             context.add_binary(asset, (self.case_dir / asset).read_bytes())
 
