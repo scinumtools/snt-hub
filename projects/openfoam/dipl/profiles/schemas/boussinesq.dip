@@ -1,0 +1,22 @@
+$schema openfoam_boussinesq_properties
+  thermal_expansion float 1/K
+    !tags ["openfoam:param"]
+    ?descr "Thermal expansion coefficient in the Boussinesq buoyancy model."
+    ?native "beta"
+
+  reference_temperature float K
+    !tags ["openfoam:param"]
+    ?descr "Reference temperature used by the Boussinesq buoyancy model."
+    ?native "TRef"
+
+  prandtl float
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Molecular Prandtl number used to relate momentum and heat diffusion."
+    ?native "Pr"
+
+  turbulent_prandtl float
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Turbulent Prandtl number used for turbulent heat transport."
+    ?native "Prt"

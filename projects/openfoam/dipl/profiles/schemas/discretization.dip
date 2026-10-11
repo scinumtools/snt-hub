@@ -1,0 +1,28 @@
+$schema openfoam_discretization
+  ?descr "Default finite-volume discretization choices shared by the selected tutorials."
+  ?url "https://www.openfoam.com/documentation/user-guide/ schemes"
+
+  time_derivative str
+    !tags ["openfoam:param"]
+    ?descr "Default time-derivative scheme from system/fvSchemes."
+    ?native "ddtSchemes.default"
+
+  gradient str
+    !tags ["openfoam:param"]
+    ?descr "Default gradient reconstruction scheme from system/fvSchemes."
+    ?native "gradSchemes.default"
+
+  laplacian str
+    !tags ["openfoam:param"]
+    ?descr "Default Laplacian scheme, including its surface-normal gradient treatment."
+    ?native "laplacianSchemes.default"
+
+  interpolation str
+    !tags ["openfoam:param"]
+    ?descr "Default interpolation scheme from cell centers to faces."
+    ?native "interpolationSchemes.default"
+
+  surface_normal_gradient str
+    !tags ["openfoam:param"]
+    ?descr "Default surface-normal gradient scheme."
+    ?native "snGradSchemes.default"

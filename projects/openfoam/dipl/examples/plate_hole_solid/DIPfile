@@ -1,0 +1,23 @@
+code[]
+  file = "../../profiles/schemas/control.dip"
+
+code[]
+  file = "../../profiles/schemas/output.dip"
+
+code[]
+  file = "../../profiles/schemas/discretization.dip"
+
+code[]
+  file = "../../profiles/schemas/divergence.dip"
+
+code[]
+  file = "../../profiles/schemas/solid.dip"
+
+code[]
+  file = "../../profiles/schemas/solver_controls.dip"
+
+code[]
+  file = "../../profiles/schemas/build.dip"
+
+code[]
+  file = "settings.dip"

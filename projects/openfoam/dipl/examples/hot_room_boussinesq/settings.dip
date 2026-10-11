@@ -1,0 +1,69 @@
+# Build profile settings transcribed from the pinned OpenFOAM v2606 etc/bashrc defaults.
+build : openfoam_build_configuration
+  compiler_type = "system"
+  compiler = "Gcc"
+  precision = "DP"
+  label_bits = 32
+  compile_mode = "Opt"
+  mpi = "SYSTEMOPENMPI"
+  openmp = false
+  target_bits = 64
+
+# Values transcribed from the pinned v2606 tutorial dictionaries.
+control : openfoam_control
+  start_from = "startTime"
+  start_time = 0
+  stop_at = "endTime"
+  end_time = 2000
+  delta_t = 2
+  write_control = "timeStep"
+  write_interval = 200
+
+output : openfoam_output
+  purge_write = 0
+  write_format = "ascii"
+  write_precision = 6
+  write_compression = "off"
+  time_format = "general"
+  time_precision = 6
+  run_time_modifiable = true
+
+adaptive : openfoam_adaptive_time
+  adjust_time_step = false
+  max_co = 0.5
+
+discretization : openfoam_discretization
+  time_derivative = "Euler"
+  gradient = "Gauss linear"
+  laplacian = "Gauss linear uncorrected"
+  interpolation = "linear"
+  surface_normal_gradient = "uncorrected"
+
+divergence : openfoam_divergence_default
+  default = "none"
+
+fluid : openfoam_kinematic_transport
+  kinematic_viscosity = 1e-05 m2/s
+
+thermal : openfoam_boussinesq_properties
+  thermal_expansion = 3e-03 1/K
+  reference_temperature = 300 K
+  prandtl = 0.7
+  turbulent_prandtl = 0.85
+
+thermal_diffusivity float = ({?fluid.kinematic_viscosity} / {?thermal.prandtl}) m2/s
+  !tags ["openfoam:param"]
+  ?descr "Molecular thermal diffusivity implied by the Boussinesq kinematic viscosity and Prandtl number."
+
+pimple : openfoam_pimple_controls
+  outer_correctors = 1
+  correctors = 2
+  non_orthogonal_correctors = 0
+
+pressure_solver : openfoam_linear_solver_controls
+  tolerance = 1e-8
+  relative_tolerance = 0.01
+
+flow_solver : openfoam_linear_solver_controls
+  tolerance = 1e-6
+  relative_tolerance = 0.1

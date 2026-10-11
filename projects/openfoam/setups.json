@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "setups": {
+    "cavity_ico": {
+      "capability": "native-inputs-only",
+      "source_example": "tutorials/incompressible/icoFoam/cavity/cavity",
+      "description": "Transient incompressible lid-driven cavity solved with icoFoam."
+    },
+    "pitz_daily_simple": {
+      "capability": "native-inputs-only",
+      "source_example": "tutorials/incompressible/simpleFoam/pitzDaily",
+      "description": "Steady turbulent incompressible backward-facing step solved with simpleFoam."
+    },
+    "dam_break_interfoam": {
+      "capability": "native-inputs-only",
+      "source_example": "tutorials/multiphase/interFoam/laminar/damBreak/damBreak",
+      "description": "Laminar two-phase dam break solved with interFoam."
+    },
+    "shock_tube_rhocentral": {
+      "capability": "native-inputs-only",
+      "source_example": "tutorials/compressible/rhoCentralFoam/shockTube",
+      "description": "One-dimensional compressible shock tube solved with rhoCentralFoam."
+    },
+    "plate_hole_solid": {
+      "capability": "native-inputs-only",
+      "source_example": "tutorials/stressAnalysis/solidDisplacementFoam/plateHole",
+      "description": "Elastic plate with a hole solved with solidDisplacementFoam."
+    },
+    "rotating_square_dynamic": {
+      "capability": "native-inputs-only",
+      "source_example": "tutorials/incompressible/overPimpleDyMFoam/rotatingSquare",
+      "description": "Dynamic-mesh rotating square solved with overPimpleDyMFoam."
+    },
+    "hot_room_boussinesq": {
+      "capability": "native-inputs-only",
+      "source_example": "tutorials/heatTransfer/buoyantBoussinesqPimpleFoam/hotRoom",
+      "description": "Buoyant heat-transfer room case solved with buoyantBoussinesqPimpleFoam."
+    },
+    "counterflow_flame": {
+      "capability": "native-inputs-only",
+      "source_example": "tutorials/combustion/reactingFoam/laminar/counterFlowFlame2D",
+      "description": "Laminar counterflow flame solved with reactingFoam."
+    },
+    "hartmann_mhd": {
+      "capability": "native-inputs-only",
+      "source_example": "tutorials/electromagnetics/mhdFoam/hartmann",
+      "description": "Magnetohydrodynamic Hartmann flow solved with mhdFoam."
+    },
+    "twisting_column": {
+      "capability": "native-inputs-only",
+      "source_example": "tutorials/mesh/moveDynamicMesh/twistingColumn",
+      "description": "Moving and deforming mesh column prepared with moveDynamicMesh."
+    }
+  }
+}

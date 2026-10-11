@@ -1,0 +1,13 @@
+$schema openfoam_adaptive_time
+  ?descr "Adaptive time-step controls used by tutorials that declare them."
+
+  adjust_time_step bool
+    !tags ["openfoam:param"]
+    ?descr "Allow the solver to adjust deltaT to satisfy its Courant-number controls."
+    ?native "adjustTimeStep"
+
+  max_co float
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Maximum Courant number used by the solver's adaptive time-step logic."
+    ?native "maxCo"

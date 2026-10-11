@@ -1,0 +1,8 @@
+$schema openfoam_adaptive_time_limits
+  ?descr "Upper bound on the adaptive time-step size."
+
+  max_delta_t float
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Largest time-step the solver may select when adjusting deltaT."
+    ?native "maxDeltaT"

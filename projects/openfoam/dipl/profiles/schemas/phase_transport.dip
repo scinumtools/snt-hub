@@ -1,0 +1,26 @@
+$schema openfoam_phase_transport
+  ?descr "Transport properties for one phase in a multiphase case."
+
+  transport_model str
+    !tags ["openfoam:param"]
+    ?descr "Constitutive transport model used for this phase."
+    ?native "transportModel"
+
+  kinematic_viscosity float m2/s
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 m2/s)
+    ?descr "Kinematic viscosity of this phase."
+    ?native "nu"
+
+  density float kg/m3
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 kg/m3)
+    ?descr "Mass density of this phase."
+    ?native "rho"
+
+$schema openfoam_surface_tension
+  surface_tension float N/m
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 N/m)
+    ?descr "Surface tension between the two modeled phases."
+    ?native "sigma"

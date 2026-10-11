@@ -21,7 +21,7 @@ const { project, report } = Astro.props as { project: any; report: BriefDocument
 const { setup } = Astro.params;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const parameters = parametersFromBriefpp(report);
-const visibleCount = parameters.filter((parameter) => !parameter.internal).length;
+const visibleCount = parameters.length;
 const groups = [...new Set(parameters.map((parameter) => parameter.group))].map((name) => ({
   name,
   label: name.replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()),
@@ -59,19 +59,18 @@ const provenanceUrl = (item: { label: string; value: string }) =>
           <div class="reference-sidebar-head"><strong>Explore parameters</strong><span id="visible-count">{visibleCount} shown</span></div>
           <label class="reference-search-label" for="parameter-search">Search paths, values, descriptions</label>
           <input id="parameter-search" class="reference-search" type="search" placeholder="Search parameters…" autocomplete="off" />
-          <label class="reference-internal-toggle"><input id="show-internals" type="checkbox" /> Show adapter controls <small>({parameters.length - visibleCount})</small></label>
           <nav class="reference-navigation" aria-label="Parameter hierarchy" set:html={tree} />
         </aside>
         <div class="reference-content">
-          <div class="reference-explainer"><strong>What this reference shows</strong><p>Each entry gives the effective value, type, description, and relevant constraints. Open “Schema &amp; provenance” for additional metadata and links to DIPL source files at the recorded lines. Adapter controls are hidden initially because they shape native output rather than scientific settings.</p></div>
+          <div class="reference-explainer"><strong>What this reference shows</strong><p>Each entry gives the effective value, type, description, and relevant constraints. Open “Schema &amp; provenance” for additional metadata and links to DIPL source files at the recorded lines.</p></div>
           {groups.map((group) => <section class="parameter-group" data-group={group.name}>
-            <div class="parameter-group-head"><div><span>PARAMETER GROUP</span><h2>{group.label}</h2></div><small>{group.entries.filter((parameter) => !parameter.internal).length} parameters</small></div>
+            <div class="parameter-group-head"><div><span>PARAMETER GROUP</span><h2>{group.label}</h2></div><small>{group.entries.length} parameters</small></div>
             <div class="parameter-entries">
-              {group.entries.map((parameter) => <article class="parameter-entry" id={parameter.id} data-internal={String(parameter.internal)} data-search={`${parameter.path} ${parameter.value} ${parameter.description} ${parameter.metadata.map((item) => item.value).join(' ')}`.toLowerCase()} hidden={parameter.internal}>
+              {group.entries.map((parameter) => <article class="parameter-entry" id={parameter.id} data-search={`${parameter.path} ${parameter.value} ${parameter.description} ${parameter.metadata.map((item) => item.value).join(' ')}`.toLowerCase()}>
                 <div class="parameter-entry-top"><div><span class="parameter-path">{parameter.path}</span><h3>{parameter.name.replaceAll('_', ' ')}</h3></div><div class="parameter-value"><span>EFFECTIVE VALUE</span><code>{parameter.value || '—'}</code></div></div>
                 {parameter.description && <p class="parameter-description">{parameter.description}</p>}
-                {!parameter.internal && <a class="parameter-try" href={`${base}/projects/${project.id}/parameters/${setup}/override/?path=${encodeURIComponent(parameter.path)}`}>Try changing this parameter ↗</a>}
-                <div class="parameter-meta"><span>Type <strong>{parameter.type || 'Unspecified'}</strong></span>{parameter.units && <span>Units <strong>{parameter.units}</strong></span>}{parameter.shape && <span>Shape <strong>{parameter.shape}</strong></span>}{parameter.internal && <span class="parameter-internal-tag">Adapter control</span>}</div>
+                <a class="parameter-try" href={`${base}/projects/${project.id}/parameters/${setup}/override/?path=${encodeURIComponent(parameter.path)}`}>Try changing this parameter ↗</a>
+                <div class="parameter-meta"><span>Type <strong>{parameter.type || 'Unspecified'}</strong></span>{parameter.units && <span>Units <strong>{parameter.units}</strong></span>}{parameter.shape && <span>Shape <strong>{parameter.shape}</strong></span>}</div>
                 {field(parameter.metadata, 'Scientific impact') && <p class="parameter-impact"><strong>Scientific impact</strong> {field(parameter.metadata, 'Scientific impact')}</p>}
                 {field(parameter.metadata, 'Validation condition') && <p class="parameter-condition"><strong>Validation</strong> <code>{field(parameter.metadata, 'Validation condition')}</code></p>}
                 <details class="parameter-details"><summary>Schema &amp; provenance <span aria-hidden="true">⌄</span></summary><div class="parameter-details-body">
@@ -89,7 +88,6 @@ const provenanceUrl = (item: { label: string; value: string }) =>
     <SiteFooter />
     <script>
       const search = document.querySelector<HTMLInputElement>('#parameter-search');
-      const internals = document.querySelector<HTMLInputElement>('#show-internals');
       const count = document.querySelector<HTMLElement>('#visible-count');
       const cards = [...document.querySelectorAll<HTMLElement>('.parameter-entry')];
       const links = [...document.querySelectorAll<HTMLElement>('.tree-link')];
@@ -97,11 +95,9 @@ const provenanceUrl = (item: { label: string; value: string }) =>
       const groups = [...document.querySelectorAll<HTMLElement>('.parameter-group')];
       function update() {
         const query = search?.value.trim().toLowerCase() ?? '';
-        const showInternals = internals?.checked ?? false;
-        document.body.classList.toggle('show-internals', showInternals);
         let shown = 0;
         for (const card of cards) {
-          card.hidden = (card.dataset.internal === 'true' && !showInternals) || !card.dataset.search?.includes(query);
+          card.hidden = !card.dataset.search?.includes(query);
           if (!card.hidden) shown++;
         }
         const visibleIds = new Set(cards.filter((card) => !card.hidden).map((card) => card.id));
@@ -115,7 +111,6 @@ const provenanceUrl = (item: { label: string; value: string }) =>
         if (count) count.textContent = `${shown} shown`;
       }
       search?.addEventListener('input', update);
-      internals?.addEventListener('change', update);
       update();
     </script>
   </body>

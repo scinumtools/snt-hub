@@ -1,0 +1,8 @@
+$schema openfoam_kinematic_transport
+  ?descr "Newtonian fluid transport settings used by the selected tutorials."
+
+  kinematic_viscosity float m2/s
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 m2/s)
+    ?descr "Kinematic viscosity of the fluid."
+    ?native "nu"

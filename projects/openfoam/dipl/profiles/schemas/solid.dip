@@ -1,0 +1,46 @@
+$schema openfoam_elastic_properties
+  density float kg/m3
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 kg/m3)
+    ?descr "Solid mass density."
+    ?native "rho.value"
+
+  poisson_ratio float
+    !tags ["openfoam:param"]
+    ?descr "Poisson ratio of the isotropic elastic material."
+    ?native "nu.value"
+
+  young_modulus float Pa
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 Pa)
+    ?descr "Young's modulus of the isotropic elastic material."
+    ?native "E.value"
+
+  plane_stress bool
+    !tags ["openfoam:param"]
+    ?descr "Use the plane-stress constitutive formulation."
+    ?native "planeStress"
+
+$schema openfoam_solid_thermal_properties
+  specific_heat float J/(kg*K)
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 J/(kg*K))
+    ?descr "Specific heat capacity of the solid."
+    ?native "C.value"
+
+  thermal_conductivity float W/(m*K)
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 W/(m*K))
+    ?descr "Thermal conductivity of the solid."
+    ?native "k.value"
+
+  thermal_diffusivity float m2/s
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 m2/s)
+    ?descr "Thermal diffusivity of the solid."
+    ?native "alpha.value"
+
+  thermal_stress bool
+    !tags ["openfoam:param"]
+    ?descr "Include thermal stress in the solid displacement calculation."
+    ?native "thermalStress"

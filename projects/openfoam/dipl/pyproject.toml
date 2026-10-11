@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "snt-hub-openfoam"
+version = "0.1.0"
+description = "OpenFOAM.com DIPL adapter for SNT Hub"
+requires-python = ">=3.10"
+dependencies = ["scinumtools3>=0.9.3", "snt-hub-runtime>=0.1.0"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+openfoam-dipl = "openfoam_dipl.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

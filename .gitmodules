@@ -10,3 +10,6 @@
 [submodule "projects/wrf/source"]
 	path = projects/wrf/source
 	url = https://github.com/wrf-model/WRF.git
+[submodule "projects/openfoam/source"]
+	path = projects/openfoam/source
+	url = https://gitlab.com/openfoam/core/openfoam.git

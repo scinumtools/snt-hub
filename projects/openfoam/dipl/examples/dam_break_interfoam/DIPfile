@@ -1,0 +1,35 @@
+code[]
+  file = "../../profiles/schemas/control.dip"
+
+code[]
+  file = "../../profiles/schemas/output.dip"
+
+code[]
+  file = "../../profiles/schemas/discretization.dip"
+
+code[]
+  file = "../../profiles/schemas/adaptive.dip"
+
+code[]
+  file = "../../profiles/schemas/adaptive_limits.dip"
+
+code[]
+  file = "../../profiles/schemas/alpha_control.dip"
+
+code[]
+  file = "../../profiles/schemas/divergence.dip"
+
+code[]
+  file = "../../profiles/schemas/viscous.dip"
+
+code[]
+  file = "../../profiles/schemas/phase_transport.dip"
+
+code[]
+  file = "../../profiles/schemas/solver_controls.dip"
+
+code[]
+  file = "../../profiles/schemas/build.dip"
+
+code[]
+  file = "settings.dip"

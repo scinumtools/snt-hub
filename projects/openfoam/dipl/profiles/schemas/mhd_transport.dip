@@ -1,0 +1,24 @@
+$schema openfoam_mhd_transport
+  density float kg/m3
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 kg/m3)
+    ?descr "Fluid mass density used by the magnetohydrodynamic case."
+    ?native "rho"
+
+  kinematic_viscosity float m2/s
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 m2/s)
+    ?descr "Kinematic viscosity used by the magnetohydrodynamic case."
+    ?native "nu"
+
+  dynamic_viscosity float Pa*s
+    !tags ["openfoam:param"]
+    !condition ({.} >= 0 Pa*s)
+    ?descr "Dynamic viscosity used by the magnetohydrodynamic case."
+    ?native "mu"
+
+  electrical_conductivity float S/m
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 S/m)
+    ?descr "Electrical conductivity of the conducting fluid."
+    ?native "sigma"

@@ -1,0 +1,25 @@
+$schema openfoam_divergence_default
+  ?descr "Default divergence scheme used by the selected OpenFOAM tutorial."
+
+  default str
+    !tags ["openfoam:param"]
+    ?descr "Fallback discretization for divergence terms without a more specific entry."
+    ?native "divSchemes.default"
+
+$schema openfoam_interfoam_divergence
+  ?descr "Explicit phase-flow divergence schemes used by the interFoam dam-break tutorial."
+
+  density_velocity str
+    !tags ["openfoam:param"]
+    ?descr "Divergence scheme for the density-weighted momentum flux."
+    ?native "divSchemes.div(rhoPhi,U)"
+
+  phase_fraction str
+    !tags ["openfoam:param"]
+    ?descr "Divergence scheme for transport of the phase fraction."
+    ?native "divSchemes.div(phi,alpha)"
+
+  phase_compression str
+    !tags ["openfoam:param"]
+    ?descr "Divergence scheme for the phase-compression flux."
+    ?native "divSchemes.div(phirb,alpha)"

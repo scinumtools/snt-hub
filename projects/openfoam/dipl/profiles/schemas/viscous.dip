@@ -1,0 +1,7 @@
+$schema openfoam_viscous_divergence
+  ?descr "Viscous-stress divergence scheme used by selected fluid tutorials."
+
+  viscous_stress str
+    !tags ["openfoam:param"]
+    ?descr "Divergence scheme for the viscous-stress contribution."
+    ?native "divSchemes.div(((rho*nuEff)*dev2(T(grad(U)))))"

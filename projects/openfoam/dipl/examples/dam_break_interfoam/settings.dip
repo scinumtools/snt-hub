@@ -1,0 +1,90 @@
+# Build profile settings transcribed from the pinned OpenFOAM v2606 etc/bashrc defaults.
+build : openfoam_build_configuration
+  compiler_type = "system"
+  compiler = "Gcc"
+  precision = "DP"
+  label_bits = 32
+  compile_mode = "Opt"
+  mpi = "SYSTEMOPENMPI"
+  openmp = false
+  target_bits = 64
+
+# Values transcribed from the pinned v2606 tutorial dictionaries.
+control : openfoam_control
+  start_from = "startTime"
+  start_time = 0
+  stop_at = "endTime"
+  end_time = 1
+  delta_t = 0.001
+  write_control = "adjustable"
+  write_interval = 0.05
+
+output : openfoam_output
+  purge_write = 0
+  write_format = "ascii"
+  write_precision = 6
+  write_compression = "off"
+  time_format = "general"
+  time_precision = 6
+  run_time_modifiable = true
+
+adaptive : openfoam_adaptive_time
+  adjust_time_step = true
+  max_co = 1
+
+adaptive_limits : openfoam_adaptive_time_limits
+  max_delta_t = 1
+
+phase_time : openfoam_phase_time_control
+  max_alpha_co = 1
+
+discretization : openfoam_discretization
+  time_derivative = "Euler"
+  gradient = "Gauss linear"
+  laplacian = "Gauss linear corrected"
+  interpolation = "linear"
+  surface_normal_gradient = "corrected"
+
+divergence : openfoam_interfoam_divergence
+  density_velocity = "Gauss linearUpwind grad(U)"
+  phase_fraction = "Gauss vanLeer"
+  phase_compression = "Gauss linear"
+
+viscous_divergence : openfoam_viscous_divergence
+  viscous_stress = "Gauss linear"
+
+water : openfoam_phase_transport
+  transport_model = "Newtonian"
+  kinematic_viscosity = 1e-06 m2/s
+  density = 1000 kg/m3
+
+air : openfoam_phase_transport
+  transport_model = "Newtonian"
+  kinematic_viscosity = 1.48e-05 m2/s
+  density = 1 kg/m3
+
+surface : openfoam_surface_tension
+  surface_tension = 0.07 N/m
+
+pimple : openfoam_pimple_controls
+  outer_correctors = 1
+  correctors = 3
+  non_orthogonal_correctors = 0
+
+alpha_solver : openfoam_alpha_controls
+  corrections = 2
+  subcycles = 1
+  compression_coefficient = 1
+  limiter_iterations = 5
+  multi_correction = true
+  tolerance = 1e-8
+  relative_tolerance = 0
+
+pressure_solver : openfoam_linear_solver_controls
+  tolerance = 1e-07
+  relative_tolerance = 0.05
+
+velocity_solver : openfoam_linear_solver_controls
+  tolerance = 1e-06
+  relative_tolerance = 0
+

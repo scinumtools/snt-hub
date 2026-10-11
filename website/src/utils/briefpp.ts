@@ -30,7 +30,6 @@ export type Parameter = {
   metadata: Field[];
   provenance: Field[];
   notes: string[];
-  internal: boolean;
 };
 
 export const inlineText = (items: BriefInline[] = []): string => items.map((item) => item.value ?? '').join('');
@@ -96,7 +95,6 @@ export function parametersFromBriefpp(report: BriefDocument): Parameter[] {
       metadata,
       provenance: byRole('snt-source'),
       notes: (node.children ?? []).filter((child) => child.type === 'paragraph').map((child) => inlineText(child.content)).filter(Boolean),
-      internal: /(^|\.)export\./.test(path),
     };
   });
 }
@@ -122,10 +120,9 @@ export function parameterTreeHtml(parameters: Parameter[]): string {
   ];
   const render = (node: TreeNode, depth: number): string => {
     const entries = descendants(node);
-    const internalOnly = entries.every((entry) => entry.internal);
-    const ownLink = node.parameter ? `<a class="tree-link" href="#${escape(node.parameter.id)}" data-path="${escape(node.parameter.path.toLowerCase())}" data-internal="${node.parameter.internal}">${escape(node.label)}</a>` : '';
-    if (!node.children.size) return `<li${internalOnly ? ' data-internal-only="true"' : ''}>${ownLink}</li>`;
-    return `<li${internalOnly ? ' data-internal-only="true"' : ''}><details class="tree-branch"${depth === 0 ? ' open' : ''}><summary><span>${escape(node.label.replaceAll('_', ' '))}</span><small>${entries.filter((entry) => !entry.internal).length || entries.length}</small></summary>${ownLink}<ul>${[...node.children.values()].map((child) => render(child, depth + 1)).join('')}</ul></details></li>`;
+    const ownLink = node.parameter ? `<a class="tree-link" href="#${escape(node.parameter.id)}" data-path="${escape(node.parameter.path.toLowerCase())}">${escape(node.label)}</a>` : '';
+    if (!node.children.size) return `<li>${ownLink}</li>`;
+    return `<li><details class="tree-branch"${depth === 0 ? ' open' : ''}><summary><span>${escape(node.label.replaceAll('_', ' '))}</span><small>${entries.length}</small></summary>${ownLink}<ul>${[...node.children.values()].map((child) => render(child, depth + 1)).join('')}</ul></details></li>`;
   };
   return `<ul class="parameter-tree">${[...root.children.values()].map((node) => render(node, 0)).join('')}</ul>`;
 }

@@ -1,0 +1,59 @@
+# Build profile settings transcribed from the pinned OpenFOAM v2606 etc/bashrc defaults.
+build : openfoam_build_configuration
+  compiler_type = "system"
+  compiler = "Gcc"
+  precision = "DP"
+  label_bits = 32
+  compile_mode = "Opt"
+  mpi = "SYSTEMOPENMPI"
+  openmp = false
+  target_bits = 64
+
+# Values transcribed from the pinned v2606 tutorial dictionaries.
+control : openfoam_control
+  start_from = "startTime"
+  start_time = 0
+  stop_at = "endTime"
+  end_time = 0.5
+  delta_t = 1e-6
+  write_control = "adjustable"
+  write_interval = 0.05
+
+output : openfoam_output
+  purge_write = 0
+  write_format = "ascii"
+  write_precision = 6
+  write_compression = "off"
+  time_format = "general"
+  time_precision = 6
+  run_time_modifiable = true
+
+adaptive : openfoam_adaptive_time
+  adjust_time_step = true
+  max_co = 0.4
+
+discretization : openfoam_discretization
+  time_derivative = "Euler"
+  gradient = "Gauss linear"
+  laplacian = "Gauss linear orthogonal"
+  interpolation = "linear"
+  surface_normal_gradient = "orthogonal"
+
+divergence : openfoam_divergence_default
+  default = "none"
+
+viscous_divergence : openfoam_viscous_divergence
+  viscous_stress = "Gauss linear"
+
+pimple : openfoam_pimple_controls
+  outer_correctors = 1
+  correctors = 2
+  non_orthogonal_correctors = 0
+
+pressure_solver : openfoam_linear_solver_controls
+  tolerance = 1e-6
+  relative_tolerance = 0.1
+
+flow_solver : openfoam_linear_solver_controls
+  tolerance = 1e-6
+  relative_tolerance = 0.1

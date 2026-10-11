@@ -1,0 +1,117 @@
+$schema openfoam_piso_controls
+  ?descr "Pressure-implicit split controls from system/fvSolution."
+
+  correctors int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 1)
+    ?descr "Number of pressure-velocity correction passes per time step."
+    ?native "nCorrectors"
+
+  non_orthogonal_correctors int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 0)
+    ?descr "Additional pressure corrections for non-orthogonal mesh faces."
+    ?native "nNonOrthogonalCorrectors"
+
+$schema openfoam_pimple_controls
+  ?descr "PIMPLE pressure-velocity coupling controls from system/fvSolution."
+
+  outer_correctors int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 1)
+    ?descr "Number of outer PIMPLE iterations per time step."
+    ?native "nOuterCorrectors"
+
+  correctors int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 1)
+    ?descr "Number of pressure corrections within each outer PIMPLE iteration."
+    ?native "nCorrectors"
+
+  non_orthogonal_correctors int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 0)
+    ?descr "Additional pressure corrections for non-orthogonal mesh faces."
+    ?native "nNonOrthogonalCorrectors"
+
+$schema openfoam_simple_controls
+  ?descr "SIMPLE steady-state pressure-correction controls from system/fvSolution."
+
+  non_orthogonal_correctors int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 0)
+    ?descr "Additional pressure corrections for non-orthogonal mesh faces."
+    ?native "nNonOrthogonalCorrectors"
+
+$schema openfoam_corrector_count
+  correctors int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 1)
+    ?descr "Number of correction passes in this solver-specific algorithm block."
+    ?native "nCorrectors"
+
+$schema openfoam_solid_solver_controls
+  correctors int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 1)
+    ?descr "Number of correction iterations in the stress-analysis solver."
+    ?native "nCorrectors"
+
+$schema openfoam_alpha_controls
+  ?descr "Interface transport controls for the interFoam phase-fraction solver."
+
+  corrections int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 1)
+    ?descr "Number of phase-fraction correction passes per time step."
+    ?native "nAlphaCorr"
+
+  subcycles int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 1)
+    ?descr "Number of phase-fraction sub-cycles within each time step."
+    ?native "nAlphaSubCycles"
+
+  compression_coefficient float
+    !tags ["openfoam:param"]
+    !condition ({.} >= 0)
+    ?descr "Interface-compression strength used by the phase-fraction equation."
+    ?native "cAlpha"
+
+  limiter_iterations int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 1)
+    ?descr "Number of limiter iterations for the phase-fraction equation."
+    ?native "nLimiterIter"
+
+  multi_correction bool
+    !tags ["openfoam:param"]
+    ?descr "Enable the MULES correction loop for phase-fraction transport."
+    ?native "MULESCorr"
+
+  tolerance float
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Absolute residual at which the phase-fraction linear solver may stop."
+    ?native "tolerance"
+
+  relative_tolerance float
+    !tags ["openfoam:param"]
+    !condition ({.} >= 0)
+    ?descr "Relative residual reduction for the phase-fraction linear solver."
+    ?native "relTol"
+
+$schema openfoam_linear_solver_controls
+  ?descr "Linear solver stopping criteria from the solvers subdictionary in system/fvSolution."
+
+  tolerance float
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Absolute residual at which the linear solver may stop."
+    ?native "tolerance"
+
+  relative_tolerance float
+    !tags ["openfoam:param"]
+    !condition ({.} >= 0)
+    ?descr "Relative residual reduction required before the linear solver may stop."
+    ?native "relTol"

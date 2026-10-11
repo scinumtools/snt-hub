@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "openfoam",
+  "name": "OpenFOAM.com",
+  "summary": "An open-source computational fluid dynamics toolkit; this Hub bundle demonstrates ten pinned tutorial cases with reusable control, discretization, solver, and physics parameter groups.",
+  "presentation": {
+    "about": "OpenFOAM provides a broad set of solvers and utilities for computational fluid dynamics and related continuum simulations. Its cases are assembled from dictionaries, field files, and mesh descriptions.",
+    "rationale": "Ten v2606 tutorials expose reusable time/output controls, finite-volume schemes, linear solver tolerances, pressure-velocity coupling controls, and selected physical properties from fluid, multiphase, heat transfer, MHD, solid mechanics, and compressible-flow cases.",
+    "official_page": "https://www.openfoam.com/",
+    "official_label": "Explore OpenFOAM.com"
+  },
+  "scope": "DIPL overrides for selectable OpenFOAM v2606 build configuration and selected system/controlDict controls, system/fvSchemes defaults, system/fvSolution coupling and linear-solver tolerances, and selected constant/ physical properties across ten tutorial cases. Setup emits a manual build profile but does not build the solver. Unmodeled native files and entries are staged from the pinned source unchanged.",
+  "integration_mode": "External adapter",
+  "hub": {
+    "status": "adapter-ready",
+    "setup_manifest": "projects/openfoam/setups.json",
+    "runtime_package": "hub",
+    "adapter_package": "projects/openfoam/dipl",
+    "adapter_executable": "openfoam-dipl",
+    "adapter_protocol": 1,
+    "output_plan": true,
+    "fetch_command": "snt hub fetch openfoam",
+    "setup_command": "snt hub setup cavity_ico"
+  },
+  "support": "independent",
+  "validation": "settings-parity",
+  "validation_qualifier": "Eighteen adapter tests passed locally on 2026-10-11 against the pinned OpenFOAM v2606 source. Tests compare modeled controlDict, fvSchemes, fvSolution, and physical-property values, verify other case files are staged byte-for-byte, exercise runtime and build-setting overrides, verify tagged build/runtime discovery, and replay a recorded output plan; the generated build profile passes a shell syntax check, but solver builds and simulation results have not been checked.",
+  "source_url": "https://gitlab.com/openfoam/core/openfoam",
+  "source_path": "projects/openfoam/source",
+  "source_revision": "481094fdf34f11ed6d0d603ee59a858a0124236d",
+  "adapter_url": "https://github.com/scinumtools/snt-hub/tree/main/projects/openfoam/dipl",
+  "adapter_path": "projects/openfoam/dipl",
+  "adapter_origin_url": null,
+  "adapter_revision": null,
+  "verification": {
+    "date": "2026-10-11",
+    "scinumtools3": "0.9.3",
+    "tests_passed": 18
+  },
+  "evidence": [
+    {
+      "label": "Pinned OpenFOAM v2606 source and tutorials",
+      "url": "https://gitlab.com/openfoam/core/openfoam/-/tree/OpenFOAM-v2606/tutorials"
+    },
+    {
+      "label": "Control, scheme, solver, physics parity and workspace tests",
+      "url": "https://github.com/scinumtools/snt-hub/blob/main/projects/openfoam/dipl/tests/test_tutorials.py"
+    }
+  ],
+  "limitations": "This adapter exposes selectable build configuration plus selected time/output controls, default finite-volume schemes, pressure-velocity coupling and linear solver stopping controls, and physical properties from representative tutorial cases. It does not yet model all fvSolution settings, geometry and mesh controls, or initial and boundary field values. Other native entries are preserved from the pinned tutorials. Setup is native-inputs-only; the generated build profile is not compile-tested, and build, execution, generated meshes, and scientific outputs are not verified. No OpenFOAM maintainer endorsement is implied.",
+  "reviewed_on": "2026-10-11"
+}

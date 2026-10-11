@@ -1,0 +1,50 @@
+$schema openfoam_build_configuration
+  ?descr "User-selected OpenFOAM v2606 build configuration."
+  ?url "https://www.openfoam.com/documentation/code-wiki/openfoam-build-guide"
+
+  compiler_type str
+    !tags ["openfoam:config"]
+    !options ["system", "ThirdParty"]
+    ?descr "Select whether OpenFOAM uses system tools or compilers from its ThirdParty configuration."
+    ?native "WM_COMPILER_TYPE"
+
+  compiler str
+    !tags ["openfoam:config"]
+    !options ["Gcc", "Clang", "Icc", "Icx", "Amd", "Arm", "Cray", "Fujitsu", "Nvidia", "Mingw"]
+    ?descr "Select the compiler family used to build OpenFOAM. Availability depends on the host platform."
+    ?native "WM_COMPILER"
+
+  precision str
+    !tags ["openfoam:config"]
+    !options ["DP", "SP", "SPDP"]
+    ?descr "Select double, single, or mixed scalar precision for the compiled OpenFOAM libraries and applications."
+    ?native "WM_PRECISION_OPTION"
+
+  label_bits int
+    !tags ["openfoam:config"]
+    !options [32, 64]
+    ?descr "Select the bit width used for OpenFOAM integer labels, such as cell and face indices."
+    ?native "WM_LABEL_SIZE"
+
+  compile_mode str
+    !tags ["openfoam:config"]
+    !options ["Opt", "Dbg", "Debug", "Prof"]
+    ?descr "Select optimized, debug, or profiling compiler rules."
+    ?native "WM_COMPILE_OPTION"
+
+  mpi str
+    !tags ["openfoam:config"]
+    !options ["SYSTEMOPENMPI", "OPENMPI", "SYSTEMMPI", "MPI", "MPICH", "INTELMPI", "USERMPI"]
+    ?descr "Select the MPI implementation used when compiling parallel OpenFOAM applications."
+    ?native "WM_MPLIB"
+
+  openmp bool
+    !tags ["openfoam:config"]
+    ?descr "Enable or disable OpenMP compiler and linker flags."
+    ?native "WM_COMPILE_CONTROL"
+
+  target_bits int
+    !tags ["openfoam:config"]
+    !options [32, 64]
+    ?descr "Select the target architecture width where supported by the host compiler and operating system."
+    ?native "WM_ARCH_OPTION"

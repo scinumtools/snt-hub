@@ -1,0 +1,31 @@
+$unit kg_per_kmol = 0.001*kg/mol
+
+$schema openfoam_ideal_gas_properties
+  molecular_weight float kg_per_kmol
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 kg_per_kmol)
+    ?descr "Molar mass of the ideal-gas mixture. OpenFOAM specifies this in kg/kmol."
+    ?native "mixture.specie.molWeight"
+
+  specific_heat float J/(kg*K)
+    !tags ["openfoam:param"]
+    !condition ({.} > 0 J/(kg*K))
+    ?descr "Constant-pressure specific heat capacity."
+    ?native "mixture.thermodynamics.Cp"
+
+  formation_enthalpy float J/kg
+    !tags ["openfoam:param"]
+    ?descr "Formation enthalpy used by the thermodynamic model."
+    ?native "mixture.thermodynamics.Hf"
+
+  dynamic_viscosity float Pa*s
+    !tags ["openfoam:param"]
+    !condition ({.} >= 0 Pa*s)
+    ?descr "Dynamic viscosity in the constant-transport gas model."
+    ?native "mixture.transport.mu"
+
+  prandtl float
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Prandtl number in the constant-transport gas model."
+    ?native "mixture.transport.Pr"

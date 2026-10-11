@@ -1,0 +1,53 @@
+# Build profile settings transcribed from the pinned OpenFOAM v2606 etc/bashrc defaults.
+build : openfoam_build_configuration
+  compiler_type = "system"
+  compiler = "Gcc"
+  precision = "DP"
+  label_bits = 32
+  compile_mode = "Opt"
+  mpi = "SYSTEMOPENMPI"
+  openmp = false
+  target_bits = 64
+
+# Values transcribed from the pinned v2606 tutorial dictionaries.
+control : openfoam_control
+  start_from = "startTime"
+  start_time = 0
+  stop_at = "endTime"
+  end_time = 0.007
+  delta_t = 1e-06
+  write_control = "adjustable"
+  write_interval = 0.001
+
+output : openfoam_output
+  purge_write = 0
+  write_format = "ascii"
+  write_precision = 6
+  write_compression = "off"
+  time_format = "general"
+  time_precision = 6
+  run_time_modifiable = true
+
+adaptive : openfoam_adaptive_time
+  adjust_time_step = true
+  max_co = 0.2
+
+adaptive_limits : openfoam_adaptive_time_limits
+  max_delta_t = 1
+
+discretization : openfoam_discretization
+  time_derivative = "Euler"
+  gradient = "Gauss linear"
+  laplacian = "Gauss linear corrected"
+  interpolation = "linear"
+  surface_normal_gradient = "corrected"
+
+divergence : openfoam_divergence_default
+  default = "none"
+
+gas : openfoam_ideal_gas_properties
+  molecular_weight = 28.96 kg_per_kmol
+  specific_heat = 1004.5 J/(kg*K)
+  formation_enthalpy = 2.544e+06 J/kg
+  dynamic_viscosity = 0 Pa*s
+  prandtl = 1

@@ -48,6 +48,16 @@ Organize public parameter paths by the concepts a researcher chooses or inspects
 
 The native file's section or command order belongs in the renderer. A DIPL tree may follow a native format where that makes the model clearer, but it should not be forced to mirror parser quirks. Record the mapping to native names in metadata or an adapter mapping so readers can move from a parameter to the generated file.
 
+## Keep build and runtime choices in one DIPL contract
+
+When users can choose compile-time settings that change the capabilities or behavior of the built executable, represent those choices as DIPL nodes in the same project contract as the runtime settings. Use a distinct namespace such as `build.*` alongside domain groups such as `physics.*`, `numerics.*`, and `output.*`. A single evaluated DIPL project should make the selected executable configuration and case configuration inspectable and overridable together.
+
+The adapter may emit these nodes to different targets: build options can become a compiler/environment profile or build-system arguments, while runtime settings become native case files. This difference in destination does not require a second parameter model. Record the build mappings and relevant compiler, library, and source versions in the build output or lock. Host facts that the user does not choose, secrets, and arbitrary site-specific paths belong in environment or workflow configuration unless they are explicitly modeled as supported choices.
+
+Keep the build workflow capability separate from the parameter contract. A project may model and generate a build profile before it offers a verified Hub `build` hook; in that case, label the workflow as manual or unsupported and do not imply that the Hub compiled the code. Avoid adding build nodes for knobs the code does not expose or the integration cannot apply.
+
+Use DIPL tags to let the adapter discover build and runtime nodes without hard-coding a second list of paths. A project can use a consistent pair such as `<code>:config` for user-selectable build settings and `<code>:param` for runtime settings. Select them with the DIPL inspection API (for example, `env.select("?", tags_all=["openfoam:config"])`). Tags classify nodes for discovery; they do not define conversion or execution behavior. Keep native mappings in `?native` metadata or the adapter's explicit mapping layer, and validate that required tagged nodes and mappings are present.
+
 ## Separate parameters from output decisions
 
 The boundary is the evaluation of the DIPL project. **DIPL nodes describe the effective simulation settings** that a researcher can inspect, validate, or override. After evaluation, the **adapter-owned output plan records how those settings become native input**. `describe_outputs(env, outputs)` resolves mappings and decisions; `plan_resolved(env, outputs, context)` renders files from that resolved plan. The output plan is saved in DIPH5 so snapshot replay can use the recorded values and decisions without reevaluating the original DIPL profiles.

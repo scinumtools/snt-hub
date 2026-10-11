@@ -1,0 +1,8 @@
+$schema openfoam_phase_time_control
+  ?descr "Additional adaptive time-step limit for phase-fraction transport."
+
+  max_alpha_co float
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Maximum phase Courant number used by interFoam's adaptive time-step control."
+    ?native "maxAlphaCo"

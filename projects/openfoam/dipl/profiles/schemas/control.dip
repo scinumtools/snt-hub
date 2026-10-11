@@ -1,0 +1,44 @@
+$schema openfoam_control
+  ?descr "Shared solver start, stop, step, and write scheduling controls."
+  ?url "https://www.openfoam.com/documentation/user-guide/2-openfoam-cases"
+
+  start_from str
+    !tags ["openfoam:param"]
+    !options ["startTime", "latestTime"]
+    ?descr "Select whether the case starts from its configured start time or the latest written time."
+    ?native "startFrom"
+
+  start_time float
+    !tags ["openfoam:param"]
+    ?descr "Starting value of the solver's native time coordinate. The solver determines its physical interpretation."
+    ?native "startTime"
+
+  end_time float
+    !tags ["openfoam:param"]
+    !condition ({.} > {?control.start_time})
+    ?descr "End value of the solver's native time coordinate; for steady solvers this can represent iteration time."
+    ?native "endTime"
+
+  stop_at str
+    !tags ["openfoam:param"]
+    !options ["endTime", "writeNow", "noWriteNow"]
+    ?descr "Select the condition that stops the solver."
+    ?native "stopAt"
+
+  delta_t float
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Time-step value used by the native solver. Stability and physical meaning remain solver-specific."
+    ?native "deltaT"
+
+  write_control str
+    !tags ["openfoam:param"]
+    !options ["timeStep", "adjustable"]
+    ?descr "Native write scheduling mode used by the selected tutorial."
+    ?native "writeControl"
+
+  write_interval float
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Output interval; its meaning is selected by write_control (steps or solver-time units)."
+    ?native "writeInterval"

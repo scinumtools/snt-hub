@@ -1,0 +1,43 @@
+$schema openfoam_output
+  ?descr "Controls for retaining and formatting simulation output."
+  ?url "https://www.openfoam.com/documentation/user-guide/2-openfoam-cases"
+
+  purge_write int
+    !tags ["openfoam:param"]
+    !condition ({.} >= 0)
+    ?descr "Number of recent time directories to retain; zero keeps all written times."
+    ?native "purgeWrite"
+
+  write_format str
+    !tags ["openfoam:param"]
+    !options ["ascii", "binary"]
+    ?descr "Representation used for written field data."
+    ?native "writeFormat"
+
+  write_precision int
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Significant digits used when writing scalar values."
+    ?native "writePrecision"
+
+  write_compression str
+    !tags ["openfoam:param"]
+    !options ["on", "off"]
+    ?descr "Whether written output files are compressed."
+    ?native "writeCompression"
+
+  time_format str
+    !tags ["openfoam:param"]
+    ?descr "Formatting mode for time-directory names."
+    ?native "timeFormat"
+
+  time_precision int
+    !tags ["openfoam:param"]
+    !condition ({.} > 0)
+    ?descr "Precision used when formatting time-directory names."
+    ?native "timePrecision"
+
+  run_time_modifiable bool
+    !tags ["openfoam:param"]
+    ?descr "Whether the solver rereads supported dictionaries while running."
+    ?native "runTimeModifiable"

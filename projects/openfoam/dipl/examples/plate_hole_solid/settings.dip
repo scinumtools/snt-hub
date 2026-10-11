@@ -1,0 +1,58 @@
+# Build profile settings transcribed from the pinned OpenFOAM v2606 etc/bashrc defaults.
+build : openfoam_build_configuration
+  compiler_type = "system"
+  compiler = "Gcc"
+  precision = "DP"
+  label_bits = 32
+  compile_mode = "Opt"
+  mpi = "SYSTEMOPENMPI"
+  openmp = false
+  target_bits = 64
+
+# Values transcribed from the pinned v2606 tutorial dictionaries.
+control : openfoam_control
+  start_from = "startTime"
+  start_time = 0
+  stop_at = "endTime"
+  end_time = 100
+  delta_t = 1
+  write_control = "timeStep"
+  write_interval = 20
+
+output : openfoam_output
+  purge_write = 0
+  write_format = "ascii"
+  write_precision = 6
+  write_compression = "off"
+  time_format = "general"
+  time_precision = 6
+  run_time_modifiable = true
+
+discretization : openfoam_discretization
+  time_derivative = "Euler"
+  gradient = "leastSquares"
+  laplacian = "none"
+  interpolation = "linear"
+  surface_normal_gradient = "none"
+
+divergence : openfoam_divergence_default
+  default = "none"
+
+mechanical_material : openfoam_elastic_properties
+  density = 7854 kg/m3
+  poisson_ratio = 0.3
+  young_modulus = 2e+11 Pa
+  plane_stress = true
+
+thermal_material : openfoam_solid_thermal_properties
+  specific_heat = 434 J/(kg*K)
+  thermal_conductivity = 60.5 W/(m*K)
+  thermal_diffusivity = 1.1e-05 m2/s
+  thermal_stress = false
+
+solid_solver : openfoam_solid_solver_controls
+  correctors = 1
+
+solid_field_solver : openfoam_linear_solver_controls
+  tolerance = 1e-06
+  relative_tolerance = 0.9
