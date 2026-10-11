@@ -1,27 +1,27 @@
 # Pinned reference: WRF v4.8.0 test/em_heldsuarez/namelist.input.
 
 time_control : wrf_time_control
-  run_days = 1000
-  run_hours = 0
-  run_minutes = 0
-  history_interval = 14400
+  run_days = 1000 day
+  run_hours = 0 h
+  run_minutes = 0 min
+  history_interval = 14400 min
 
 domains : wrf_domains
-  time_step = 1800
+  time_step = 1800 s
   e_we = 65
   e_sn = 37
   e_vert = 41
-  dx = 625373.3125
-  dy = 555887.375
-  ztop = 120000.0
+  dx = 625373.3125 m
+  dy = 555887.375 m
+  ztop = 120000.0 m
 
 dynamics : wrf_dynamics
   hybrid_opt = 0
   damp_opt = 0
-  zdamp = 4000.0
-  dampcoef = 0.2
-  khdif = 0.0
-  kvdif = 0.0
+  zdamp = 4000.0 m
+  dampcoef = 0.2 1/s
+  khdif = 0.0 m2/s
+  kvdif = 0.0 m2/s
 
 bdy_control : wrf_boundary
   periodic_x = true

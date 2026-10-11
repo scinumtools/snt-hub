@@ -142,8 +142,8 @@ hydrodynamics : hydrodynamics_settings
   initial_gas_temperature = 244.8095 K
   minimum_gas_temperature = 5 K
   minimum_startup_density = 1e-20 arepo_density
-  internal_energy_density_limit = 0
-  internal_energy_floor = 0
+  internal_energy_density_limit = 0 arepo_density
+  internal_energy_floor = 0 arepo_specific_energy
   minimum_specific_energy = 0 arepo_specific_energy
   target_neighbors = 64
   maximum_neighbor_deviation = 4

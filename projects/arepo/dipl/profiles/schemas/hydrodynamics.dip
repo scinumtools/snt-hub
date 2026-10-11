@@ -32,7 +32,7 @@ $schema hydrodynamics_settings
     ?scientific_impact "All gas cells below this density immediately after IC loading are raised to this value."
     ?category "initial conditions"
 
-  internal_energy_density_limit float = 0
+  internal_energy_density_limit float = 0 arepo_density
     ?descr "Density threshold for an internal-energy limit."
     ?native "LimitUBelowThisDensity"
     !tags ["arepo:param"]
@@ -41,7 +41,7 @@ $schema hydrodynamics_settings
     ?category "thermodynamics"
     ?visibility "advanced"
 
-  internal_energy_floor float = 0
+  internal_energy_floor float = 0 arepo_specific_energy
     ?descr "Internal-energy floor applied below the configured density threshold."
     ?native "LimitUBelowCertainDensityToThisValue"
     !tags ["arepo:param"]

@@ -1,26 +1,26 @@
 # Pinned reference: WRF v4.8.0 test/em_hill2d_x/namelist.input.
 time_control : wrf_time_control
-  run_days = 0
-  run_hours = 10
-  run_minutes = 0
-  history_interval = 60
+  run_days = 0 day
+  run_hours = 10 h
+  run_minutes = 0 min
+  history_interval = 60 min
 
 domains : wrf_domains
-  time_step = 20
+  time_step = 20 s
   e_we = 202
   e_sn = 3
   e_vert = 41
-  dx = 2000.0
-  dy = 2000.0
-  ztop = 30000.0
+  dx = 2000.0 m
+  dy = 2000.0 m
+  ztop = 30000.0 m
 
 dynamics : wrf_dynamics
   hybrid_opt = 2
   damp_opt = 3
-  zdamp = 20000.0
-  dampcoef = 0.1
-  khdif = 0.0
-  kvdif = 0.0
+  zdamp = 20000.0 m
+  dampcoef = 0.1 1/s
+  khdif = 0.0 m2/s
+  kvdif = 0.0 m2/s
 
 bdy_control : wrf_boundary
   periodic_x = false

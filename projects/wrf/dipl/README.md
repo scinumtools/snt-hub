@@ -10,7 +10,7 @@ wrf-dipl examples
 wrf-dipl setup --setup hill_2d --output ./runs/hill_2d --inputs-only
 ```
 
-Use `--override-file PATH` for bare DIPL assignments such as `domains.dx = 1500`. The adapter validates grid dimensionality, 2D orientation where relevant, exclusive periodic/open x boundaries, and any initializer ID tied to a source profile. Changing a modeled value rewrites its native namelist entry. Other native settings remain pinned; review them before using a case outside its original purpose. WRF namelists can contain independent run-duration and end-time fields, so the adapter does not infer or rewrite their relationship.
+Use `--override-file PATH` for DIPL assignments such as `domains.dx = 1500 m`; omitted units use the field's declared native unit. Compatible overrides are converted back to the native value when the namelist is generated. The adapter validates grid dimensionality, 2D orientation where relevant, exclusive periodic/open x boundaries, and any initializer ID tied to a source profile. Changing a modeled value rewrites its native namelist entry. Other native settings remain pinned; review them before using a case outside its original purpose. WRF namelists can contain independent run-duration and end-time fields, so the adapter does not infer or rewrite their relationship.
 
 With SNT3 0.9.3 or newer, `environment.diph5` records the modeled namelist mappings. `run_adapter_snapshot` reuses those values without loading DIPL profiles. Replay still needs the pinned WRF source checkout: the adapter patches its original namelist and stages its sounding or jet asset.
 

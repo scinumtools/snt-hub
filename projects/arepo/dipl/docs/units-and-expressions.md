@@ -46,6 +46,10 @@ The three `code_units.*` values are physical quantities declared in `cm`,
 `UnitVelocity_in_cm_per_s` parameters. DIPL resolves compatible overrides to
 those declared units before the adapter reads the values.
 
+`resources.memory.per_rank` remains an integer with its native MiB convention
+in the description. PUQ does not currently define a data-size dimension, so
+assigning it a physical `$unit` would misrepresent the value.
+
 The `arepo_*` names are derived DIPL units for values such as box sizes,
 softening lengths, and densities. An override of a base unit is applied before
 the derived units and dependent values are evaluated.

@@ -1,27 +1,27 @@
 # Pinned reference: WRF v4.8.0 test/em_b_wave/namelist.input.
 
 time_control : wrf_time_control
-  run_days = 5
-  run_hours = 0
-  run_minutes = 0
-  history_interval = 360
+  run_days = 5 day
+  run_hours = 0 h
+  run_minutes = 0 min
+  history_interval = 360 min
 
 domains : wrf_domains
-  time_step = 600
+  time_step = 600 s
   e_we = 41
   e_sn = 81
   e_vert = 65
-  dx = 100000.0
-  dy = 100000.0
-  ztop = 16000.0
+  dx = 100000.0 m
+  dy = 100000.0 m
+  ztop = 16000.0 m
 
 dynamics : wrf_dynamics
   hybrid_opt = 0
   damp_opt = 0
-  zdamp = 4000.0
-  dampcoef = 0.01
-  khdif = 0.0
-  kvdif = 0.0
+  zdamp = 4000.0 m
+  dampcoef = 0.01 1/s
+  khdif = 0.0 m2/s
+  kvdif = 0.0 m2/s
 
 bdy_control : wrf_boundary
   periodic_x = true
