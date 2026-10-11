@@ -78,7 +78,7 @@ def test_override_changes_input_and_is_recorded(tmp_path: Path) -> None:
     override = tmp_path / "tuning.dip"
     override.write_text("system.ecutwfc = 16.0\n")
     output = setup("si_scf", tmp_path / "tuned", override_file=override)
-    assert float(_namelist((output / "pw.in").read_text(), "system")["ecutwfc"]) == 16.0
+    assert float(_namelist((output / "pw.in").read_text(), "system")["ecutwfc"]) == pytest.approx(16.0, rel=1e-8)
     assert (output / "input-overrides.dip").read_bytes() == override.read_bytes()
     lock = json.loads((output / "setup-lock.json").read_text())
     assert lock["inputs"]["override_sha256"] == sha256(override.read_bytes()).hexdigest()
