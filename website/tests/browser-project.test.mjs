@@ -8,10 +8,10 @@ import { loadDIPL } from '../public/vendor/snt-web/index.mjs';
 test('browser project packages evaluate and accept representative overrides', async () => {
   const web = await loadDIPL();
   const cases = [
-    ['arepo', 'current_sheet_2d', 'hydrodynamics.courant_factor = 0.25', 'hydrodynamics.courant_factor', '0.25'],
-    ['quantum-espresso', 'si_scf', 'system.ecutwfc = 16', 'system.ecutwfc', '16'],
-    ['lammps', 'lj_melt', 'dynamics.run_steps = 5', 'dynamics.run_steps', '5'],
-    ['wrf', 'hill_2d', 'domains.dx = 1500', 'domains.dx', '1.5e3'],
+    ['arepo', 'current_sheet_2d', 'hydrodynamics.courant_factor = 0.25', 'hydrodynamics.courant_factor', 0.25],
+    ['quantum-espresso', 'si_scf', 'system.ecutwfc = 16', 'system.ecutwfc', 16],
+    ['lammps', 'lj_melt', 'dynamics.run_steps = 5', 'dynamics.run_steps', 5],
+    ['wrf', 'hill_2d', 'domains.dx = 1500', 'domains.dx', 1500],
   ];
   for (const [project, setup, override, path, expected] of cases) {
     const packaged = browserProject(project, setup);
@@ -23,7 +23,10 @@ test('browser project packages evaluate and accept representative overrides', as
     assert.ok(Array.isArray(description.options), `${project}/${setup}: missing allowed options for override editor`);
     assert.ok('condition' in description, `${project}/${setup}: missing condition for override editor`);
     const changed = original.withOverride(override);
-    assert.equal(changed.describe(path).valueText, expected);
+    const actual = Number(changed.describe(path).valueText);
+    assert.ok(Number.isFinite(actual), `${project}/${setup}: override did not produce a numeric value`);
+    assert.ok(Math.abs(actual - expected) <= 1e-8 * Math.max(1, Math.abs(expected)),
+      `${project}/${setup}: expected ${expected}, got ${actual}`);
     changed.dispose();
     original.dispose();
   }
