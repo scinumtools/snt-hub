@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "snt-hub-openfoam"
 version = "0.1.0"
-description = "OpenFOAM.com DIPL adapter for SNT Hub"
+description = "OpenFOAM DIPL adapter for SNT Hub"
 requires-python = ">=3.10"
 dependencies = ["scinumtools3>=0.9.3", "snt-hub-runtime>=0.1.0"]
 

@@ -1,4 +1,4 @@
-# OpenFOAM.com DIPL adapter
+# OpenFOAM DIPL adapter
 
 This adapter covers ten pinned v2606 tutorials. Reusable schemas model shared `system/controlDict` controls, `system/fvSchemes` discretization choices, `system/fvSolution` coupling and linear solver tolerances, selected physical properties, and user-selectable `build.*` settings. The `openfoam:param` and `openfoam:config` tags identify runtime and build nodes for adapter discovery. The adapter stages each tutorial, rewrites only mapped native entries, and records those mappings in `environment.diph5`. It does not parse or generalize the full OpenFOAM dictionary language.
 

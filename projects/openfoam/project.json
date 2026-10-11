@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "id": "openfoam",
-  "name": "OpenFOAM.com",
+  "name": "OpenFOAM",
   "summary": "An open-source computational fluid dynamics toolkit; this Hub bundle demonstrates ten pinned tutorial cases with reusable control, discretization, solver, and physics parameter groups.",
   "presentation": {
     "about": "OpenFOAM provides a broad set of solvers and utilities for computational fluid dynamics and related continuum simulations. Its cases are assembled from dictionaries, field files, and mesh descriptions.",
     "rationale": "Ten v2606 tutorials expose reusable time/output controls, finite-volume schemes, linear solver tolerances, pressure-velocity coupling controls, and selected physical properties from fluid, multiphase, heat transfer, MHD, solid mechanics, and compressible-flow cases.",
     "official_page": "https://www.openfoam.com/",
-    "official_label": "Explore OpenFOAM.com"
+    "official_label": "Explore OpenFOAM"
   },
   "scope": "DIPL overrides for selectable OpenFOAM v2606 build configuration and selected system/controlDict controls, system/fvSchemes defaults, system/fvSolution coupling and linear-solver tolerances, and selected constant/ physical properties across ten tutorial cases. Setup emits a manual build profile but does not build the solver. Unmodeled native files and entries are staged from the pinned source unchanged.",
   "integration_mode": "External adapter",

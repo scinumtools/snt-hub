@@ -5,7 +5,7 @@ from .hub import recipes, setup
 
 
 def main() -> None:
-    adapter_main(description="Prepare OpenFOAM.com tutorial cases from DIPL",
+    adapter_main(description="Prepare OpenFOAM tutorial cases from DIPL",
                  root=ROOT, default_setup="cavity_ico", generate=generate,
                  setup=setup, recipes=recipes)
 
