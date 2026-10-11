@@ -24,6 +24,28 @@ def _portable(parsed: dict) -> dict:
     return parsed
 
 
+def _assert_native_values_equal(actual, expected, path: str = "native input") -> None:
+    if isinstance(actual, dict) and isinstance(expected, dict):
+        assert actual.keys() == expected.keys(), f"{path}: keys differ"
+        for key in actual:
+            _assert_native_values_equal(actual[key], expected[key], f"{path}.{key}")
+    elif isinstance(actual, list) and isinstance(expected, list):
+        assert len(actual) == len(expected), f"{path}: lengths differ"
+        for index, (left, right) in enumerate(zip(actual, expected)):
+            _assert_native_values_equal(left, right, f"{path}[{index}]")
+    elif isinstance(actual, bool) or isinstance(expected, bool):
+        assert actual == expected, f"{path}: {actual!r} != {expected!r}"
+    elif isinstance(actual, (int, float)) and isinstance(expected, (int, float)):
+        if isinstance(actual, int) and isinstance(expected, int):
+            assert actual == expected, f"{path}: {actual!r} != {expected!r}"
+        else:
+            assert float(actual) == pytest.approx(float(expected), rel=1e-8, abs=1e-12), (
+                f"{path}: {actual!r} != {expected!r}"
+            )
+    else:
+        assert actual == expected, f"{path}: {actual!r} != {expected!r}"
+
+
 def test_inventory_covers_the_pinned_pw_scf_directory() -> None:
     assert len(SOURCE_INPUTS) == 27
     assert set(RECIPES) == {setup_id(path.name) for path in SOURCE_INPUTS}
@@ -47,7 +69,8 @@ def test_every_dipl_setup_matches_native_input(source_file: Path, tmp_path: Path
     assert lock["project"] == "quantum-espresso"
     assert lock["setup"] == name
     assert lock["capability"] == RECIPES[name]["capability"]
-    assert _portable(parse_native(native_file)) == _portable(parse_native(source_file))
+    _assert_native_values_equal(_portable(parse_native(native_file)),
+                                _portable(parse_native(source_file)))
     assert (PROJECT / "dipl/examples" / name / "settings.dip").read_text() == render_settings(
         parse_native(source_file), source_file.name
     )

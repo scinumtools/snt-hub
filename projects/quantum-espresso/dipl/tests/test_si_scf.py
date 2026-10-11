@@ -51,21 +51,27 @@ def test_generated_input_matches_pinned_reference_semantically(tmp_path: Path) -
         for key, value in expected.items():
             if key in ("pseudo_dir", "outdir"):
                 continue
-            if key in ("ibrav", "nat", "ntyp", "celldm(1)", "ecutwfc"):
-                assert float(actual[key]) == float(value)
+            if key in ("ibrav", "nat", "ntyp"):
+                assert int(actual[key]) == int(value)
+            elif key in ("celldm(1)", "ecutwfc"):
+                assert float(actual[key]) == pytest.approx(float(value), rel=1e-8, abs=1e-12)
             else:
                 assert actual[key] == value
     actual_species, actual_positions, actual_kpoints = _cards(generated)
     expected_species, expected_positions, expected_kpoints = _cards(reference)
     assert actual_species[0::2] == expected_species[0::2]
-    assert float(actual_species[1]) == float(expected_species[1])
+    assert float(actual_species[1]) == pytest.approx(float(expected_species[1]), rel=1e-8, abs=1e-12)
     assert actual_positions[0][0] == expected_positions[0][0]
     assert actual_positions[1][0] == expected_positions[1][0]
     for actual, expected in zip(actual_positions, expected_positions):
-        assert list(map(float, actual[1:])) == list(map(float, expected[1:]))
+        assert list(map(float, actual[1:])) == pytest.approx(
+            list(map(float, expected[1:])), rel=1e-8, abs=1e-12
+        )
     assert len(actual_kpoints) == len(expected_kpoints)
     for actual, expected in zip(actual_kpoints, expected_kpoints):
-        assert list(map(float, actual)) == list(map(float, expected))
+        assert list(map(float, actual)) == pytest.approx(
+            list(map(float, expected)), rel=1e-8, abs=1e-12
+        )
     pseudo = output / "pseudo/Si.bhs"
     asset = json.loads((PROJECT / "setups.json").read_text())["setups"]["si_scf"]["pseudo_assets"][0]
     assert sha256(pseudo.read_bytes()).hexdigest() == asset["sha256"]

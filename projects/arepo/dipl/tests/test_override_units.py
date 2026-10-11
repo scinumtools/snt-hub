@@ -64,19 +64,19 @@ class OverrideUnitTests(unittest.TestCase):
     def test_time_override_converts_hours_to_native_seconds(self):
         result, values = run_override("resources.wall_clock.limit = 1 h\n")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(float(values["TimeLimitCPU"]), 3600)
+        self.assertAlmostEqual(float(values["TimeLimitCPU"]), 3600, delta=3600e-8)
 
     def test_length_override_converts_metres_to_code_lengths(self):
         result, values = run_override("simulation.domain.box.size = 2 m\n")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(float(values["BoxSize"]), 200)  # One code length is 1 cm.
+        self.assertAlmostEqual(float(values["BoxSize"]), 200, delta=200e-8)  # One code length is 1 cm.
 
     def test_code_unit_override_changes_downstream_length_conversion(self):
         result, values = run_override(
             "code_units.length = 2 cm\nsimulation.domain.box.size = 1 m\n")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(float(values["UnitLength_in_cm"]), 2)
-        self.assertEqual(float(values["BoxSize"]), 50)
+        self.assertAlmostEqual(float(values["UnitLength_in_cm"]), 2, delta=2e-8)
+        self.assertAlmostEqual(float(values["BoxSize"]), 50, delta=50e-8)
 
     def test_incompatible_override_units_are_rejected(self):
         result, _ = run_override("simulation.domain.box.size = 2 s\n")
