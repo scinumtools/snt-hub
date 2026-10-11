@@ -1,5 +1,12 @@
+sources[]
+  name = "hill_sounding_profile"
+  filepath = "sounding_profile.dipt"
+
 code[]
   file = "../../profiles/schemas/idealized.dip"
+
+code[]
+  file = "../../profiles/schemas/sounding.dip"
 
 code[]
   file = "settings.dip"

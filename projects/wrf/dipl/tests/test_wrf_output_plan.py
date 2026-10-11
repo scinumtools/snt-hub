@@ -15,6 +15,10 @@ def test_saved_wrf_plan_replays_namelist_and_assets(tmp_path):
     tagged_paths = {node.name for node in loaded.select("?", tags_all=["wrf:param"])}
     assert tagged_paths
     assert tagged_paths <= {mapping.source_path for mapping in plan.mappings}
+    assert any(mapping.target == "sounding:surface" and
+               mapping.source_path == "sounding.surface.pressure" for mapping in plan.mappings)
+    assert any(mapping.target == "sounding:file" and mapping.key == "input_sounding"
+               for mapping in plan.mappings)
     assert any(m.target == "namelist:domains" and m.key == "dx" for m in plan.mappings)
     run_adapter_snapshot(snapshot, WrfAdapter("hill_2d", source), replay)
     for name in ("namelist.input", "input_sounding"):

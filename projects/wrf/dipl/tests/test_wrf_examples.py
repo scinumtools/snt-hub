@@ -1,14 +1,34 @@
 import json
 from pathlib import Path
 import shutil
+import struct
 
 import pytest
+from scinumtools3.dip import inspect_table
 
 from wrf_dipl.generator import ROOT, UPSTREAM_CASES, load_environment, render_namelist
 from wrf_dipl.hub import setup as prepare_setup
 
 
 SOURCE = ROOT.parent / "source"
+
+
+def _sounding_values(text: str) -> list[list[float]]:
+    return [[float(token) for token in line.split()]
+            for line in text.splitlines() if line.strip()]
+
+
+def _as_wrf_real(value: float) -> bytes:
+    return struct.pack("=f", value)
+
+
+def test_hill_sounding_profile_is_an_imported_typed_table():
+    env = load_environment("hill_2d")
+    table = inspect_table(env, "sounding.profile")
+    assert [column.name for column in table.columns] == [
+        "height", "potential_temperature", "water_vapor_mixing_ratio", "u_wind", "v_wind",
+    ]
+    assert all(len(env[column.path].value) == 601 for column in table.columns)
 
 
 @pytest.mark.parametrize("setup", sorted(UPSTREAM_CASES))
@@ -22,7 +42,17 @@ def test_pinned_namelist_and_sounding_parity(setup, tmp_path):
     prepare_setup(setup, output, inputs_only=True)
     assert (output / "namelist.input").read_bytes() == namelist.read_bytes()
     for asset in assets:
-        assert (output / asset).read_bytes() == (upstream / asset).read_bytes()
+        if setup == "hill_2d" and asset == "input_sounding":
+            generated = _sounding_values((output / asset).read_text())
+            reference_bytes = (upstream / asset).read_bytes()
+            reference = _sounding_values(reference_bytes.decode())
+            assert (output / asset).read_bytes() != reference_bytes
+            assert [len(row) for row in generated] == [len(row) for row in reference]
+            assert [[_as_wrf_real(value) for value in row] for row in generated] == [
+                [_as_wrf_real(value) for value in row] for row in reference
+            ]
+        else:
+            assert (output / asset).read_bytes() == (upstream / asset).read_bytes()
     assert (output / "environment.diph5").is_file()
     lock = json.loads((output / "setup-lock.json").read_text())
     assert lock["capability"] == "native-inputs-only"
@@ -39,6 +69,16 @@ def test_override_changes_native_grid_and_is_recorded(tmp_path):
     assert generated == original.replace("dx                                  = 2000,",
                                          "dx                                  = 1500,")
     assert (output / "input-overrides.dip").read_text() == override.read_text()
+    assert json.loads((output / "setup-lock.json").read_text())["inputs"]["override_sha256"]
+
+
+def test_sounding_surface_override_is_written_and_recorded(tmp_path):
+    override = tmp_path / "surface.dip"
+    override.write_text("sounding.surface.pressure = 1001 hPa\n")
+    output = tmp_path / "hill"
+    prepare_setup("hill_2d", output, inputs_only=True, override_file=override)
+    generated = _sounding_values((output / "input_sounding").read_text())
+    assert generated[0][0] == 1001.0
     assert json.loads((output / "setup-lock.json").read_text())["inputs"]["override_sha256"]
 
 

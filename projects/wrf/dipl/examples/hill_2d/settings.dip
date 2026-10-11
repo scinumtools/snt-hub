@@ -29,3 +29,14 @@ bdy_control : wrf_boundary
 
 ideal : wrf_ideal
   ideal_case = 1
+
+sounding.surface : wrf_sounding_surface
+  pressure = 1000.0 hPa
+  potential_temperature = 288.0 K
+  water_vapor_mixing_ratio = 0.0 g/kg
+
+sounding.profile table = {hill_sounding_profile}
+
+sounding.output_file str = "input_sounding"
+  ?descr "Native idealized WRF sounding filename generated from this DIPL table."
+  !tags ["wrf:sounding-output"]

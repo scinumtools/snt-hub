@@ -6,7 +6,7 @@ from pathlib import Path
 import re
 from typing import Any
 
-from scinumtools3.dip import Adapter, ExistingOutputPolicy, run_adapter
+from scinumtools3.dip import Adapter, ExistingOutputPolicy, inspect_table, run_adapter
 from snt_hub_runtime.dipl import evaluate_project
 from snt_hub_runtime.output_plan import PlannedValues
 
@@ -27,7 +27,12 @@ UPSTREAM_CASES = {
 X_2D_CASES = {"hill_2d", "gravity_current_2d", "sea_breeze_2d", "squall_line_x"}
 Y_2D_CASES = {"squall_line_y"}
 PARAMETER_TAG = "wrf:param"
+SOUNDING_VALUE_TAG = "wrf:sounding-value"
+SOUNDING_OUTPUT_TAG = "wrf:sounding-output"
 NATIVE_SECTIONS = {"time_control", "domains", "dynamics", "bdy_control", "ideal"}
+SOUNDING_COLUMNS = (
+    "height", "potential_temperature", "water_vapor_mixing_ratio", "u_wind", "v_wind",
+)
 SECTION = re.compile(r"^\s*&([a-z_]+)\s*$", re.I)
 ASSIGNMENT = re.compile(r"^(\s*)([a-z_]+)(\s*=\s*)([^!,\n]+)(,?)(.*)$", re.I)
 
@@ -65,6 +70,47 @@ def _format_value(value: Any) -> str:
     if isinstance(value, float):
         return f"{value:.12g}"
     raise GenerationError(f"Unsupported WRF namelist value: {value!r}")
+
+
+def _format_sounding_value(value: Any) -> str:
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        raise GenerationError(f"Unsupported WRF sounding value: {value!r}")
+    return f"{float(value):.9g}"
+
+
+def render_input_sounding(env: Any, outputs: Any) -> str:
+    """Render the tagged surface values and typed profile table in WRF's native layout."""
+    values = PlannedValues(outputs)
+    surface_paths = (
+        "sounding.surface.pressure",
+        "sounding.surface.potential_temperature",
+        "sounding.surface.water_vapor_mixing_ratio",
+    )
+    surface = [_format_sounding_value(_value(values, path)) for path in surface_paths]
+
+    table = inspect_table(env, "sounding.profile")
+    columns = {column.path.rsplit(".", 1)[-1]: list(_value(env, column.path))
+               for column in table.columns}
+    if set(columns) != set(SOUNDING_COLUMNS):
+        raise GenerationError(f"WRF sounding table needs columns {SOUNDING_COLUMNS}")
+    lengths = {len(columns[name]) for name in SOUNDING_COLUMNS}
+    if len(lengths) != 1 or not lengths or next(iter(lengths)) == 0:
+        raise GenerationError("WRF sounding profile columns must have equal, nonzero lengths")
+
+    lines = [" ".join(surface)]
+    for row in zip(*(columns[name] for name in SOUNDING_COLUMNS)):
+        lines.append(" ".join(_format_sounding_value(value) for value in row))
+    return "\n".join(lines) + "\n"
+
+
+def _sounding_output_path(outputs: Any) -> str:
+    mappings = outputs.select("sounding:file", True)
+    if len(mappings) != 1 or mappings[0].key != "input_sounding":
+        raise GenerationError("The WRF sounding adapter needs one input_sounding output mapping")
+    path = Path(mappings[0].value)
+    if path.is_absolute() or ".." in path.parts or path.as_posix() != "input_sounding":
+        raise GenerationError("The generated WRF sounding path must be input_sounding")
+    return path.as_posix()
 
 
 def _native_fields(env: Any, setup: str) -> dict[str, tuple[str, ...]]:
@@ -154,7 +200,8 @@ class WrfAdapter(Adapter):
         super().__init__()
         self.setup = setup
         self.case_dir = source_root / "test" / UPSTREAM_CASES[setup][0]
-        self.assets = UPSTREAM_CASES[setup][1]
+        self.assets = tuple(asset for asset in UPSTREAM_CASES[setup][1]
+                            if not (setup == "hill_2d" and asset == "input_sounding"))
 
     def describe_outputs(self, env: Any, outputs: Any) -> None:
         fields = _native_fields(env, self.setup)
@@ -163,6 +210,17 @@ class WrfAdapter(Adapter):
                 path = f"{section}.{key}"
                 outputs.add_node(env, path, f"namelist:{section}", key, path,
                                  rule="modeled WRF namelist field", origin="adapter:wrf")
+        if self.setup == "hill_2d":
+            for node in env.select("?", tags_all=[SOUNDING_VALUE_TAG]):
+                outputs.add_node(env, f"sounding:{node.name}", "sounding:surface", node.name,
+                                 node.name, rule="WRF input sounding surface value",
+                                 origin="adapter:wrf")
+            output_nodes = env.select("?", tags_all=[SOUNDING_OUTPUT_TAG])
+            if len(output_nodes) != 1:
+                raise GenerationError("hill_2d needs one tagged WRF sounding output filename")
+            outputs.add_node(env, "sounding:file", "sounding:file", "input_sounding",
+                             output_nodes[0].name, rule="WRF input sounding profile",
+                             origin="adapter:wrf")
 
     def plan_resolved(self, env: Any, outputs: Any, context: Any) -> None:
         namelist = self.case_dir / "namelist.input"
@@ -171,6 +229,8 @@ class WrfAdapter(Adapter):
         fields = _native_fields(env, self.setup)
         context.add_text("namelist.input", render_namelist(
             PlannedValues(outputs), namelist.read_text(), self.setup, fields))
+        if self.setup == "hill_2d":
+            context.add_text(_sounding_output_path(outputs), render_input_sounding(env, outputs))
         for asset in self.assets:
             context.add_binary(asset, (self.case_dir / asset).read_bytes())
 

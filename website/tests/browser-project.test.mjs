@@ -11,7 +11,7 @@ test('browser project packages evaluate and accept representative overrides', as
     ['arepo', 'current_sheet_2d', 'hydrodynamics.courant_factor = 0.25', 'hydrodynamics.courant_factor', 0.25],
     ['quantum-espresso', 'si_scf', 'system.ecutwfc = 16', 'system.ecutwfc', 16],
     ['lammps', 'lj_melt', 'dynamics.run_steps = 5', 'dynamics.run_steps', 5],
-    ['wrf', 'hill_2d', 'domains.dx = 1500', 'domains.dx', 1500],
+    ['wrf', 'sea_breeze_2d', 'domains.dx = 1500', 'domains.dx', 1500],
   ];
   for (const [project, setup, override, path, expected] of cases) {
     const packaged = browserProject(project, setup);
@@ -51,6 +51,6 @@ test('every browser-supported published example evaluates', async () => {
       supported++;
     }
   }
-  assert.equal(supported, 48);
-  assert.equal(sourceBacked, 7);
+  assert.equal(supported, 47);
+  assert.equal(sourceBacked, 8);
 });

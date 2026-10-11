@@ -89,6 +89,8 @@ Put reusable type and validation definitions in `profiles/schemas/`. Group files
 
 Within a schema, order declarations for a reader: identifying choices, required values, optional values, then derived values. Give each public field a meaningful type, unit where applicable, a concise `?descr`, and a condition or options list when there is a real constraint. Add a source URL or rationale when the meaning is code-specific or surprising. Describe the physical meaning and valid range; avoid repeating the field name as its description. Record native names when one exists. Constraints must reflect the pinned code, not a guessed universal rule.
 
+Use an imported DIPL `table` with a `.dipt` source for structured tabular data whose columns or values should be typed, inspected, validated, or regenerated as part of the parameter contract. Register the source in the example manifest and declare units on numeric columns. Keep native text assets unchanged when the Hub only needs to stage them; do not parse arbitrary text or large opaque files just to make them look like tables. Preserve the original input as a parity reference and test generated values against the pinned source.
+
 For example, this defines a reusable concept and sets one example value:
 
 ```dip
