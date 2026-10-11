@@ -2,6 +2,19 @@
 
 SNT Hub keeps each scientific code's original source, DIPL layer, registry record, and example recipes together under `projects/<id>/`. The [integration specification](INTEGRATION_SPEC.md) states the bundle contract and recommended node and schema organization. The [shared runtime](../hub/README.md) handles setup staging, source revision checks, and locks. A new project supplies its own parameter model and renderer.
 
+To start a non-published draft, run `./setup.sh scaffold` from the repository root:
+
+```sh
+./setup.sh scaffold \
+  --id my-code \
+  --name "My Code" \
+  --source-url https://example.org/my-code \
+  --source-revision <full-commit> \
+  --setup example=examples/example/input
+```
+
+The default output is `projects/_drafts/<id>/`. Repeat `--setup ID=SOURCE_EXAMPLE` for each reviewed upstream example, or pass `--output DIR` to choose another empty directory. The scaffold creates metadata templates, example `DIPfile`s, and the adapter folder layout; it does not clone source or invent DIPL parameters. Review the generated TODOs, add the upstream source as a pinned Git submodule, complete and test the adapter, then move the finished bundle to `projects/<id>/` and rename `project.json.template` and `setups.json.template` to their live filenames. Drafts under `_drafts` are not included in the registry or project checks. Use `./setup.sh docs`, `./setup.sh test`, and `./setup.sh spec-pdf` for the corresponding manual generation and verification tasks.
+
 ## 1. Define the scope and pin the original code
 
 Choose a short lowercase project ID. Add the code owner's canonical public repository as `projects/<id>/source`, pinned to a reviewed commit in `.gitmodules`. Treat that checkout as read-only. Keep DIPL models, adapters, and tests in `projects/<id>/dipl/`; do not add generated inputs, binaries, IC snapshots, or virtual environments to Git.

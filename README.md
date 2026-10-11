@@ -37,6 +37,8 @@ npm run dev
 
 To check all project bundles, Python tests, and the static site in one pass, use `python3 scripts/test_all.py` from the repository root. The Python environment needs `pytest` and the dependencies declared by the runtime and participating DIPL packages, including SNT3's Python bindings. When using a local SNT3 build instead of an installed binding, pass `--snt-python-dir ../scinumtools3/build/python`. The [test workflow](.github/workflows/tests.yml) runs the same command on pushes and pull requests with a pinned SNT3 source checkout.
 
+For manual Hub maintenance tasks, [`setup.sh`](setup.sh) provides a central command dispatcher: `./setup.sh help` lists project scaffolding, parameter export generation/checking, QE example import, PDF generation, website build, and the full test workflow. Set `SNT_BIN`, `PYTHON_BIN`, or `SNT_PYTHON_DIR` to select local SNT3 and Python builds.
+
 ## Project integrations
 
 Choose a project and an example from the [registry](https://scinumtools.github.io/snt-hub/registry/). From an empty local directory, the general flow is:
@@ -59,6 +61,7 @@ Each integration in this Hub repository has a pinned original-code submodule, a 
 Project-specific integration guides under `projects/<id>/README.md` describe scope and evidence. Shared workspace checks live in the reusable [hub runtime](hub/README.md); each project supplies its own renderer and reviewed example and solver recipes.
 
 To integrate another code, follow the [new-project guide](docs/ADDING_PROJECT.md).
+Start a draft bundle with `./setup.sh scaffold`; it creates templates under `projects/_drafts/` without adding an unfinished listing to the registry. The [new-project guide](docs/ADDING_PROJECT.md) shows the required options and promotion steps.
 
 The [Hub integration specification](docs/INTEGRATION_SPEC.md) defines the project bundle contract and recommended DIPL node and schema organization. Its [Pandoc defaults](docs/pandoc.yaml) and logo assets live in `docs/`. Compile it from the repository root with `pandoc --defaults docs/pandoc.yaml` (Pandoc and XeLaTeX required), or run `scripts/build_integration_spec.sh`. A [ready PDF](https://scinumtools.github.io/snt-hub/integration-spec.pdf) is published on the website.
 
