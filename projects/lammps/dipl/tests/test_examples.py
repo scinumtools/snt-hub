@@ -13,6 +13,8 @@ SOURCE = ROOT.parent / "source"
 REFERENCES = {
     "lj_melt": SOURCE / "examples" / "melt" / "in.melt",
     "lj_minimize_2d": SOURCE / "examples" / "min" / "in.min",
+    "flow_couette": SOURCE / "examples" / "flow" / "in.flow.couette",
+    "flow_poiseuille": SOURCE / "examples" / "flow" / "in.flow.pois",
 }
 
 

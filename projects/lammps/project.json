@@ -2,10 +2,10 @@
   "schema_version": 1,
   "id": "lammps",
   "name": "LAMMPS",
-  "summary": "A classical molecular dynamics code; this Hub bundle models two self-contained Lennard-Jones examples.",
+  "summary": "A classical molecular dynamics code; this Hub bundle models four self-contained Lennard-Jones examples covering bulk, minimization, and driven channel flow.",
   "presentation": {
     "about": "LAMMPS simulates collections of atoms and molecules using classical molecular dynamics. Its command-based input language supports a broad range of materials and soft-matter problems.",
-    "rationale": "The two Lennard-Jones examples give the Hub a compact, runnable case for translating a structured parameter contract into native commands. Their small scope keeps the relationship between a DIPL value and a generated command easy to inspect.",
+    "rationale": "Four self-contained Lennard-Jones examples cover bulk dynamics, minimization, and two driven channel flows. They show how a shared DIPL contract can map both common controls and distinct physical driving mechanisms into native commands.",
     "official_page": "https://www.lammps.org/",
     "official_label": "Explore the LAMMPS project",
     "visual": {
@@ -15,7 +15,7 @@
       "credit": "LAMMPS logo · pinned upstream source"
     }
   },
-  "scope": "DIPL input generation for the pinned examples/melt/in.melt and examples/min/in.min scripts.",
+  "scope": "DIPL input generation for the pinned examples/melt/in.melt, examples/min/in.min, examples/flow/in.flow.couette, and examples/flow/in.flow.pois scripts.",
   "integration_mode": "External adapter",
   "hub": {
     "status": "adapter-ready",
@@ -40,7 +40,7 @@
   },
   "support": "independent",
   "validation": "settings-parity",
-  "validation_qualifier": "Eight adapter tests passed against the pinned source on 2026-10-09. Active commands match both upstream LJ examples, and both generated setups completed local serial smoke runs. Scientific-result validation is not claimed.",
+  "validation_qualifier": "Twelve adapter tests passed on 2026-10-11. Active commands match all four pinned upstream examples. Local serial smoke runs covered the two original examples; the flow examples are parity-tested but have not had smoke runs. Scientific-result validation is not claimed.",
   "source_url": "https://github.com/lammps/lammps",
   "source_path": "projects/lammps/source",
   "source_revision": "8de817dd79bfe4525d5d39246a212d833e6dee07",
@@ -49,13 +49,13 @@
   "adapter_origin_url": null,
   "adapter_revision": null,
   "verification": {
-    "date": "2026-10-09",
+    "date": "2026-10-11",
     "scinumtools3": "0.9.3",
-    "tests_passed": 8
+    "tests_passed": 12
   },
   "evidence": [
     {
-      "label": "Pinned LAMMPS LJ examples",
+      "label": "Pinned LAMMPS LJ and flow examples",
       "url": "https://github.com/lammps/lammps/tree/stable_30Sep2026/examples"
     },
     {
@@ -63,6 +63,6 @@
       "url": "https://github.com/scinumtools/snt-hub/blob/main/projects/lammps/dipl/tests/test_examples.py"
     }
   ],
-  "limitations": "This independent external adapter covers only two self-contained Lennard-Jones examples, not the LAMMPS input language or package catalogue. The local build and two smoke runs do not establish scientifically validated simulation results, other-platform support, or upstream endorsement.",
-  "reviewed_on": "2026-10-09"
+  "limitations": "This independent external adapter covers four self-contained Lennard-Jones examples, not the LAMMPS input language or package catalogue. The local build and two original-example smoke runs do not establish scientific validation for the flow cases, other-platform support, or upstream endorsement.",
+  "reviewed_on": "2026-10-11"
 }

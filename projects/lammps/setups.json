@@ -10,6 +10,16 @@
       "capability": "complete",
       "source_example": "examples/min/in.min",
       "description": "Two-dimensional Lennard-Jones dynamics followed by energy minimization."
+    },
+    "flow_couette": {
+      "capability": "complete",
+      "source_example": "examples/flow/in.flow.couette",
+      "description": "Two-dimensional Lennard-Jones Couette flow driven by a moving upper wall."
+    },
+    "flow_poiseuille": {
+      "capability": "complete",
+      "source_example": "examples/flow/in.flow.pois",
+      "description": "Two-dimensional Lennard-Jones Poiseuille flow driven by a body force."
     }
   }
 }

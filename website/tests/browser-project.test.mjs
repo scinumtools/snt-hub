@@ -51,6 +51,6 @@ test('every browser-supported published example evaluates', async () => {
       supported++;
     }
   }
-  assert.equal(supported, 47);
+  assert.equal(supported, 49);
   assert.equal(sourceBacked, 8);
 });

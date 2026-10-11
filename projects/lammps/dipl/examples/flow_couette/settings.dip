@@ -1,0 +1,29 @@
+# Pinned reference: examples/flow/in.flow.couette at stable_30Sep2026.
+geometry : flow_geometry
+  lattice_density = 0.7
+  xlo = 0
+  xhi = 20
+  ylo = 0
+  yhi = 10
+  zlo = -0.25
+  zhi = 0.25
+  lower_wall_top = 1.25
+  upper_wall_bottom = 8.75
+  atom_mass = 1.0
+
+interactions : flow_interactions
+  cutoff = 1.12246
+  neighbor_skin = 0.3
+  neighbor_delay = 5
+
+dynamics : flow_thermostat
+  initial_temperature = 1.0
+  velocity_seed = 482748
+  rescale_every = 200
+  rescale_window = 0.02
+  timestep = 0.003
+  thermo_interval = 500
+  run_steps = 10000
+
+drive : couette_drive
+  upper_wall_speed = 3.0

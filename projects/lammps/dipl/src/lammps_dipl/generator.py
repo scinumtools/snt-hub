@@ -1,4 +1,4 @@
-"""Render the pinned self-contained Lennard-Jones examples from DIPL."""
+"""Render the pinned self-contained LAMMPS examples from DIPL."""
 
 from __future__ import annotations
 
@@ -41,6 +41,8 @@ def number(value: float | int) -> str:
 
 
 def render_lammps(env: Any) -> str:
+    if optional_value(env, "geometry.lower_wall_top") is not None:
+        return render_flow(env)
     dimension = int(value(env, "geometry.dimension"))
     lattice = value(env, "geometry.lattice_style")
     enforce_2d = bool(value(env, "dynamics.enforce_2d"))
@@ -94,6 +96,55 @@ def render_lammps(env: Any) -> str:
                                   ("energy_tolerance", "force_tolerance", "max_iterations",
                                    "max_evaluations")),
         ))
+    return "\n".join(lines) + "\n"
+
+
+def render_flow(env: Any) -> str:
+    """Render the pinned Couette or Poiseuille channel example."""
+    v = lambda path: value(env, path)
+    f = lambda path: number(v(path))
+    mode = "couette" if optional_value(env, "drive.upper_wall_speed") is not None else "poiseuille"
+    g = "geometry"
+    p = "interactions"
+    d = "dynamics"
+    lines = [
+        "# Generated from SNT Hub DIPL; evaluated values are in environment.diph5.",
+        "dimension 2", "boundary p s p", "atom_style atomic",
+        f"neighbor {f(p + '.neighbor_skin')} bin",
+        f"neigh_modify delay {v(p + '.neighbor_delay')}",
+        f"lattice hex {f(g + '.lattice_density')}",
+        "region box block " + " ".join(f(g + "." + axis + bound)
+                                          for axis in "xyz" for bound in ("lo", "hi")),
+        "create_box 3 box", "create_atoms 1 box",
+        *(f"mass {atom_type} {f(g + '.atom_mass')}" for atom_type in (1, 2, 3)),
+        f"pair_style lj/cut {f(p + '.cutoff')}",
+        f"pair_coeff * * 1.0 1.0 {f(p + '.cutoff')}",
+        "region 1 block INF INF INF " + f(g + ".lower_wall_top") + " INF INF",
+        "group lower region 1",
+        "region 2 block INF INF " + f(g + ".upper_wall_bottom") + " INF INF INF",
+        "group upper region 2", "group boundary union lower upper",
+        "group flow subtract all boundary", "set group lower type 2", "set group upper type 3",
+        "compute mobile flow temp",
+        f"velocity flow create {f(d + '.initial_temperature')} {v(d + '.velocity_seed')} temp mobile",
+        "fix 1 all nve",
+        f"fix 2 flow temp/rescale {v(d + '.rescale_every')} "
+        f"{f(d + '.initial_temperature')} {f(d + '.initial_temperature')} "
+        f"{f(d + '.rescale_window')} 1.0",
+        "fix_modify 2 temp mobile",
+    ]
+    if mode == "couette":
+        lines.extend(("velocity lower set 0.0 0.0 0.0",
+                      f"velocity upper set {f('drive.upper_wall_speed')} 0.0 0.0",
+                      "fix 3 boundary setforce 0.0 0.0 0.0", "fix 4 all enforce2d"))
+    else:
+        lines.extend(("velocity boundary set 0.0 0.0 0.0",
+                      "fix 3 lower setforce 0.0 0.0 0.0",
+                      "fix 4 upper setforce 0.0 NULL 0.0",
+                      f"fix 5 upper aveforce 0.0 {f('drive.upper_wall_force')} 0.0",
+                      f"fix 6 flow addforce {f('drive.flow_acceleration')} 0.0 0.0",
+                      "fix 7 all enforce2d"))
+    lines.extend((f"timestep {f(d + '.timestep')}", f"thermo {v(d + '.thermo_interval')}",
+                  "thermo_modify temp mobile", f"run {v(d + '.run_steps')}"))
     return "\n".join(lines) + "\n"
 
 

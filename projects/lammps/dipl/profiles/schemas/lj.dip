@@ -145,3 +145,127 @@ $schema lj_minimization
     ?descr "Maximum force/energy evaluations."
     !tags ["lammps:param"]
     ?native "minimize"
+
+$schema flow_geometry
+  ?descr "Two-dimensional channel geometry and fixed wall groups for driven Lennard-Jones flow."
+  ?url "https://docs.lammps.org/region.html"
+  lattice_density float = 0.7
+    !condition ({.} > 0)
+    ?descr "Hexagonal lattice density used to create the channel atoms."
+    !tags ["lammps:param"]
+    ?native "lattice"
+  xlo float = 0
+    ?descr "Lower x bound of the 2D channel."
+    !tags ["lammps:param"]
+    ?native "region box"
+  xhi float = 20
+    ?descr "Upper x bound of the 2D channel."
+    !tags ["lammps:param"]
+    ?native "region box"
+  ylo float = 0
+    ?descr "Lower y bound of the channel."
+    !tags ["lammps:param"]
+    ?native "region box"
+  yhi float = 10
+    ?descr "Upper y bound of the channel."
+    !tags ["lammps:param"]
+    ?native "region box"
+  zlo float = -0.25
+    ?descr "Lower z bound of the thin 2D simulation box."
+    !tags ["lammps:param"]
+    ?native "region box"
+  zhi float = 0.25
+    ?descr "Upper z bound of the thin 2D simulation box."
+    !tags ["lammps:param"]
+    ?native "region box"
+  lower_wall_top float = 1.25
+    ?descr "Upper y boundary of the lower fixed wall group."
+    !tags ["lammps:param"]
+    ?native "region lower"
+  upper_wall_bottom float = 8.75
+    ?descr "Lower y boundary of the upper fixed wall group."
+    !tags ["lammps:param"]
+    ?native "region upper"
+  atom_mass float = 1
+    !condition ({.} > 0)
+    ?descr "Mass assigned to each of the three atom types in reduced LJ units."
+    !tags ["lammps:param"]
+    ?native "mass"
+
+$schema flow_interactions
+  ?descr "Lennard-Jones interaction and neighbor-list controls for the flow channel."
+  ?url "https://docs.lammps.org/pair_lj.html"
+  cutoff float = 1.12246
+    !condition ({.} > 0)
+    ?descr "Lennard-Jones cutoff used for pair_style and pair_coeff."
+    !tags ["lammps:param"]
+    ?native "pair_style lj/cut"
+  neighbor_skin float = 0.3
+    !condition ({.} > 0)
+    ?descr "Neighbor-list skin distance."
+    !tags ["lammps:param"]
+    ?native "neighbor"
+  neighbor_delay int = 5
+    !condition ({.} >= 0)
+    ?descr "Minimum delay before checking for a neighbor-list rebuild."
+    !tags ["lammps:param"]
+    ?native "neigh_modify delay"
+
+$schema flow_thermostat
+  ?descr "Initial velocities, temperature rescaling, and integration controls."
+  ?url "https://docs.lammps.org/fix_temp_rescale.html"
+  initial_temperature float = 1
+    !condition ({.} >= 0)
+    ?descr "Initial temperature for mobile flow atoms."
+    !tags ["lammps:param"]
+    ?native "velocity create"
+  velocity_seed int = 482748
+    !condition ({.} > 0)
+    ?descr "Seed for the initial mobile-atom velocity distribution."
+    !tags ["lammps:param"]
+    ?native "velocity create"
+  rescale_every int = 200
+    !condition ({.} > 0)
+    ?descr "Temperature-rescale interval in timesteps."
+    !tags ["lammps:param"]
+    ?native "fix temp/rescale"
+  rescale_window float = 0.02
+    !condition ({.} >= 0)
+    ?descr "Temperature-rescale window in reduced temperature units."
+    !tags ["lammps:param"]
+    ?native "fix temp/rescale"
+  timestep float = 0.003
+    !condition ({.} > 0)
+    ?descr "Integration timestep in reduced LJ units."
+    !tags ["lammps:param"]
+    ?native "timestep"
+  thermo_interval int = 500
+    !condition ({.} > 0)
+    ?descr "Thermodynamic output interval."
+    !tags ["lammps:param"]
+    ?native "thermo"
+  run_steps int = 10000
+    !condition ({.} >= 0)
+    ?descr "Number of timesteps for the driven-flow run."
+    !tags ["lammps:param"]
+    ?native "run"
+
+$schema couette_drive
+  ?descr "Boundary velocity for planar Couette flow."
+  ?url "https://docs.lammps.org/velocity.html"
+  upper_wall_speed float = 3
+    ?descr "Tangential velocity assigned to the upper wall atoms."
+    !tags ["lammps:param"]
+    ?native "velocity upper set"
+
+$schema poiseuille_drive
+  ?descr "Wall constraints and body force for planar Poiseuille flow."
+  ?url "https://docs.lammps.org/fix_addforce.html"
+  upper_wall_force float = -1
+    ?descr "Normal force applied to upper wall atoms by aveforce."
+    !tags ["lammps:param"]
+    ?native "fix upper aveforce"
+  flow_acceleration float = 0.5
+    ?descr "Streamwise force per mobile atom."
+    !tags ["lammps:param"]
+    ?native "fix flow addforce"
