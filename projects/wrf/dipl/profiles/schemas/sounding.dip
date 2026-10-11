@@ -1,0 +1,19 @@
+# Surface record used by idealized WRF input soundings.
+$schema wrf_sounding_surface
+  ?descr "Surface thermodynamic values that begin an idealized WRF input sounding."
+  ?url "https://github.com/wrf-model/WRF/blob/v4.8.0/dyn_em/module_initialize_ideal.F"
+
+  pressure float hPa
+    !condition ({.} > 0 hPa)
+    ?descr "Surface pressure read from the first input_sounding record."
+    !tags ["wrf:sounding-value"]
+
+  potential_temperature float K
+    !condition ({.} > 0 K)
+    ?descr "Surface potential temperature read from the first input_sounding record."
+    !tags ["wrf:sounding-value"]
+
+  water_vapor_mixing_ratio float g/kg
+    !condition ({.} >= 0 g/kg)
+    ?descr "Surface water-vapor mixing ratio read from the first input_sounding record."
+    !tags ["wrf:sounding-value"]
