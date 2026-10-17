@@ -1,0 +1,55 @@
+$schema castro_run
+  ?descr "Termination controls for the pinned Sedov example."
+  max_step int
+    !condition ({.} > 0)
+    ?descr "Maximum number of Castro timesteps."
+    ?native "max_step"
+  stop_time float
+    !condition ({.} > 0)
+    ?descr "End time in Castro's cgs time units."
+    ?native "stop_time"
+
+$schema castro_hydro
+  ?descr "Hydrodynamic timestep controls."
+  cfl float
+    !condition ({.} > 0)
+    ?descr "Courant number."
+    ?native "castro.cfl"
+  init_shrink float
+    !condition ({.} > 0)
+    ?descr "Initial timestep shrink factor."
+    ?native "castro.init_shrink"
+  change_max float
+    !condition ({.} >= 1)
+    ?descr "Maximum growth factor between timesteps."
+    ?native "castro.change_max"
+
+$schema castro_blast
+  ?descr "Sedov blast initialization; physical values follow Castro's cgs convention."
+  radius float
+    !condition ({.} > 0)
+    ?descr "Initial energy deposition radius in cm."
+    ?native "problem.r_init"
+  ambient_pressure float
+    !condition ({.} > 0)
+    ?descr "Ambient pressure in dyn/cm²."
+    ?native "problem.p_ambient"
+  explosion_energy float
+    !condition ({.} > 0)
+    ?descr "Explosion energy in erg."
+    ?native "problem.exp_energy"
+  ambient_density float
+    !condition ({.} > 0)
+    ?descr "Ambient density in g/cm³."
+    ?native "problem.dens_ambient"
+  subcells int
+    !condition ({.} > 0)
+    ?descr "Subcell sampling count for blast initialization."
+    ?native "problem.nsub"
+
+$schema castro_eos
+  ?descr "Gamma-law equation of state."
+  gamma float
+    !condition ({.} > 1)
+    ?descr "Adiabatic index for the pinned gamma-law EOS."
+    ?native "eos.eos_gamma"

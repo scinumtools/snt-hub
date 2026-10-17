@@ -13,3 +13,6 @@
 [submodule "projects/openfoam/source"]
 	path = projects/openfoam/source
 	url = https://gitlab.com/openfoam/core/openfoam.git
+[submodule "projects/castro/source"]
+	path = projects/castro/source
+	url = https://github.com/AMReX-Astro/Castro.git

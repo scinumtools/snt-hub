@@ -1,0 +1,22 @@
+$schema castro_mesh_3d
+  ?descr "Three-dimensional base grid and adaptive mesh refinement controls."
+  nx int
+    !condition ({.} > 0)
+    ?descr "Base grid cells in x."
+    ?native "amr.n_cell"
+  ny int
+    !condition ({.} > 0)
+    ?descr "Base grid cells in y."
+    ?native "amr.n_cell"
+  nz int
+    !condition ({.} > 0)
+    ?descr "Base grid cells in z."
+    ?native "amr.n_cell"
+  max_level int
+    !condition ({.} >= 0)
+    ?descr "Maximum AMR level; refinement indicators remain as in the pinned source."
+    ?native "amr.max_level"
+  regrid_interval int
+    !condition ({.} > 0)
+    ?descr "Timesteps between regridding."
+    ?native "amr.regrid_int"

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "id": "castro",
+  "name": "Castro",
+  "summary": "An adaptive mesh astrophysical hydrodynamics code; this Hub bundle models six Sedov blast examples across one, two, and three dimensions.",
+  "presentation": {
+    "about": "Castro simulates compressible astrophysical flows with adaptive mesh refinement and optional radiation, MHD, gravity, and reactions.",
+    "rationale": "The six Sedov inputs compare Cartesian, cylindrical, and spherical configurations across one, two, and three dimensions. The Hub exposes selected blast, mesh, timestep, and EOS controls while retaining the rest of each pinned upstream input file.",
+    "official_page": "https://amrex-astro.github.io/Castro/",
+    "official_label": "Explore Castro"
+  },
+  "scope": "Selected native-input controls for six pinned hydro Sedov inputs in Exec/hydro_tests/Sedov/.",
+  "integration_mode": "External adapter",
+  "hub": {
+    "status": "adapter-ready",
+    "setup_manifest": "projects/castro/setups.json",
+    "runtime_package": "hub",
+    "adapter_package": "projects/castro/dipl",
+    "adapter_executable": "castro-dipl",
+    "adapter_protocol": 1,
+    "output_plan": true,
+    "fetch_command": "snt hub fetch castro",
+    "setup_command": "snt hub setup sedov_2d_cartesian"
+  },
+  "support": "independent",
+  "validation": "settings-parity",
+  "validation_qualifier": "Generated inputs match all six pinned Sedov references; complete setup, override behavior, and DIPH5 replay are tested. Castro build, execution, and scientific outputs have not been checked.",
+  "source_url": "https://github.com/AMReX-Astro/Castro",
+  "source_path": "projects/castro/source",
+  "source_revision": "371ba40de0ef71963fa8f185d45c7d54e84ec041",
+  "adapter_url": "https://github.com/scinumtools/snt-hub/tree/main/projects/castro/dipl",
+  "adapter_path": "projects/castro/dipl",
+  "adapter_origin_url": null,
+  "adapter_revision": null,
+  "verification": {
+    "date": "2026-10-17",
+    "scinumtools3": "0.9.5",
+    "tests_passed": 22
+  },
+  "evidence": [
+    {
+      "label": "Pinned Castro Sedov source inputs",
+      "url": "https://github.com/AMReX-Astro/Castro/tree/371ba40de0ef71963fa8f185d45c7d54e84ec041/Exec/hydro_tests/Sedov"
+    },
+    {
+      "label": "Castro Sedov getting started guide",
+      "url": "https://amrex-astro.github.io/Castro/docs/getting_started.html"
+    },
+    {
+      "label": "Sedov input parity and setup tests",
+      "url": "https://github.com/scinumtools/snt-hub/blob/main/projects/castro/dipl/tests/test_sedov.py"
+    }
+  ],
+  "limitations": "This independent adapter covers six hydro Sedov inputs and models selected settings only; MHD and mini-Castro inputs are outside its scope. Other lines are retained from the pinned source. Castro's AMReX and Microphysics submodules are required for a solver build, which this Hub bundle has not validated. No upstream endorsement or scientific-result validation is implied.",
+  "reviewed_on": "2026-10-17"
+}

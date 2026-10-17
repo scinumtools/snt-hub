@@ -1,0 +1,24 @@
+# Pinned reference: Exec/hydro_tests/Sedov/inputs.1d.sph.
+run : castro_run
+  max_step = 500
+  stop_time = 0.01
+
+mesh : castro_mesh_1d
+  nx = 32
+  max_level = 3
+  regrid_interval = 2
+
+hydro : castro_hydro
+  cfl = 0.5
+  init_shrink = 0.01
+  change_max = 1.1
+
+blast : castro_blast
+  radius = 0.01
+  ambient_pressure = 1e-5
+  explosion_energy = 1.0
+  ambient_density = 1.0
+  subcells = 10
+
+eos : castro_eos
+  gamma = 1.4

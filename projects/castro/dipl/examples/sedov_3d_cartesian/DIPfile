@@ -1,0 +1,8 @@
+code[]
+  file = "../../profiles/schemas/sedov.dip"
+
+code[]
+  file = "../../profiles/schemas/mesh_3d.dip"
+
+code[]
+  file = "settings.dip"

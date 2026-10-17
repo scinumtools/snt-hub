@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "setups": {
+    "sedov_1d_cylindrical": {
+      "capability": "complete",
+      "source_example": "Exec/hydro_tests/Sedov/inputs.1d.cyl",
+      "description": "One-dimensional cylindrical Sedov blast."
+    },
+    "sedov_1d_spherical": {
+      "capability": "complete",
+      "source_example": "Exec/hydro_tests/Sedov/inputs.1d.sph",
+      "description": "One-dimensional spherical Sedov blast."
+    },
+    "sedov_2d_cartesian": {
+      "capability": "complete",
+      "source_example": "Exec/hydro_tests/Sedov/inputs.2d.cyl_in_cartcoords",
+      "description": "Two-dimensional cylindrical Sedov blast in Cartesian coordinates, using Castro's pinned self-contained input file."
+    },
+    "sedov_2d_cylindrical": {
+      "capability": "complete",
+      "source_example": "Exec/hydro_tests/Sedov/inputs.2d.sph_in_cylcoords",
+      "description": "Two-dimensional spherical Sedov blast in cylindrical coordinates."
+    },
+    "sedov_2d_spherical": {
+      "capability": "complete",
+      "source_example": "Exec/hydro_tests/Sedov/inputs.2d.sph_in_sphcoords",
+      "description": "Two-dimensional spherical-coordinate Sedov input."
+    },
+    "sedov_3d_cartesian": {
+      "capability": "complete",
+      "source_example": "Exec/hydro_tests/Sedov/inputs.3d.sph",
+      "description": "Three-dimensional spherical Sedov blast in Cartesian coordinates."
+    }
+  }
+}
