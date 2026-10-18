@@ -7,17 +7,21 @@ import { field, parameterTreeHtml, parametersFromBriefpp, sourceLocationUrl, typ
 
 export function getStaticPaths() {
   const reports = import.meta.glob('../../../../../../projects/*/docs/parameters/*.json', { eager: true, import: 'default' });
+  const metadataExports = import.meta.glob('../../../../../../projects/*/docs/semantic/*.json', { eager: true, import: 'default' });
   const records = import.meta.glob('../../../../../../projects/*/project.json', { eager: true, import: 'default' });
   return Object.entries(reports).map(([path, report]) => {
     const match = path.match(/\/projects\/([^/]+)\/docs\/parameters\/([^/]+)\.json$/);
     if (!match) throw new Error(`Unexpected parameter report path: ${path}`);
     const project = Object.values(records).find((record: any) => record.id === match[1]);
     if (!project) throw new Error(`Missing project record for ${match[1]}`);
-    return { params: { project: match[1], setup: match[2] }, props: { project, report } };
+    const metadata = Object.entries(metadataExports).find(([path]) => path.endsWith(`/projects/${match[1]}/docs/semantic/${match[2]}.json`))?.[1];
+    if (!metadata) throw new Error(`Missing SNT metadata for ${match[1]}/${match[2]}`);
+    return { params: { project: match[1], setup: match[2] }, props: { project, report, metadata } };
   });
 }
 
-const { project, report } = Astro.props as { project: any; report: BriefDocument };
+type SemanticMetadata = { values: Record<string, { provenance?: { source: string; line: number; code: string; overridden: boolean } }>; sources: Record<string, { path: string; metadata?: { present: string[]; values: Record<string, unknown> } }> };
+const { project, report, metadata } = Astro.props as { project: any; report: BriefDocument; metadata: SemanticMetadata };
 const { setup } = Astro.params;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const parameters = parametersFromBriefpp(report);
@@ -32,6 +36,16 @@ const detailsFields = (parameter: Parameter) => parameter.metadata.filter((item)
 const schemaNames = (value: string) => value.split(',').map((name) => name.trim()).filter(Boolean);
 const provenanceUrl = (item: { label: string; value: string }) =>
   item.label.endsWith(' at') ? sourceLocationUrl(item.value, project.id, setup ?? '') : null;
+const semanticSource = (parameter: Parameter) => {
+  const origin = metadata.values[parameter.path]?.provenance;
+  const source = origin && metadata.sources[origin.source];
+  return origin && source ? { origin, source } : null;
+};
+const metadataFields = (source: { metadata?: { present: string[]; values: Record<string, unknown> } }) =>
+  (source.metadata?.present ?? []).map((key) => {
+    const value = source.metadata?.values[key];
+    return { key, value: typeof value === 'string' ? value : JSON.stringify(value) ?? '' };
+  });
 ---
 
 <!doctype html>
@@ -52,7 +66,7 @@ const provenanceUrl = (item: { label: string; value: string }) =>
         <div class="eyebrow"><span class="eyebrow-line"></span> EVALUATED PARAMETER REFERENCE</div>
         <h1>{setup?.replaceAll('_', ' ')}<span>.</span></h1>
         <p>Browse the evaluated DIPL parameters for this pinned {project.name} example. Values come from the bundled setup; a run using overrides can differ.</p>
-        <div class="reference-facts"><span><strong>{visibleCount}</strong> model parameters</span><span><strong>{groups.length}</strong> top-level groups</span><span>Source <code>{project.source_revision.slice(0, 12)}</code></span><a class="reference-graph-link" href={`${base}/projects/${project.id}/parameters/${setup}/graph/`}>Explore 3D graph ↗</a><a class="reference-override-link" href={`${base}/projects/${project.id}/parameters/${setup}/schemas/`}>Browse schemas ↗</a><a class="reference-override-link" href={`${base}/projects/${project.id}/parameters/${setup}/override/`}>Try an override ↗</a></div>
+        <div class="reference-facts"><span><strong>{visibleCount}</strong> model parameters</span><span><strong>{groups.length}</strong> top-level groups</span><span>Source <code>{project.source_revision.slice(0, 12)}</code></span><a class="reference-graph-link" href={`${base}/projects/${project.id}/parameters/${setup}/graph/`}>Explore 3D graph ↗</a><a class="reference-override-link" href={`${base}/projects/${project.id}/parameters/${setup}/schemas/`}>Browse schemas ↗</a><a class="reference-override-link" href={`${base}/projects/${project.id}/parameters/${setup}/override/`}>Try an override ↗</a><a class="reference-override-link" href={`${base}/projects/${project.id}/parameters/${setup}/metadata.json`} download>Download metadata JSON ↓</a></div>
       </section>
       <section class="reference-main"><div class="shell reference-layout">
         <aside class="reference-sidebar" aria-label="Parameter navigation">
@@ -76,6 +90,13 @@ const provenanceUrl = (item: { label: string; value: string }) =>
                 <details class="parameter-details"><summary>Schema &amp; provenance <span aria-hidden="true">⌄</span></summary><div class="parameter-details-body">
                   {detailsFields(parameter).length > 0 && <div><h4>Model metadata</h4><dl>{detailsFields(parameter).map((item) => <><dt>{item.label}</dt><dd>{item.label === 'Applied schemas' || item.label === 'Supplied by schema' ? schemaNames(item.value).map((name, index) => <>{index > 0 && ', '}<a class="parameter-source-link" href={`${base}/projects/${project.id}/parameters/${setup}/schemas/#schema-${encodeURIComponent(name)}`}>{name}<span aria-hidden="true"> ↗</span></a></>) : item.value}</dd></>)}</dl></div>}
                   {parameter.provenance.length > 0 && <div><h4>Source history</h4><dl>{parameter.provenance.map((item) => <><dt>{item.label}</dt><dd>{provenanceUrl(item) ? <a class="parameter-source-link" href={provenanceUrl(item)!} target="_blank" rel="noopener noreferrer"><code>{item.value}</code><span aria-hidden="true"> ↗</span></a> : <code>{item.value}</code>}</dd></>)}</dl></div>}
+                  {semanticSource(parameter) && <div><h4>SNT3 source metadata</h4><dl>
+                    <dt>Source ID</dt><dd><code>{semanticSource(parameter)!.origin.source}</code></dd>
+                    {semanticSource(parameter)!.source.path && <><dt>Source file</dt><dd><code>{semanticSource(parameter)!.source.path}:{semanticSource(parameter)!.origin.line}</code></dd></>}
+                    <dt>Declaration</dt><dd><code>{semanticSource(parameter)!.origin.code}</code></dd>
+                    <dt>Override applied</dt><dd>{semanticSource(parameter)!.origin.overridden ? 'Yes' : 'No'}</dd>
+                    {metadataFields(semanticSource(parameter)!.source).map((item) => <><dt>{item.key}</dt><dd><code>{item.value}</code></dd></>)}
+                  </dl></div>}
                   {parameter.notes.length > 0 && <div><h4>Notes</h4>{parameter.notes.map((note) => <p>{note}</p>)}</div>}
                 </div></details>
               </article>)}

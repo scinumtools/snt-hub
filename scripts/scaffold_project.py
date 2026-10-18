@@ -121,7 +121,7 @@ name = "snt-hub-{project_id}"
 version = "0.1.0"
 description = "{name} DIPL adapter for SNT Hub"
 requires-python = ">=3.10"
-dependencies = ["scinumtools3>=0.9.3", "snt-hub-runtime>=0.1.0"]
+dependencies = ["scinumtools3>=0.9.6", "snt-hub-runtime>=0.1.0"]
 
 [project.optional-dependencies]
 test = ["pytest"]

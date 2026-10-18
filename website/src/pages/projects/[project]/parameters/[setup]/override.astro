@@ -81,7 +81,7 @@ const referenceUrl = `${base}/projects/${project.id}/parameters/${setup}/`;
       const results = document.querySelector<HTMLElement>('#override-results');
       const changes = document.querySelector<HTMLElement>('#override-changes');
       type WebDescription = { valueText: string | null; declaredType: string; units: string | null; options: string[]; condition: string | null; metadata: { description: string } };
-      type WebModel = { paths(): string[]; describe(path: string): WebDescription; withOverride(body: string): WebModel; dispose(): void };
+      type WebModel = { paths(): string[]; describe(path: string): WebDescription; describeMany(paths: string[]): WebDescription[]; withOverride(body: string): WebModel; dispose(): void };
       type WebDIPL = { parseProject(project: unknown): WebModel; validateProject(project: unknown, overrideBody?: string): { valid: boolean; diagnostic: { message: string; details: string; suggestion: string } | null } };
       let runtime: WebDIPL | undefined;
       let projectInput: unknown;
@@ -167,9 +167,12 @@ const referenceUrl = `${base}/projects/${project.id}/parameters/${setup}/`;
         candidate = baseline.withOverride(override);
         changes.replaceChildren();
         let count = 0;
-        for (const path of candidate.paths()) {
-          const before = baseline.describe(path);
-          const after = candidate.describe(path);
+        const paths = candidate.paths();
+        const beforeDescriptions = baseline.describeMany(paths);
+        const afterDescriptions = candidate.describeMany(paths);
+        for (const [index, path] of paths.entries()) {
+          const before = beforeDescriptions[index];
+          const after = afterDescriptions[index];
           const oldValue = `${before.valueText ?? '—'}${before.units ? ` ${before.units}` : ''}`;
           const newValue = `${after.valueText ?? '—'}${after.units ? ` ${after.units}` : ''}`;
           if (oldValue === newValue) continue;

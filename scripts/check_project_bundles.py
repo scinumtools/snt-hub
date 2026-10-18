@@ -53,14 +53,18 @@ def check_project(project: Path) -> list[str]:
     example_root = project / "dipl" / "examples"
     report_root = project / "docs" / "parameters"
     schema_root = project / "docs" / "schemas"
+    semantic_root = project / "docs" / "semantic"
     example_names = {path.name for path in example_root.iterdir() if path.is_dir()} if example_root.is_dir() else set()
     reports = list(report_root.glob("*.json"))
     report_names = {path.stem for path in reports}
     hierarchies = list(schema_root.glob("*.json"))
     hierarchy_names = {path.stem for path in hierarchies}
+    metadata_exports = list(semantic_root.glob("*.json"))
+    metadata_names = {path.stem for path in metadata_exports}
     check(set(setups) == example_names, "setup IDs differ from DIPL example directories")
     check(set(setups) == report_names, "setup IDs differ from published parameter reports")
     check(set(setups) == hierarchy_names, "setup IDs differ from published schema hierarchies")
+    check(set(setups) == metadata_names, "setup IDs differ from published semantic metadata")
     for path in reports:
         try:
             report = json.loads(path.read_text())
@@ -74,6 +78,16 @@ def check_project(project: Path) -> list[str]:
                   f"{path.name} has an unsupported schema hierarchy contract")
             check(hierarchy.get("definitions_available") is True,
                   f"{path.name} has no live schema definitions")
+        except json.JSONDecodeError:
+            check(False, f"{path.name} is not valid JSON")
+    for path in metadata_exports:
+        try:
+            metadata = json.loads(path.read_text())
+            check(metadata.get("schema") == "snt-dip-values/2" and
+                  isinstance(metadata.get("values"), dict) and
+                  isinstance(metadata.get("node_metadata"), dict) and
+                  isinstance(metadata.get("sources"), dict),
+                  f"{path.name} has an unsupported semantic metadata contract")
         except json.JSONDecodeError:
             check(False, f"{path.name} is not valid JSON")
     for setup_name, recipe in setups.items():

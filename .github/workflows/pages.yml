@@ -10,8 +10,10 @@ on:
       - "projects/**/setups.json"
       - "projects/**/docs/parameters/**"
       - "projects/**/docs/schemas/**"
+      - "projects/**/docs/semantic/**"
       - "projects/**/dipl/examples/**"
       - "scripts/check_project_bundles.py"
+      - "scripts/generate_semantic_metadata.py"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 

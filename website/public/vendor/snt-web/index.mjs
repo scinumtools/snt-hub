@@ -10,6 +10,9 @@ export class DIPLModel {
   describe(path, maxValueElements = 16) {
     return this.native.describe(path, maxValueElements);
   }
+  describeMany(paths, maxValueElements = 16) {
+    return this.native.describeMany(paths, maxValueElements);
+  }
   schemas() { return this.native.schemas(); }
   withOverride(body) {
     return new DIPLModel(this.runtime, this.native.withOverride(body));
@@ -29,11 +32,17 @@ export async function loadDIPL(options = {}) {
     parseProject(project) {
       return new DIPLModel(runtime, runtime.parseProjectDIPL(project, ""));
     },
+    parseBundle(bundle) {
+      return new DIPLModel(runtime, runtime.parseBundleDIPL(bundle, ""));
+    },
     validate(source, overrideBody = "") {
       return runtime.validateDIPL(source, overrideBody);
     },
     validateProject(project, overrideBody = "") {
       return runtime.validateProjectDIPL(project, overrideBody);
+    },
+    validateBundle(bundle, overrideBody = "") {
+      return runtime.validateBundleDIPL(bundle, overrideBody);
     },
   };
 }
