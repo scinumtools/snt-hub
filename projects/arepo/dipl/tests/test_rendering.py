@@ -179,9 +179,13 @@ from pathlib import Path
 from scinumtools3.dip import Environment
 from arepo_dipl.generator import generate, _render_config, _render_parameters, _render_schedule
 from arepo_dipl.tables import render_tables
+def stage(name):
+    print(f"{sys.argv[1]}: {name}", file=sys.stderr, flush=True)
 with tempfile.TemporaryDirectory(dir=sys.argv[2]) as directory:
+    stage("generate")
     path = generate(Path(directory), sys.argv[1])
     outputs = {name: (path / name).read_text() for name in ("Config.sh", "param.txt")}
+    stage("load DIPH5")
     env = Environment()
     env.load(path / "environment.diph5")
     if env["output.schedule.enabled"].value:
@@ -189,18 +193,21 @@ with tempfile.TemporaryDirectory(dir=sys.argv[2]) as directory:
     else:
         assert not (path / "output_list.txt").exists()
         outputs["output_list.txt"] = ""
+    stage("replay native outputs")
     assert _render_config(env) == outputs["Config.sh"]
     assert _render_parameters(env) == outputs["param.txt"]
     assert _render_schedule(env) == outputs["output_list.txt"]
+    stage("render tables")
     datasets = render_tables(env)
     inventory = json.loads((Path(sys.argv[2]) / "tests/table_inventory.json").read_text())
     for record in inventory:
         if record["setup"] != sys.argv[1]:
             continue
         filename = record["filename"]
+        stage("compare " + filename)
         rendered = (path / filename).read_text()
         # Cooling's declared path has an explicit ./ prefix.
-        assert rendered == datasets.get(filename, datasets.get("./" + filename))
+        assert rendered == datasets.get(filename, datasets.get("./" + filename)), filename
         original = (Path(sys.argv[2]).parent / "source" / record["source"]).read_text()
         def numeric_rows(text):
             return [[float(item) for item in line.split()] for line in text.splitlines()
@@ -212,8 +219,13 @@ with tempfile.TemporaryDirectory(dir=sys.argv[2]) as directory:
         # process-global PUEL registrations, as separate CLI invocations do.
         for setup in SETUPS:
             with self.subTest(setup=setup):
-                outputs = json.loads(subprocess.check_output(
-                    [sys.executable, "-B", "-c", script, setup, str(ROOT)], text=True))
+                result = subprocess.run(
+                    [sys.executable, "-B", "-c", script, setup, str(ROOT)],
+                    capture_output=True, text=True,
+                )
+                self.assertEqual(result.returncode, 0,
+                                 f"{setup} subprocess failed:\n{result.stderr}\n{result.stdout}")
+                outputs = json.loads(result.stdout)
                 schedules = {
                     "cosmo_zoom_gravity_only_3d": [.0197, .2, .25, .33, .5, .66, 1],
                     "galaxy_merger_star_formation_3d": [3*i/31 for i in range(32)],
