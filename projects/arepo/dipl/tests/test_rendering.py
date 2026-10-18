@@ -176,7 +176,7 @@ y int = 2
 
         script = '''import json, sys, tempfile
 from pathlib import Path
-from scinumtools3.dip import Environment
+from scinumtools3.dip import Environment, inspect_table
 from arepo_dipl.generator import generate, _render_config, _render_parameters, _render_schedule
 from arepo_dipl.tables import render_tables
 def stage(name):
@@ -205,6 +205,9 @@ with tempfile.TemporaryDirectory(dir=sys.argv[2]) as directory:
             continue
         filename = record["filename"]
         stage("compare " + filename)
+        columns = [(column.index, column.name) for column in
+                   inspect_table(env, "datasets." + record["key"] + ".data").columns]
+        assert columns == list(enumerate(record["columns"])), (record["source"], columns)
         rendered = (path / filename).read_text()
         # Cooling's declared path has an explicit ./ prefix.
         assert rendered == datasets.get(filename, datasets.get("./" + filename)), filename
@@ -212,7 +215,14 @@ with tempfile.TemporaryDirectory(dir=sys.argv[2]) as directory:
         def numeric_rows(text):
             return [[float(item) for item in line.split()] for line in text.splitlines()
                     if line.strip() and not line.lstrip().startswith("#")]
-        assert numeric_rows(rendered) == numeric_rows(original), record["source"]
+        actual_rows = numeric_rows(rendered)
+        expected_rows = numeric_rows(original)
+        assert len(actual_rows) == len(expected_rows), (record["source"], "row count", len(actual_rows), len(expected_rows))
+        for row_number, (actual, expected) in enumerate(zip(actual_rows, expected_rows), 1):
+            assert len(actual) == len(expected), (record["source"], "column count", row_number, len(actual), len(expected))
+            for column_number, (value, reference) in enumerate(zip(actual, expected), 1):
+                assert value == reference, (record["source"], row_number, column_number,
+                                            value, reference, columns)
     print(json.dumps(outputs))
 '''
         # Different setups redefine the same custom units, so isolate their
