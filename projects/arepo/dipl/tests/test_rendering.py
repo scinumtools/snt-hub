@@ -174,7 +174,7 @@ y int = 2
     def test_all_setups_roundtrip_native_outputs_and_tables(self):
         from arepo_dipl.generator import SETUPS
 
-        script = '''import json, sys, tempfile
+        script = '''import json, math, sys, tempfile
 from pathlib import Path
 from scinumtools3.dip import Environment, inspect_table
 from arepo_dipl.generator import generate, _render_config, _render_parameters, _render_schedule
@@ -221,8 +221,11 @@ with tempfile.TemporaryDirectory(dir=sys.argv[2]) as directory:
         for row_number, (actual, expected) in enumerate(zip(actual_rows, expected_rows), 1):
             assert len(actual) == len(expected), (record["source"], "column count", row_number, len(actual), len(expected))
             for column_number, (value, reference) in enumerate(zip(actual, expected), 1):
-                assert value == reference, (record["source"], row_number, column_number,
-                                            value, reference, columns)
+                # Decimal imports can differ by one binary64 step across platforms.
+                close = value == reference or (math.isfinite(value) and math.isfinite(reference)
+                                               and abs(value - reference) <= 2 * math.ulp(reference))
+                assert close, (record["source"], row_number, column_number,
+                               value, reference, columns)
     print(json.dumps(outputs))
 '''
         # Different setups redefine the same custom units, so isolate their
